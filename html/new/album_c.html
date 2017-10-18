@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>全部专辑</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/study_plan.css" />   
+</head>
+<body>
+	 <div id="album_list"></div>
+	 <script id="album_list_tpl" type="text/html">
+		<%for(var i=0;i< data.length;i++){	%>
+		<div class="aui-card-list aui-bg-white"  onclick="open_w('album_details','album_details.html',{'aid':'<%=data[i].aid%>',frameName:api.frameName});">
+		    <div class="aui-card-list-content-padded" style="padding-bottom: 0;">
+		        <img src="../../image/icon/echo_bg.jpg"  data-echo="<%=data[i].apic%>">
+		    </div>
+		    <div class="aui-card-list-footer aui-font-size-12">
+		        <div style="width:50%; " class="aui-font-size-16 spedialtitle"><%=data[i].aname%></div>
+		        <div  style=" text-align:left; width:25%;">
+		            <i class="aui-pull-left aui-margin-r-5">
+		                <img src="../../img/book.png" style="height:18px;" alt="">
+		            </i><%=data[i].course_count%>课程
+		        </div>
+		        <div class=" border-l" style=" text-align:right; width:23%; ">
+		            <span class="aui-pull-right"><%=data[i].areadnum%></span>
+		            <i class="aui-pull-right aui-margin-r-5" >
+		                <img src="../../img/eye11.png" style="height:20px; " alt="" >
+		            </i>
+		        </div>
+		    </div>
+		</div>
+		<%}%>             
+	</script>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script>
+apiready = function() {
+		album();
+};
+function album(){
+	var URL = serverURL + 'app_interface/course/album_course2/';
+	URL+='?secret='+appSecret;
+	g_ajax(URL,function(ret)
+	{	
+		//alert(JSON.stringify(ret))
+		if(ret.errCode==0){
+			$('#album_list').html(bt('album_list_tpl',ret));
+			Echo.init();
+		}else{
+			$toast(ret.errMsg,1500);		
+		}
+		api.parseTapmode();
+	})
+} 
+</script>
+</html>

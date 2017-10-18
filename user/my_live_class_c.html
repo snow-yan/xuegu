@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>我的直播</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style>
+		.marl-05{margin-left:-0.5em}
+		</style>
+	</head>
+	<body class="c-wh">
+		<input type="hidden" id="page" value="1" />
+		<ul class="ovd" id="live_class"></ul>
+		<script type="text/html" id="live_class_list">
+			<div class="h05e w10 c-edf0f5"></div>
+			<%
+			for(var i=0;i<data.length;i++){
+			%>
+			<li class="clo_two pstnr ubb ub-e4e4e4" livemode="c-e0e0e0">
+			    <div class=" w95 area_auto">
+					<div class="col_list">
+						<div class="pdl02 pdr05 pdt08 pdb08">
+							<span class=" pstnr">
+								<span class="t-wh ftz09 tx-c pdl05 pdt025 pdb025 pdr05 c-bla op5 pstna absl0 abst0 umh1">231人观看</span>
+								<img src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].live_pic%>" class="w10 h10 uc-a02" alt="" />
+							</span>
+						</div>
+					</div>
+					<div class="col_list">
+						<div class="pdr02 pdt08">
+							<p class="umh125 pdb03 ftz08 ovd"><span class="marl-05 t-ff7b00">【回放】</span><%=data[i].live_name%></p>
+							<p class="t-333 ">
+								<span class="pdt02 pdb02 ftz07 pdr05 marr03">主讲老师：多多</span>
+							</p>
+						</div>
+					</div>
+					<p class="t-999 pstna absl50p absb09 ftz07"><img class="fll w10e h10e mart01 pdr05" src="../image/icon/time_s.png" /><span class="fll">16分钟前</span></p>
+				</div>
+			</li>
+			<%
+			}
+			%>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var lastPage = true,firstPageHaveData =true;
+		apiready = function(){
+			getMyLive();
+			push_down(function(){
+				if(firstPageHaveData){
+					getMyLive();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					getMyLive('next')
+				}
+			});
+		};
+		function getMyLive(type){
+			if(type=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;	
+			}
+			var uid = api.pageParam.uid;
+			var pagesize = 10;
+			var URL = serverURL + 'app_interface/user/my_live/';
+			URL+='?secret='+appSecret+'&page='+page+'&pagesize='+pagesize+'&uid='+uid;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					if(ret.data && ret.data.length>0){
+						if( type == 'next'){
+							$('#live_class').append(bt('live_class_list',ret));
+						}else{
+							$('#live_class').html(bt('live_class_list',ret));
+						}
+					}else{
+						if( page == 1 ){
+							firstPageHaveData = false;
+							lastPage =false;
+							firstPage_no_data('live_class');
+						}else{
+							lastPage = false;
+							no_data_more('live_class');	
+						}
+					}
+					push_down_over();
+					api.parseTapmode();
+					Echo.init({offset: 0,throttle:0});
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+	</script>
+</html>

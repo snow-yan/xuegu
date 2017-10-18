@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>充值</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+			.umh5{ line-height: 5em;}
+			.ftz17{ font-size: 1.7em;}
+			.marl025-per{margin-left:4%}
+			.marl025-per{margin-left:4%}
+			.w028{width:28%}
+			.w55{width:55%}
+			.w92{width:92%}
+			.h01e{height:0.1em}
+			.pre{ background:#4371bc;color:#ffffff; border-radius:5px;}
+			.pre_after{ background:#ffffff;color:#4371bc;}
+			.pre2{background:#4371bc;}
+			.pre_after2{ background:#ffffff;}
+			::-webkit-input-placeholder {
+				color: #4371bc;
+				font-size: 15px;
+			}
+		</style>
+	</head> 
+	<body class="c-wh">
+		 <input type="hidden" value="" id="recharge_money" />
+		<div class="c-cbe0ff t-4371bc h50e w10 box tx-c umh5 ftz17">1元购买10谷子</div>
+		<div class="w10 box ovd">
+			<p class=" w10 sl" >
+				<span class="w028 sl h50e marl025-per mart10">
+					<span class=" w10 sl w-10 ovd pre h50e" id="nav0"  onclick="switch_data(0,this)">
+						<span class=" ovd uc-a02 pdb05 uba-4371bc">
+							<span class="tx-c w10 pdt075 sl h10e umh15"><font class="ftz15" id="num_val0">10</font>.0元</span>
+							<span class="tx-c w10 sl ">
+								<span class="w55 area_auto mart025 marb025 h01e pre_after2"  id="bg_border0"></span>
+							</span>
+							<span class="tx-c w10 sl h10e ftz10 umh15">100谷子</span>
+						</span>
+					</span>
+				</span>
+				<span class="w028 sl h50e marl025-per mart10">
+					<span class=" w10 sl w-10 ovd pre_after h50e" id="nav1" onclick="switch_data(1,this)">
+						<span class=" ovd uc-a02 pdb05 uba-4371bc">
+							<span class="tx-c w10 pdt075 sl h10e umh15"><font class=" ftz15" id="num_val1">30</font>.0元</span>
+							<span class="tx-c w10 sl ">
+								<span class="w55 area_auto mart025 marb025 h01e pre2"  id="bg_border1"></span>
+							</span>
+							<span class="tx-c w10 sl h10e ftz10 umh15">300谷子</span>
+						</span>
+					</span>
+				</span>
+				<span class="w028 sl h50e marl025-per mart10">
+					<span class=" w10 sl w-10 ovd h50e pre_after" id="nav2"  onclick="switch_data(2,this)">
+						<span class=" ovd uc-a02 pdb05 uba-4371bc">
+							<span class="tx-c w10 pdt075 sl h10e umh15"><font class=" ftz15" id="num_val2">50</font>.0元</span>
+							<span class="tx-c w10 sl ">
+								<span class="w55 area_auto mart025 marb025 h01e pre2" id="bg_border2"></span>
+							</span>
+							<span class="tx-c w10 sl h10e ftz10 umh15">500谷子</span>
+						</span>
+					</span>
+				</span>
+				<span class="w028 sl h50e marl025-per mart10">
+					<span class=" w10 sl w-10 ovd h50e pre_after" id="nav3"  onclick="switch_data(3,this)">
+						<span class=" ovd uc-a02 pdb05 uba-4371bc">
+							<span class="tx-c w10 pdt075 sl h10e umh15"><font class=" ftz15" id="num_val3">100</font>.0元</span>
+							<span class="tx-c w10 sl ">
+								<span class="w55 area_auto mart025 marb025 h01e pre2" id="bg_border3"></span>
+							</span>
+							<span class="tx-c w10 sl h10e ftz10 umh15">1000谷子</span>
+						</span>
+					</span>
+				</span>
+				<span class="w028 sl h50e marl025-per mart10">
+					<span class=" w10 sl w-10 ovd h50e pre_after" id="nav4"  onclick="switch_data(4,this)">
+						<span class=" ovd uc-a02 pdb05 uba-4371bc">
+							<span class="tx-c w10 pdt075 sl h10e umh15"><font class=" ftz15" id="num_val4">521</font>.0元</span>
+							<span class="tx-c w10 sl ">
+								<span class="w55 area_auto mart025 marb025 h01e pre2" id="bg_border4"></span>
+							</span>
+							<span class="tx-c w10 sl h10e ftz10 umh15">5210谷子</span>
+						</span>
+					</span>
+				</span>
+				<span class="w028 sl h50e marl025-per mart10">
+					<span class=" w10 sl w-10 ovd h50e pre_after" id="nav5">
+						<span class=" ovd uc-a02 pdb05 uba-4371bc">
+							<span class=" w10 ovd tx-c area_auto">
+								<input id="other_value" placeholder="其他数额" maxlength="4" type="tel" onclick="switch_data(5)" oninput="selectedThis()" class="tx-c t-4371bc umh20 pdt09 w95 area_auto ovd c-wh ubnone ftz10">
+							</span>
+							<span class="tx-c w10 sl ">
+								<span class="w55 area_auto marb025 h01e pre2" id="bg_border0"></span>
+							</span>
+							<span class="tx-c w10 sl h10e umh15 t-c1c1c1" id="other_guzi0"><font class="ftz09">不得大于9999</font></span>
+							<span class="tx-c w10 sl h10e umh15" style="display: none;" id="other_guzi1"><font class="ftz09" id="other_guzi_val">不得大于9999</font></span>
+						</span> 
+					</span>
+				</span>
+			</p>
+		</div>
+		<div class="box w10" id="recharge_light" onclick="recharge_val()">
+            <p class="w92 area_auto mart10 c-4371bc uc-a02 ftz10"  tapmode="op7">
+                <span class="w10 tx-c t-wh umh25">同意协议，并充值</span>
+            </p>
+        </div>
+		<div class="box w10 dspn" id="recharge_gray" onclick="toast()">
+            <p class="w92 area_auto mart10 c-c0c0c0 uc-a02 ftz10"  tapmode="op7">
+                <span class="w10 tx-c t-wh umh25">同意协议，并充值</span>
+            </p>
+        </div>
+        <div class="box w92 mart10 t-4371bc tx-l ftz08 ovd">
+    		<img src="../image/icon/select.png" id="agreement" class="w10e yes pdt01" onclick="selectAgreement(this)">
+    		<font class="umh1 pdl02" onclick="open_w('xuegu_agreement','xuegu_agreement.html')">《学股网服务协议》</font>
+        </div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/md5.js"></script>
+	<script type="text/javascript" src="../script/ksort.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+	<script>
+		var wxPay,t;
+		apiready = function(){
+			wxPay = api.require('wxPay');
+			switch_data(0);
+			t = setInterval(function(){
+				checkPay();
+			},2000);
+		};
+		
+		
+		function switch_data(index,el){
+			for(var i=0;i<5;i++){
+		   		 if(index!=i){
+		   			$api.removeCls($api.byId('nav'+i), 'pre');
+		   			$api.addCls($api.byId('nav'+i), "pre_after");
+		   			$api.removeCls($api.byId('bg_border'+i), 'pre_after2');
+		   			$api.addCls($api.byId('bg_border'+i), 'pre2');
+		   		 }else{
+	   	   			$("#other_value").val('');//其他金额
+	   	   			$('#other_guzi0').css('display','');	
+	   	   			$('#other_guzi1').css('display','none');
+	   	   			$api.removeCls($api.byId('nav'+i), 'pre_after');
+		   		 	$api.addCls($api.byId('nav'+i), "pre");
+		   		 	$api.removeCls($api.byId('bg_border'+i), 'pre2');
+		   			$api.addCls($api.byId('bg_border'+i), 'pre_after2');
+		   		 }
+			}
+			var num_val=$("#num_val"+index).text();
+			$("#recharge_money").val(num_val);
+//			console.log(num_val);
+		}
+		function selectAgreement(el){
+			if($(el).hasClass('no')){
+				$(el).attr('src','../image/icon/select.png').attr('class','w10e yes pdt01');
+				$('#recharge_light').removeClass('dspn');
+				$('#recharge_gray').addClass('dspn');
+			}else{
+				$('#recharge_light').addClass('dspn');
+				$('#recharge_gray').removeClass('dspn');
+				$(el).attr('src','../image/icon/select-gray.png').attr('class','w10e no pdt01');
+			}
+		}
+		
+		function selectedThis(){
+			var other_value=$("#other_value").val();//其他金额
+			if(!isNaN(other_value)){
+				if(other_value<1){
+					$toast("充值金额不能小于1",1500);
+					$('#other_guzi0').css('display','');	
+	   	   			$('#other_guzi1').css('display','none');
+				}else{
+	   	   			$('#other_guzi1').css('display','');	
+	   	   			$('#other_guzi0').css('display','none');
+					$('#other_guzi_val').text(other_value*10+'谷子');
+					$("#recharge_money").val(other_value);
+				}
+			}else{
+				$toast("金额类型必须是数字",1500);
+			   	$("#other_value").val("");	
+				$('#other_guzi0').css('display','');	
+   	   			$('#other_guzi1').css('display','none');
+			}
+		}
+		var jine;
+		function recharge_val(){
+			var other_value=$("#other_value").val();//其他金额
+			var recharge_money=$("#recharge_money").val();//选择的金额
+			if(is_define(other_value)){//其他金额
+				if(!isNaN(other_value)){
+//					$toast("您购买的金额是"+other_value+"元",1500);
+					jine = other_value;
+				}else{
+					$toast("金额类型必须是数字",1500);
+				    $("#other_value").val("");
+				}
+			}else{//选择金额
+//			    $toast("您购买的金额是"+recharge_money+"元",1500);
+			    jine = recharge_money;
+			}
+			
+				surePay(jine);
+			
+		}
+		var signParams,MustSendData;
+		function surePay(m){
+			var uid = get_local('uid');
+			var URL = serverURL + "app_interface/WxPayUnifiedOrder/";
+			var data = {
+				values:{
+					uid :uid,
+					jine : m,
+					secret : appSecret
+				}
+			};
+			r_ajax(URL,data,function(ret){
+		 		if(ret.errCode==0){
+					signParams = {
+	                    appid: ret.data.data.appid,
+	                    partnerid: ret.data.data.mch_id,
+	                    prepayid: ret.data.data.prepay_id,
+	                    package: 'Sign=WXPay',
+	                    noncestr: ret.data.data.nonce_str,
+	                    timestamp: Math.round(new Date().getTime() / 1000),
+	                };
+	                MustSendData = ret.data.MustSendData;
+	                signParams.sign = fetchSign(signParams).toUpperCase();
+	              
+	               	WXpay(ret.data.data);
+		 		}else{
+		 			$toast(ret.errMsg, 1500);
+		 		}
+		 	});
+		}
+		function WXpay(data){
+			var apiKey = data.appid;
+			wxPay.payOrder({
+			    apiKey: data.appid,
+			    orderId: data.prepay_id,
+			    mchId: data.mch_id,
+			    nonceStr: data.nonce_str,
+			    timeStamp: signParams.timestamp,
+		     	package: 'Sign=WXPay',
+			    sign: signParams.sign
+			}, function(ret, err) {
+			    if (ret.status) {
+			        //支付成功
+			        checkPay();
+			        clearInterval(t);
+			    } else {
+			    }
+			});
+		}
+		function fetchSign(postData) {
+	        return md5(jsonToPostDataStr(ksort(postData)) + '&key=THpbhPMUQArHMlCVXY9xLcaqF9woWl3I');
+	    }
+	
+	    function jsonToPostDataStr(json) {
+	        var PostDataStr = '';
+	        for (var i in json) {
+	            PostDataStr += i + '=' + json[i] + '&';
+	        }
+	        return PostDataStr == '' ? PostDataStr : PostDataStr.slice(0, -1);
+	    }
+	    function checkPay(){
+	    	var URL = serverURL + "app_interface/ChongZhiStatus/";
+	    	var data = {
+				values:{
+					uid :get_local('uid'),
+					MustSendData : MustSendData,
+					secret : appSecret
+				}
+			};
+			post_ajax(URL,data,function(ret){
+		 		if(ret.errCode==0){
+		 			if(ret.data.status ==1){
+	 				clearInterval(t);
+		 				$toast('充值成功',1500);
+		 				api.execScript({
+		 					name :'root',
+		 					frameName : 'user',
+		 					script : 'getUserInfo()'
+		 				});
+		 				var frme = api.pageParam.frameName;
+		 				var integral = ret.data.user.integral;
+		 				switch(frme){
+	 					case 'account_management_c':
+		 					api.execScript({
+			 					name :api.pageParam.name,
+			 					frameName : 'account_management_c',
+			 					script : 'setAccount('+integral+')'
+			 				});
+			 				break;
+		 				case 'ask_questions_c':
+			 				api.execScript({
+			 					name :api.pageParam.name,
+			 					frameName : 'ask_questions_c',
+			 					script : 'setIntegral('+integral+')'
+			 				});
+			 				break;
+		 				case 'put_questions_to_c':
+			 				api.execScript({
+			 					name :api.pageParam.name,
+			 					frameName : 'put_questions_to_c',
+			 					script : 'setIntegral('+integral+')'
+			 				});
+			 				break;
+		 				case 'sure_order_c':
+			 				api.execScript({
+			 					name :api.pageParam.name,
+			 					frameName : 'sure_order_c',
+			 					script : 'setIntegral('+integral+')'
+			 				});
+			 				break;
+		 				}
+		 				setTimeout(function(){
+		 					close_w();
+		 				},1500);
+//		 			}else if(ret.data.status == 0){
+//		 				checkPay();
+		 			}
+		 		}
+	 		})
+	    }
+	    function toast(){
+	    	$toast('您还没有同意学股网协议，请选择同意后再充值');
+	    }
+	    function post_ajax(serverURL,data,callback)
+		{
+		
+			var token=get_local("toekn");
+			
+			if (!is_json(data))
+			{
+				data=str2json(data);
+		//		data.values.app_version=app_version;
+			}
+			api.ajax({
+				url : serverURL,
+				method : 'post',
+				timeout : 30,
+				dataType : 'json',
+				returnAll : false,
+				data : data
+			}, function(ret, err)
+			{
+				if (ret)
+				{
+					callback(ret)
+				}
+				else
+				{
+					net_error();//请求失败
+				}
+			});
+		}
+	</script>
+</html>

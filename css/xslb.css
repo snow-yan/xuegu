@@ -1,0 +1,42 @@
+@charset "utf-8";
+/* CSS Document */
+
+body,div,p,input,ul,li,a{ margin:0; padding:0; list-style-type:none; text-decoration:none;}
+body{background:#f1c687;}
+.newlibao_pop{width:100%; position:fixed; top:50%; position:relative; z-index:10;}
+.newlibao_pop img{ width:100%; position:relative; z-index:11;margin-top:35%;}
+.newlibao_pop .c_mask{ position:absolute; left:78%; top:6%; width:6%; height:6%; z-index:12;}
+.newlibao_pop .popbtn{ position:absolute;left:20%; bottom:11%; width:58%; height:17%; z-index:12;}
+
+.cardcontent a{ text-decoration:none;}
+.cardlist{ padding:18px 15px 25px 15px; border-bottom:1px #dcdcdc solid;}
+.cardlist img{ width:100%;}
+.cardlist span{ width:170px; height:40px; display:block; margin:0 auto; line-height:40px; font-size:18px; text-align:center; border-radius:5px;  margin-top:15px; text-decoration:none;}
+.cardlist .redbtn{ border:1px #dd582b solid; color:#dd582b;}
+.cardlist .bluebtn{ border:1px #05a solid; color:#05a;}
+.xslbtop{ width:100%;}
+.xslbtop img{width:100%;}
+.xslbbottom img{width:100%;}
+.lqinfo{ margin:0 15px;}
+.lqinfo img{ display:block; width:100%;}
+.lqinfo .lqinput{ padding:15px; background:#fff; margin:0; padding-bottom:0; overflow:hidden;}
+.lqinfo .lqinput p{ height:46px; border:1px #999 solid; border-radius:46px; margin-bottom:10px;}
+.lqinfo .lqinput p input{ line-height:44px; font-size:14px; width:49%; float:left; border:none; margin-left:20px; color:#888;}
+.lqinfo .lqinput p a{ float:right; margin-right:15px; line-height:44px; color:#05a; font-size:10px;}
+.lqinfo .lqlist{ padding:0 15px; background:#fff; margin:0; overflow:hidden;}
+.lqinfo .lqlist .xslblist{ margin-top:18px;}
+.lqinfo .lqlist .xslblist li{ width:48%; float:left; margin-bottom:20px; overflow:hidden;}
+.lqinfo .lqlist .xslblist li:nth-child(even){float:right;}
+.lqinfo .lqlist .xslblist li .lqguzi{ float:left; color:#ee6939; font-size:10px;}
+.lqinfo .lqlist .xslblist li .lqplay{ float:right; color:#888;font-size:10px;}
+.lqinfo .lqlist .xslblist li .lqtitle{ font-size:13px; color:#333; line-height:20px; padding-top:5px; display:block; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
+.lqinfo .lqlist .xslblist li p span img{ float:left; width:10px; margin-right:5px; }
+.lqinfo .lqinput .lqbtn{height:46px; color:#fff; display:block; line-height:46px; text-align:center; border-radius:46px; margin-bottom:10px; background:#f1c687; -webkit-box-shadow:0 3px 3px rgba(109, 65, 0, .3);  
+  -moz-box-shadow:0 3px 3px rgba(109, 65, 0, .3);  
+  box-shadow:0 3px 3px rgba(109, 65, 0, .3); display:none; }
+  .lqinfo .lqinput .lqbtnnone{height:46px; color:#fff; display:block; line-height:46px; text-align:center; border-radius:46px; margin-bottom:10px; background:#dcdcdc; box-shadow:none; -moz-box-shadow:none; -webkit-box-shadow:none; }
+  .lqinfo .jsinfo p{ font-size:12px; line-height:20px; padding-top:6px; color:#222;}
+.xslbt{ background:#05a; width:100%; height:2.4rem; position:relative; overflow:hidden; text-align:center; line-height:2.4rem; color:#fff; font-size:1rem;}
+.xslbt .back{position: absolute; z-index: 20; height: 2.25rem; line-height: 2.25rem;	left:0; border-radius: 0.1rem; border-width: 0; padding: 0 0.5rem; font-size: 0.8rem; font-weight: 400;}.st_parameters h2 a img{ display:block; margin-top:10px;}
+.xslbt .zxedit{ margin-left:5px;}
+.xslbt .back img{display: block; margin-top: 10px;}

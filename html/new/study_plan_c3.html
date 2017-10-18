@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>战法课程</title>
+   	<link rel="stylesheet" type="text/css" href="../../css/aui.css">
+   	<link rel="stylesheet" type="text/css" href="../../css/study_plan.css" />
+</head>
+<body class="aui-bg-white">
+	<ul id="coursePack_ajax_list" class=" aui-padded-15"></ul>
+	<script id="coursePack_ajax_list_tpl" type="text/html">
+	   <%
+	   for(var i=0;i< data.length;i++){
+	   %>
+	 	<li onclick="open_w('zhanfa_course','../course_order/zhanfa_course.html',{'aid':'<%=data[i].special_id%>'})">
+		    <a><img src="../../image/icon/echo_bg.jpg"  data-echo="<%=data[i].apic%>" style="border-radius: 5px;"></a>
+		    <div class="zftitle  aui-padded-t-10"><%=data[i].title%></div>
+		    <p><%=data[i].intro%></p>
+		</li>
+		<%
+		}
+		%>
+	</script>
+</body>
+<script type="text/javascript" src="../../script/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script>
+apiready = function() {
+		courselist();
+};
+function courselist(){
+	var uid=get_local('uid');
+	var URL = serverURL + 'app_interface/newCourse/my_study_pack/';
+		URL+='?secret='+appSecret+'&uid='+uid;
+        g_ajax(URL,function(ret){
+        //alert(JSON.stringify(ret))
+		if(ret.errCode ==200||ret.errCode ==101){
+			if(ret.errCode ==200){
+			    $('#coursePack_ajax_list').html(bt('coursePack_ajax_list_tpl',ret));
+				Echo.init();
+			}else{
+				var html = '<div class="aui-text-center ">';
+				html +='<span class="aui-text-gray">暂无数据</span>';
+				html +='</div>';
+				$('#coursePack_ajax_list').append(html);
+			}
+		}else{
+			$toast(ret.errMsg,1500);
+		}
+	})
+}
+</script>
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>题材望远镜</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+   	<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/telescope.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css">
+   	<style>
+   		.body>div:nth-child(2n-1)
+		{
+		background:#f5faff;
+		}
+   	</style>
+</head>
+<body>     
+    <div class="telescope">
+    	<input type="hidden" id="page" value="1"/>
+        <ul class="list aui-bg-white" id="list"></ul>
+        <script type="text/html" id="list_tpl">
+			<%
+			for(var i=0;i<data.length;i++){
+			if(data[i].rank==1){
+			%>
+				<li class="a1">
+				 <div class='title'>
+                    <div class="left">
+                       <img src="../../img/first.png" alt="">
+                      	<div>
+                            <div class='name'><%=data[i].title%></div>
+                            <div class='lable'><span>事件驱动</span></div>
+                       	</div>
+                    </div>
+			<%}else if(data[i].rank==2){%>
+				<li class="a2">
+					<div class='title'>
+	                    <div class="left">
+	                       <img src="../../img/second.png" alt="">
+		                    <div>
+	                            <div class='name'><%=data[i].title%></div>
+	                            <div class='lable'><span>事件驱动</span></div>
+	                       	</div>
+	                    </div>
+			<%}else if(data[i].rank==3){%>
+				<li class="a3">
+					<div class='title'>
+	                    <div class="left">
+	                       <img src="../../img/third.png" alt="">
+	                     	<div>
+	                            <div class='name'><%=data[i].title%></div>
+	                            <div class='lable'><span>事件驱动</span></div>
+                       		</div>
+                    	</div>
+			<%}else{%>
+				<li class="a4">
+				   <div class='title'>
+					   	<div class="left">
+	                     	<div>
+	                            <div class='name'><%=data[i].title%></div>
+	                            <div class='lable'><span>事件驱动</span></div>
+                       		</div>
+                    	</div>
+			<%}%>
+                    
+                    <div class="right">
+                       <div class="aui-ellipsis-2"><%=data[i].describe%></div>
+                   </div>                   
+               </div>
+               <div class="center">
+                    <div class="head">
+                       <div class="first">股票</div>
+                       <div>涨幅<span>[%]</span></div>
+                       <div>资金<span>[亿]</span></div>
+                       <div>相关度</div>  
+                    </div>
+                    <div class="body">
+                    <%
+					for(var j=0;j< data[i].shares.length;j++){
+					%>
+					<div>
+                        <div class="first"><%=data[i].shares[j].name%></div>
+                        <%if(data[i].shares[j].rise_float>0){%>
+                        	<div><%=data[i].shares[j].rise_float%></div>
+						<%}else{%>
+							<div style="color:green;"><%=data[i].shares[j].rise_float%></div>
+						<%}%>
+						
+                        <div class="deal_total"><%=data[i].shares[j].deal_total%></div>
+                        <%if(data[i].shares[j].similarity==1){%>
+                        	<div><img src="../../img/wifi1.png" alt=""></div>  
+                        <%}else if(data[i].shares[j].similarity==2){%>
+							<div><img src="../../img/wifi2.png" alt=""></div>
+						<%}else if(data[i].shares[j].similarity==3){%>
+							<div><img src="../../img/wifi3.png" alt=""></div>
+						<%}else if(data[i].shares[j].similarity==4){%>
+							<div><img src="../../img/wifi4.png" alt=""></div> 
+						<%}else if(data[i].shares[j].similarity==5){%>
+							<div><img src="../../img/wifi5.png" alt=""></div> 	
+						<%}%>
+                                                
+                    </div>
+					<%
+					}
+					%>
+            </li>
+			<%
+			}
+			%>
+		</script>
+           
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/swiper.min.js"></script>
+<script>
+  	var lastPage = true,firstPageHaveData = true;
+  	
+ 	apiready = function() {
+		list();
+		push_down(function(){
+			if(firstPageHaveData){
+				list();
+			}else{
+				setTimeout(function(){
+					push_down_over();
+				},500);
+			}
+		});
+		scrollBottom(function(){
+			if(lastPage){
+				list('next');
+				
+			}
+		});
+		
+	};   
+  function list(type){
+  	if(type=='next'){
+		var page = $('#page').val();
+		page = parseInt(page)+1;
+		$('#page').val(page);
+	}else{
+		var page =1;
+		$('#page').val(page);
+	}
+	var pagesize = 10;
+	var URL = serverURL + 'app_interface/newMobile/telescope_list/';
+		URL+='?secret='+appSecret+'&page='+page;
+        g_ajax(URL,function(ret){
+		if(ret.errCode ==200){
+			//alert(JSON.stringify(ret))
+			if(ret.data.length>0){
+				if(type=='next'){
+					$('#list').append(bt('list_tpl',ret));
+				}else{
+					$('#list').html(bt('list_tpl',ret));
+				}
+			
+			}else{
+				if(page==1){
+					firstPageHaveData = false;
+					lastPage = false;
+					firstPage_no_data('list');
+				}else{
+					lastPage =false;
+					no_data_more('list');
+				}
+				if(page==1){
+					firstPageHaveData = false;
+				}
+				
+			}
+			push_down_over();
+			api.parseTapmode();
+		}else{
+			$toast(ret.errMsg,1500);
+		}
+	})
+}
+      
+</script>
+</html>

@@ -1,0 +1,141 @@
+
+        .fouse{
+            border: 1px solid #d9ecff;
+            border-radius: 20px;
+            color:#0055aa;
+            padding:5px 7px 2px 7px;
+        }
+        .fouse1{
+            border: 1px solid #dddddd;
+            border-radius: 20px;
+            color:#dddddd;
+            padding:5px 7px 2px 7px;
+        }        
+        .title{
+            color:#000;
+            padding:15px;
+            background:#fff;
+            font-size:22px;
+        }
+        .detail .content{
+            background: #fff;
+            padding:40px 15px;
+            font-size:14px;
+            line-height: 25px;
+        }
+        .detail .content img{
+            width:100%;
+            margin:10px 0;
+        }
+        .line{
+            position: absolute;
+            top:18px;
+            right:15px;
+        }
+        .line img{
+           height:25px;
+        }
+        .detail .eye{
+            overflow: hidden; 
+        }
+        .detail .eye span{
+            float:left;
+            margin-right:10px;
+            color:#898989;
+            font-size: 14px;
+        }
+        .detail .eye span img{
+            display: inline-block;
+            vertical-align: middle;
+            margin:-5px 5px 0 0;
+            height:18px;
+        }
+        .blue{
+            color:#0055aa;
+        }
+        .comment{
+            margin:10px 0;
+            background: #fff;
+        }
+        .comment .title1{
+            color:#888888;
+            overflow: hidden;
+            line-height: 45px;
+            font-size: 16px;
+        }
+        .comment .title1 img{
+            float:left;
+            height:25px;
+            margin:10px 10px 0 0;
+        }
+        .aui-list .aui-list-item{
+            padding:0 15px !important;
+        } 
+        .blue1{
+            color:#0a75e0;
+        }
+        .saysay{
+            margin:-5px 15px 0 50px;
+            color:#333;
+            line-height: 20px;
+            
+        }
+        .list-footer{
+            padding:5px 0 0 50px;
+        }
+        .reply{
+            background: #ececec;
+            border-radius: 10px;
+            padding:2px 7px;
+            margin-left:5px;
+        }
+        .aui-card-list .title2{
+            margin:10px 15px 10px 50px;
+            color:#a4a4a4;            
+        }
+        .aui-card-list .title2 img{
+            height:15px;
+            float:left;
+            margin:1px 10px 0 0;
+        }
+        .footer{
+			position:fixed;
+			bottom:0;
+            width: 100%;
+            height:50px;
+            background: #fff;
+            padding:0 15px;
+            display:-moz-box;
+            display:-webkit-box;
+            display:box;        
+        }
+        .footer .form{  
+         	-moz-box-flex:1;
+           	-webkit-box-flex:1;
+           	 box-flex:1;
+            border-radius:20px;  
+            background: #f2f2f2; 
+            margin:10px 10px 12px 0;
+            padding:5px 10px;
+            height:26px; 
+        }
+       .footer .star{
+            width:145px;
+            padding:15px 0;
+       }
+        .footer .form img{
+            width:15px !important;
+            height:auto !important;
+            display:inline-block;
+            vertical-align: middle;
+            margin-top:-5px !important;
+            margin-right:5px  !important;
+        }      
+        .footer .star img{
+        	color:#888888;
+           
+            display:inline-block;
+            margin-right:5px  !important;
+            vertical-align: middle;
+            margin-top:-4px!important;
+        }              

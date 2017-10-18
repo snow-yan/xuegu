@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>我要关注</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style type="text/css">
+		 	.abst-05{
+		 		top: -0.5em;
+		 	}
+		 	.list-pd{
+		 		padding: .8em .5em;
+		 	}
+		 	.marl50{margin-left:5em}
+		 	.absb15{bottom:1.5em}
+		 	.h117{ height: 117px;}
+		 	.h90{ height: 90px;}
+		</style>
+	</head>
+	<body class="c-wh">
+	<div id="concern">
+	    <script id="concern_left" type="text/html">
+	    <div class="h05e c-edf0f5"></div>
+	    <%
+		if(data.follow_course && data.follow_course.length>0){
+		%>
+		<div class="box ubtb w10 ub-e4e4e4">
+			<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393">
+				<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+				<span class="sl"><font class="t-4371bc">课程</font></span>
+			</p>
+		</div>
+		<div class="h03e c-edf0f5"></div>
+		<ul class=" c-wh ovd pdb05" id="introduce">
+		   <%
+		   for(var i=0;i< data.follow_course.length;i++){
+		   var le_msg = str2json(data.follow_course[i].cor_letv_msg);
+		   var let_v=le_msg.data.video_unique;  
+		   %>
+		   	<li class="clo_two pstnr ubb ub-e4e4e4" tapmode="op8" onclick="open_w('class_details','../html/class_details.html',{'cor_id':'<%=data.follow_course[i].cor_id%>','UID':get_local('uid'),pic:'<%=data.follow_course[i].cor_pic%>',video_unique:'<%=let_v%>'})">
+				    <div class=" w95 area_auto">
+						<div class="col_list">
+							<div class="pdt07 pdb07 pdl02 pdr05 pstnr">
+								<img src="../image/icon/echo_bg.jpg" style=" height:<%=api.frameWidth/3.4-15%>px;" data-echo="<%=data.follow_course[i].cor_pic%>" class="w10 uc-a02 ovd" alt="" />
+								<span class=" pstna absb12 marb025 absr10 marr025 c-616161 uc-a10 t-wh ftz07 ovd pdr05  pdl05">
+									<img src="../image/icon/live_small.png" class="w15e h12e pdr02"/>
+									<font class=" umh15"><%=data.follow_course[i].cor_view%></font>
+								</span>
+							</div>
+						</div>
+						<div class="col_list">
+							<div class="pdr02 pdt07">
+								<p class="umh125 pdb025 ftz085 txo"><%=data.follow_course[i].cor_name%></p>
+								<p class="t-c0c0c0 ftz09 w10" style="max-height: 3.3em;overflow: hidden;">
+									<%
+									var lable = data.follow_course[i].cor_label.split(' ');
+									for(var j=0;j<lable.length;j++){
+									if(is_define(lable[j])){
+									%>
+									<span class="fll pdt01 pdb01 pdl05 pdr05 marr03 mart025 umh1 border-radius-e0e0e0 dsplb"><font class="ftz07"><%=lable[j]%></font></span>
+									<%	
+									}
+									}
+									%>
+								</p>
+							</div>
+						</div>
+						<%
+						if(is_define(data.follow_course[i].cor_charge_money)&& data.follow_course[i].cor_charge_money != 0){
+						%>
+						<p class="pstna absl50p absb05 ovd t-ff7b00 umh15 ftz075"><img src="../image/icon/guzi.png" class="w10e pdt03 pdr01" alt="" /><%=data.follow_course[i].cor_charge_money%></p>
+						<%}else{%>
+						<p class="t-ff7b00 pstna absl50p absb07 ftz075">限时免费</p>
+						<%
+						}
+						%>
+					</div>
+				</li>
+				<!--时间分割-->
+				<div class="pstnr">
+					<div class="pstna abst-05 absr0 t-4371bc c-wh pdl05 pdr10 umh1" style="margin-top:-3px;">
+					<img src="../image/icon/time-blue.png" class="w10e h10e pdt01"/>
+					<span class=" ftz07 pdl02"><%=getLocalTime(data.follow_course[i].cor_date)%></span>
+				    </div>
+				</div>
+			<%
+			}
+			%>
+			</ul>			
+			<div class=" w10 tx-c umh2 c-wh ftz08" tapmode="c-e0e0e0" onclick="open_w('course_list','../html/new/course_list.html');">
+				<img src="../image/icon/more.png" class="w15e h15e pd025"/>
+		    </div>
+		    <%
+		    }
+		    %>
+		</script>
+		</div>
+		
+		<!--问答-->
+		<div id="answers">
+		<script id="answers_left" type="text/html">
+		<%
+		if(data.follow_question && data.follow_question.length>0){
+		%>
+		<div class="h05e c-edf0f5"></div>
+		<div class="box ubtb w10 ub-e4e4e4">
+			<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393">
+				<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+				<span class="sl"><font class="t-4371bc">问答</font></span>
+			</p>
+		</div>
+		<div class="h03e c-edf0f5"></div>
+	    <div class=" c-wh ovd pdb05" id="main_frame">
+		    <%
+			for(var i =0; i< data.follow_question.length;i++){
+			%>
+			<div class="box w10 ovd ubb ub-e0e0e0" tapmode="c-e0e0e0" onclick="open_w('choice_details','../html/choice_details.html',{'question_id':<%=data.follow_question[i].question_id%>,'uid':get_local('uid'),'tangu_id':<%=data.follow_question[i].published_uid%>})">
+				<p class="area_auto w95">
+					<span class="sl pdb05 pdt05 pdl02">
+						<span class="pdl05 pdr05 h10e umh1 c-wh ftz075 pdb03 pdt03 border-radius-ff7b00 tx-c t-ff7b00">
+						    <img src="../image/icon/guzi.png" class="w10e pdr01 " alt="" /><%=data.follow_question[i].question_reward%>
+						</span>
+					</span>
+					<span class="sr umh2 t-c0c0c0 pdt08 pdb05 pdr02 ftz07" id="createTime<%=data.follow_question[i].question_id%>"></span>
+				</p>
+				<p class="ovd w95 area_auto ftz085 t-545454 tx-lr">
+					<span class="pdl02 pdr02"><%=data.follow_question[i].question_content%></span>
+				</p>
+				<div class="ovd w95 area_auto pdt05 pdb05">
+					<p class="w5 fll txo ftz075 umh2">
+						<span class="sl umh2 t-c0c0c0 w10 txo pdl02">
+							<%
+							if(data.follow_question[i].last_answer != 0){
+							%>
+							<img src="<%=data.follow_question[i].face%>" class="w20e h20e uc-a10">
+							<font class="pdl05 pdt01 t-999"><%=data.follow_question[i].nakename%></font>
+							<font class="pdl05 pdt01 t-999">已抢答</font>
+							<%
+							}else{
+							%>
+							<img src="../image/icon/no-answer.png" class="w20e h20e uc-a10">
+							<%
+							}
+							%>
+						</span>
+					</p>
+					<p class="w5 flr ftz075">
+						<span class="sl t-c0c0c0 umh2 pdr07 tx-r w10 txo">
+							<img src="../image/icon/dot-gray.png" class="w20e h20e">
+							<%=data.follow_question[i].view_count%>人
+							<img src="../image/icon/biaoqian.png" class="w10e h10e mart04 pdl05 pdr02">
+							<font class=" pdr02"><%=data.follow_question[i].question_label%></font>
+						</span>
+					</p>
+				</div>
+			</div>
+			<%
+			}
+			%>
+		</div>
+		<div class=" w10 tx-c umh2 c-wh ftz08 ubb ub-e0e0e0" tapmode="c-e0e0e0" onclick="open_w('answer_list','../html/answer_list.html')">
+			<img src="../image/icon/more.png" class="w15e h15e pd025"/>
+		</div>
+		<%
+		}
+		%>
+		</script>
+		</div>
+		<!--<ul class="pdl05 pdr05">
+			<li class="box w10 ovd ubb ub-e4e4e4">
+				<p class="area_auto w95">
+					<span class="sl pdb05 pdt05">
+						<span class="pdl05 pdr05 h15e pdb01 c-wh ftz09 border-radius-ff7b00 tx-c t-ff7b00">
+							<img src="../image/icon/guzi.png" class="w10e pdt03 pdr01 " alt="" />55
+						</span>
+					</span>
+					<span class="sr umh2 t-898888 pdt05 pdb05 ftz08">1分钟前</span>
+				</p>
+				<p class="ovd w95 area_auto ftz09 t-333 tx-lr">
+					<span class="">股票什002237现在可以进吗？14.4附近，还会不会有更低点，什么股票的再等等？</span>
+				</p>
+				<p class="ovd w95 area_auto pdt05 pdb10 ftz09">
+					<span class="sl">
+						<img src="../image/test/tu_5.png" class="w20e h20e">
+					</span>
+					<span class="sl t-898888 umh2 pdl05">答主名称</span>
+					<span class="sl t-898888 umh2 pdl05">已抢答</span>
+					<span class="sr t-898888 umh2 pdl05">技巧</span>
+					<span class="sr t-898888 umh2 pdl05">股票</span>
+					<span class="sr pdt05">
+						<img src="../image/icon/biaoqian.png" class="w10e h10e">
+					</span>
+				</p>
+			</li>
+			<li class="box w10 ovd ubb ub-e4e4e4">
+				<p class="area_auto w95">
+					<span class="sl pdb05 pdt05">
+						<span class="pdl05 pdr05 h15e pdb01 c-wh ftz09 border-radius-ff7b00 tx-c t-ff7b00">
+							<img src="../image/icon/guzi.png" class="w10e pdt03 pdr01 " alt="" />55
+						</span>
+					</span>
+					<span class="sr umh2 t-898888 pdt05 pdb05 ftz08">1分钟前</span>
+				</p>
+				<p class="ovd w95 area_auto ftz09 t-333 tx-lr">
+					<span class="">股票什002237现在可以进吗？14.4附近，还会不会有更低点，什么股票的再等等？</span>
+				</p>
+				<p class="ovd w95 area_auto pdt05 pdb10 ftz09">
+					<span class="sl">
+						<img src="../image/test/tu_5.png" class="w20e h20e">
+					</span>
+					<span class="sl t-898888 umh2 pdl05">答主名称</span>
+					<span class="sl t-898888 umh2 pdl05">已抢答</span>
+					<span class="sr t-898888 umh2 pdl05">技巧</span>
+					<span class="sr t-898888 umh2 pdl05">股票</span>
+					<span class="sr pdt05">
+						<img src="../image/icon/biaoqian.png" class="w10e h10e">
+					</span>
+				</p>
+			</li>
+		</ul>-->
+		<!--谈股-->
+		<!--<div class="h05e c-edf0f5"></div>
+		<div class="box ubtb w10 ub-e4e4e4">
+			<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393">
+				<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+				<span class="sl"><font class="t-4371bc">谈股<font class="t-c0c0c0 ftz09">30</font></font></span>
+			</p>
+		</div>
+		<div class="h03e c-edf0f5"></div>
+		<ul>
+			<li class="box c-wh ovd"  onclick="">
+				<div class="ovd area_auto pstnr ftz10">
+			   		<div class="fll umh10 tx-c w2">
+			   			<img src="../image/test/tu_2.png" class="uc-a w35e h35e pdt05">
+			   		</div>
+			   		<div class="fll w8">
+			   			<p class="txo mart075 umh15 t-4371bc">股票达人</p>
+						<p class="txo pdt03 umh15 ftz08 t-999">16分钟前	来自学股网</p>
+			   		</div>
+			   	</div>
+		   		<div class="ovd area_auto ftz10">
+			   		<div class="flr umh10 w8">
+			   			<div class="pdr05">
+			   				<div class="marb05">
+				   				<div class="txo t-333">大盘本周地位 西陇科学医疗板块升温</div>
+				   				<p class="ftz09 t-898888">002237现在可以进吗？14.4附近，还会不会有更低点，什么股票的再等等？</p>
+				   			</div>
+				   			<div class="ftz08 ubb ub-e0e0e0 ovd pdb05 t-999">
+				   				<span class="fll pdt05">
+									<img src="../image/icon/biaoqian.png" class="w10e h10e">
+								</span>
+								<span class="fll umh2 pdl05">个票</span>
+				   				<span class="fll umh2 pdl05">技巧</span>
+				   				<span class="flr umh2 pdr05">600阅读</span>
+				   				<span class="flr umh2 pdl05"><img src="../image/icon/dot-gray.png" class="w20e h20e"/></span>
+				   			</div>
+			   			</div>
+			   		</div>
+			   	</div>
+			</li>
+			<li class="box c-wh ovd"  onclick="">
+				<div class="ovd area_auto pstnr ftz10">
+			   		<div class="fll umh10 tx-c w2">
+			   			<img src="../image/test/tu_2.png" class="uc-a w35e h35e pdt05">
+			   		</div>
+			   		<div class="fll w8">
+			   			<p class="txo mart075 umh15 t-4371bc">股票达人</p>
+						<p class="txo pdt03 umh15 ftz08 t-999">16分钟前	来自学股网</p>
+			   		</div>
+			   	</div>
+		   		<div class="ovd area_auto ftz10">
+			   		<div class="flr umh10 w8">
+			   			<div class="pdr05">
+			   				<div class="marb05">
+				   				<div class="txo t-333">大盘本周地位 西陇科学医疗板块升温</div>
+				   				<p class="ftz09 t-898888">002237现在可以进吗？14.4附近，还会不会有更低点，什么股票的再等等？</p>
+				   			</div>
+				   			<div class="ftz08 ubb ub-e0e0e0 ovd pdb05 t-999">
+				   				<span class="fll pdt05">
+									<img src="../image/icon/biaoqian.png" class="w10e h10e">
+								</span>
+								<span class="fll umh2 pdl05">个票</span>
+				   				<span class="fll umh2 pdl05">技巧</span>
+				   				<span class="flr umh2 pdr05">600阅读</span>
+				   				<span class="flr umh2 pdl05"><img src="../image/icon/dot-gray.png" class="w20e h20e"/></span>
+				   			</div>
+			   			</div>
+			   		</div>
+			   	</div>
+			</li>
+		</ul>
+		<div class="tx-c">
+			<span class="">
+				<img src="../image/icon/more.png" class="w15e h15e pd025"/>
+			</span>
+		</div>-->
+		<div class="h10e"></div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			get_follow();
+		};
+		function get_follow(){
+			var URL = serverURL + 'app_interface/user/get_follow/';
+			URL+='?secret='+appSecret;
+		    g_ajax(URL,function(ret){
+				if(ret.errCode ==0){
+					$('#concern').html(bt('concern_left',ret));
+					$('#answers').html(bt('answers_left',ret));
+					for(var i =0 ; i < ret.data.follow_question.length;i++){
+						var idx = '#createTime'+ret.data.follow_question[i].question_id;
+						var t = getTimeDifference(ret.data.follow_question[i].add_time);
+						$(idx).text(t);
+					}
+				}else{
+					$toast(ret.errMsg,1500);
+				};
+				push_down_over();
+				api.parseTapmode();
+				Echo.init();
+			});
+		}
+ 	</script>
+</html>

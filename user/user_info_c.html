@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>个人资料</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <link href="../cool_css/css/css_zv100_mobiscroll_002.css" rel="stylesheet">
+        <link href="../cool_css/css/css_zv100_mobiscroll_003.css" rel="stylesheet">
+        <link href="../cool_css/css/css_zv100_mobiscroll.css" rel="stylesheet">
+        <script src="../script/js/js_zv100_jquery-1.8.0.min.js"></script>   
+	    <script src="../script/js/js_zv100_mobiscroll_002.js"></script>
+		<script src="../script/js/js_zv100_mobiscroll_004.js"></script>
+	    <script src="../script/js/js_zv100_mobiscroll.js"></script>
+	    <script src="../script/js/js_zv100_mobiscroll_003.js"></script>
+	    <script src="../script/js/js_zv100_mobiscroll_005.js"></script>
+        <style>
+        	input {
+				color: #777777;
+				font-size: 14px;
+			}
+        	-webkit-input-placeholder{color:#cccccc; font-size:14px; text-align: right;}
+      		.border-gray{
+				text-align: center;
+				padding-top: .3em;
+				padding-bottom: .3em;
+				margin: .5em;
+				color: #666;
+			}
+			.border-light{
+				text-align: center;
+				padding-top: .3em;
+				padding-bottom: .3em;
+				margin: .5em;
+				color: #ff7b00;
+			}
+        </style>
+	</head> 
+	<body class="c-edf0f5">
+		<input type="hidden" id="province" value=""/>
+		<input type="hidden" id="city" value=""/>
+		<div class="w10 h05e" id="howing_data"></div>
+		<script id="howing_data_left" type="text/html">
+			<div class="box ubt c-wh ub-e4e4e4 t-666">
+				<p class="ovd pd05 ubb ub-e4e4e4" tapmode>
+					<span class="sl umh3 pdl05">头像</span>
+					<span class="sr pdr05"><img id="add_pic" src="<%=data.face+"?a="+Date.parse(new Date())%>" onclick="add_file()" class="w35e h35e uc-a" /></span>
+				</p>
+			</div>
+			<div class="w10 h05e"></div>
+			<div class="box w10 ubt c-wh ub-e4e4e4 t-666">
+				<p class="ovd w95 area_auto ubb ub-e4e4e4 " tapmode>
+					<span class="sl umh25 pdl05">昵称</span>
+					<span class="sr w5"><input class="w95 tx-r umh2 pdt05 pdb025 t-999 c-wh" id="nakename" placeholder="<%if(!is_define(data.nakename)){%>请填写昵称<%}else{%><%=data.nakename%><%}%>" value="" type="text" /></span>
+				</p>
+				<p class="ovd w95 ubb ub-e4e4e4 area_auto" tapmode>
+					<span class="sl umh25 pdl05">简介</span>
+					<span class="sr w5"><input maxlength="20" class="w95 tx-r umh2 pdt05 pdb025 t-999 c-wh" id="introduction" placeholder="<%if(!is_define(data.introduction)){%>请填写简介<%}else{%><%=data.introduction%><%}%>" value="" type="text" /></span>
+				</p>
+				<p class="ovd w95 ubb ub-e4e4e4 area_auto" tapmode>
+					<span class="sl umh25 pdl05">性别</span>
+					<span class="sr w333333 tx-r">
+						<select class="w10 c-wh t-999999 ftz09 umh2 mart025 marr05 tx-r pdr05" id="sex" dir="rtl" style=" background-color: transparent; border-color: #fff; color: #999999;">
+							<option value="1" <%if(data.sex==1){%>selected<%}%>>男</option>
+							<option value="2" <%if(data.sex==2){%>selected<%}%>>女</option>
+							<option value="3" <%if(data.sex==3){%>selected<%}%>>保密</option>
+						</select>
+					</span>
+				</p>
+				<p class="ovd w95 ubb ub-e4e4e4 area_auto" tapmode>
+					<span class="sl umh25 pdl05">生日</span>
+					<span class="sr w5"><input type="text" class="w95 tx-r umh2 pdt05 pdb025 t-999 c-wh" placeholder="<%if(!is_define(data.birthday)){%>请选择生日<%}else{%><%=timetostr_ymd(data.birthday)%><%}%>" readonly="readonly" id="endDate" value=""/></span>
+				</p>
+				<p class="ovd w95 ubb ub-e4e4e4 area_auto" tapmode> 
+					<span class="sl umh25 pdl05">职业</span>
+					<span class="sr w8 tx-r">
+						<select class="w10 c-wh t-999999 ftz09 umh2 mart025 marr05 tx-r pdr05" id="job" dir="rtl" style=" background-color: transparent; border-color: #fff; color: #999999;">
+							<%
+							for(var i=0;i< jobList.list.length;i++){
+							%>
+							<option value="<%=jobList.list[i].job_name%>" <%if(jobList.list[i].job_name== data.zhiye){%>selected<%}%> ><%=jobList.list[i].job_name%></option>
+							<%
+							}
+							%>
+						</select>
+					</span>
+				</p>
+				<p class="ovd w95 ubb ub-e4e4e4 area_auto" tapmode>
+					<span class="sl umh25 pdl05">居住</span>
+					<span class="sr w5" ontouchstart="provinces_city()">
+					<span class="w95 tx-r umh2 pdt05 pdb025 t-999" style="font-size: 14px;" id="address">
+					<%if(!is_define(data.province)){%>
+						点击设置居住信息
+					<%}else{%>
+						<%=data.province%> <%=data.city%></span>
+					<%}%>
+					</span>
+				</p>
+				<p class="ovd w95 ubb ub-e4e4e4 area_auto" tapmode>
+					<span class="sl umh25 pdl05">用户等级</span>
+					<%
+					if(is_define(data.current_grade)){
+					%>
+					<span class="sr w5 tx-r umh15 ftz09 pdr05 t-999 pdt075"><%=data.current_grade%></span>
+					<%}else{%>
+					<span class="sr w5 tx-r umh15 ftz09 pdr05 t-999 pdt075"><%=data.current_appellation%></span>
+					<%
+					}
+					%>
+				</p>
+			</div>
+			<div class="h10p w10 edf0f5"></div>
+	    </script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script>
+		var img_data,userInfo={};
+		apiready = function(){
+			getProfession();
+			
+		};
+	    //上传图片
+		function add_file(){
+			api.actionSheet({
+				title : '上传图片',
+				cancelTitle : '关闭',
+				buttons : ['打开相机', '本地图库']
+			}, function(ret, err){
+				if (ret.buttonIndex == 1) {
+					openPicCard('camera');
+				}
+				if (ret.buttonIndex == 2) {
+					openPicCard('library');
+				}
+			});
+		}
+		function openPicCard(type) {
+			api.getPicture({
+				sourceType : type,
+				encodingType : 'jpg',
+				mediaValue : 'pic',
+				destinationType : 'url',
+				quality : 100,
+				saveToPhotoAlbum : false
+			}, function(ret, err) {
+				if (ret) {
+					if (is_define(ret.data)) {
+					//alert(JSON.stringify(ret.data))
+						var pars = {
+							rank : 0,
+							srcPath : ret.data,
+							x1 : 0,
+							y1 : 0,
+							w1 : api.winWidth,
+							h1 : api.winHeight - 48,
+							x2 : (api.winWidth - api.winWidth * 0.5) * 0.5,
+							y2 : (api.winHeight - 50 - api.winWidth * 0.5) * 0.5,
+							w2 : api.winWidth * 0.5,
+							h2 : api.winWidth * 0.5
+						};
+						api.openFrame({
+						    name: 'imageClip',
+						    url: 'imageClip.html',
+						    rect: {
+						        x: 0,
+						        y: 0,
+						        w: 'auto',
+						        h: 'auto'
+						    },
+						    pageParam: pars,
+						    bounces: false,
+						    bgColor: 'rgba(0,0,0,0)',
+						    vScrollBarEnabled: true,
+						    hScrollBarEnabled: true
+						});
+					} else {
+					}
+				} else {
+					$toast('未上传图片', 1000)
+				}
+			});
+		}
+		
+	    //个人信息借口查询
+	    function information_Showing(){
+	        var uid = get_local('uid');
+			var URL = serverURL + "app_interface/user/get_user_info/";
+			var data = {
+		 		values :{
+		 			uid  :uid ,
+		 			secret:appSecret,
+		 		}
+			 	};
+			 	r_ajax(URL,data,function(ret){
+			 		if(ret.errCode==0){
+			 			userInfo.data = ret.data;
+			 			$('#howing_data').html(bt('howing_data_left',userInfo));
+			 			openDataCtrl('endDate');
+			 		}else{
+			 			$toast(ret.errMsg, 1500);
+			 		}
+	
+			 	})
+	    } 
+	        
+	    //个人头像修改 
+	    function avatar_Modification(){
+	    	if(is_define(img_data)){
+	         	var pras = api.pageParam;
+				var URL = serverURL + "app_interface/user/user_avatar_edit/";
+				var uid = get_local('uid');
+				var data = {
+			 		values :{
+			 		    uid :uid,
+			 		    secret:appSecret,
+			 		    data :img_data
+			 		}
+			 	};
+			 	r_ajax(URL,data,function(ret){
+			 	    if(ret.errCode==0){
+			 	    	var face = ret.data.file;
+						api.execScript({
+							name : pras.winName,
+							frameName : pras.frameName,
+							script : 'getUserInfo()'
+						});
+						$('#add_pic').attr('src',ret.data.file+'?a='+Date.parse(new Date())	);
+			 		}else{
+			 			$toast(ret.errMsg, 1500);
+			 		}
+			 	})
+			 }
+			 personal_Data();
+		}
+		//获取职业字段
+		  function getProfession(){
+			var URL = serverURL + 'app_interface/user/get_job_list/';
+			URL+='?secret='+appSecret;
+		    g_ajax(URL,function(ret)
+			{
+				if(ret.errCode == 0){
+					userInfo.jobList = ret.data;
+					information_Showing();
+				}
+			})
+		}
+		//修改信息
+   		function personal_Data(){
+			var URL = serverURL + "app_interface/user/user_info_edit/";
+			var uid = get_local('uid');
+			var nakename = $api.trimAll($("#nakename").val());
+			if(!is_define(nakename)){
+				nakename = $("#nakename").attr('placeholder');
+			}
+			var introduction = $api.trimAll($("#introduction").val());
+			if(!is_define(introduction)){
+				introduction = $("#introduction").attr('placeholder');
+			}
+			var sex = $("#sex").val();
+			var work = $("#job").val();
+			var endDate = $("#endDate").val();
+//			var work = $api.trimAll($("#work").val());
+			if(!is_define(work)){
+				work = $("#work").attr('placeholder');
+			}
+			var province = $("#province").val();
+			var city = $("#city").val();
+			var data = {
+		 		values :{
+		 		    uid :uid,
+		 		    secret:appSecret,
+		 		    face :img_data,
+		 			nakename :nakename,
+		 			introduction :introduction,
+		 			sex :sex,
+		 			birthday :endDate,
+		 			zhiye :work,
+		 			city : city,
+		 			province : province
+		 		}
+		 	};
+		 	r_ajax(URL,data,function(ret){
+		 	    if(ret.errCode==0){
+		 	        api.execScript({
+						name : 'root',
+						frameName : 'user',
+						script : 'getUserInfo()'
+					});
+					$toast(ret.errMsg, 1500);
+					setTimeout(function(){
+					    close_w();
+					},1500);
+		 		}else{
+		 			$toast(ret.errMsg, 1500);
+		 		}
+		 	})
+    	}  
+    //省市区
+    function provinces_city(){
+        var UIActionSelector = api.require('UIActionSelector');
+		UIActionSelector.open({
+		    datas: 'widget://res/city.json',
+		    layout: {
+		        row: 5,
+		        col: 2,
+		        height: 30,
+		        size: 20,
+		        sizeActive: 14,
+		        rowSpacing: 5,
+		        colSpacing: 10,
+		        maskBg: 'rgba(0,0,0,0.2)',
+		        bg: '#fff',
+		        color: '#888',
+		        colorActive: '#f00',
+		        colorSelected: '#f00'
+		    },
+		    animation: true,
+		    cancel: {
+		        text: '取消',
+		        size: 16,
+		        w: 90,
+		        h: 35,
+		        bg: '#fff',
+		        bgActive: '#ccc',
+		        color: '#888',
+		        colorActive: '#fff'
+		    },
+		    ok: {
+		        text: '确定',
+		        size: 16,
+		        w: 90,
+		        h: 35,
+		        bg: '#fff',
+		        bgActive: '#ccc',
+		        color: '#888',
+		        colorActive: '#fff'
+		    },
+		    title: {
+		        text: '请选择',
+		        size: 16,
+		        h: 44,
+		        bg: '#eee',
+		        color: '#888'
+		    },
+		    fixedOn: api.frameName
+		}, function(ret, err) {
+		    if (ret) {
+		    	if(ret.eventType=="ok"){
+		    	    var pl=ret.level1+' '+ret.level2;
+			        $('#province').val(ret.level1);
+			        $('#city').val(ret.level2);
+			        $('#address').text(pl);
+		    	}else{
+		    	}
+		      
+		    } else {
+		    }
+		});
+    }
+    //标签选择
+//	function choiceThis(el){
+//		if($api.hasCls($api.first(el,'div'), 'selected')){
+//			$api.attr($api.first(el,'div'), 'class', 'border-gray border-radius-e0e0e0');
+//			getTap(el);
+//		}else{
+//			changeTap(el);
+//		}
+//	}
+//	function changeTap(el){
+//		var tap = $api.domAll('.selected');
+//		if(tap.length<5){
+//			$api.attr($api.first(el,'div'), 'class', 'border-light border-radius-ff7b00 selected');
+//			getTap(el);
+//		}else{
+//			$toast('最多添加只能5个标签',2000)
+//		}
+//	}
+//	function getTap(el){
+//		var txt = '';
+//		var tap = $api.domAll('.selected');
+//		for (var i = 0; i < tap.length; i++) {
+//			if(i!=tap.length-1){
+//				txt += $(tap[i]).html()+" ";
+//			}else{
+//				txt += $(tap[i]).html();
+//			}
+//		}
+//		$('#biaoqian').val(txt);
+//	}
+		
+		function savePic(destPath){
+			var trans = api.require('trans');
+			trans.decodeImgToBase64({
+			    imgPath: destPath
+			}, function(ret, err) {
+			    if (ret.status) {
+			        img_data=ret.base64Str;
+					$('#add_pic').attr('src',destPath);
+			    } else {
+			        $toast(JSON.stringify(err),1500);
+			    }
+			}); 
+		}
+		function openDataCtrl(id){
+			var currYear = (new Date()).getFullYear();	
+			var opt={};
+			opt.date = {preset : 'date'};
+			opt.datetime = {preset : 'datetime'};
+			opt.time = {preset : 'time'};
+			opt.default = {
+				theme: 'android-ics light', //皮肤样式
+		        display: 'bottom', //显示方式 bottom modal
+		        mode: 'scroller', //日期选择模式scroller,mixed
+				dateFormat: 'yyyy-mm-dd',
+				lang: 'zh',
+				showNow: false,
+				nowText: "今天",
+		        startYear: currYear - 77, //开始年份
+		        endYear: currYear //结束年份
+			};
+		  	var optTime = $.extend(opt['date'], opt['default']);
+		    $("#"+id).mobiscroll(optTime).date(optTime);
+		}
+    </script>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>搜索牛人</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style type="text/css">
+			.abst15{top:1.5em}
+		</style>
+	</head>
+	<body class="c-ebf2fc">
+	<input type="hidden" id="page" value="1"/>
+	<div class=" box w10 ovd mart025">
+		<ul class="c-wh" id="hot_lecturer"></ul>
+		<script type="text/html" id="hot_lecturer_list">
+			<%
+			for(var i=0;i< user_data.length;i++){
+			%>
+			<li class="ubb ub-e0e0e0" tapmode="c-e0e0e0">
+			    <div class="pdl07 pdr07 area_auto">
+					<div class="pdl02 pdr02 pdt07 pdb07 pstnr ovd">
+						<div class="w6 ovd" onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=user_data[i].uid%>,uid:get_local('uid')});event.preventDefault();event.stopPropagation();">
+							<div class="fll dsplb pstnr">
+								<%
+								if(is_define(user_data[i].face)){
+								%>
+								<img src="<%=user_data[i].face%>" class="uc-a w35e h35e marr05">
+								<%
+								}else{
+								%>
+								<img src="../image/icon/no-answer.png" class="uc-a w35e h35e marr05" tapmode="op8" onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=user_data[i].uid%>,uid:get_local('uid')});event.preventDefault();event.stopPropagation();">
+								<%
+								}
+								%>
+							</div>
+							<p class="ftz095 mart05 umh15 t-4371bc txo"><%=user_data[i].nakename%></p>
+							<p class="txo umh15 ftz07 t-999"><%if(is_define(user_data[i].signature)){%><%=user_data[i].signature%><%}%></p>
+						</div>	
+						<div class="w60e h15e umh15 pstna abst15 ftz09 absr10 c-ff7b00 border-radius-ff7b00">
+							<%
+							if(is_define(user_data[i].focus)){
+							%>
+							<div class="fll w5 tx-c umh15 t-wh ubr ub-wh yes" id="reduce<%=user_data[i].uid%>" onclick="change_attention(this,'0',<%=user_data[i].uid%>);event.preventDefault();event.stopPropagation();">
+								<div class="t-wh c-c0c0c0" style="border-radius: 0.3em 0 0 0.2em;"><font class="ftz085">已关注</font></div>
+							</div>
+							<div class="fll w5 tx-c umh15 t-wh ovd no dspn" id="add<%=user_data[i].uid%>" onclick="change_attention(this,'1',<%=user_data[i].uid%>);event.preventDefault();event.stopPropagation();">
+								<div class="c-wh t-ff7b00" style="border-radius: 0.3em 0 0 0.2em;">+关注</div>
+							</div>
+							<%
+							}else{
+							%>
+							<div class="fll w5 tx-c umh15 t-wh ovd no" id="add<%=user_data[i].uid%>" onclick="change_attention(this,'1',<%=user_data[i].uid%>);event.preventDefault();event.stopPropagation();">
+								<div class="c-wh t-ff7b00" style="border-radius: 0.3em 0 0 0.2em;">+关注</div>
+							</div>
+							<div class="fll w5 tx-c umh15 t-wh ubr ub-wh yes dspn" id="reduce<%=user_data[i].uid%>" onclick="change_attention(this,'0',<%=user_data[i].uid%>);event.preventDefault();event.stopPropagation();">
+								<div class="t-wh c-c0c0c0" style="border-radius: 0.3em 0 0 0.2em;"><font class="ftz085">已关注</font></div>
+							</div>
+							<%
+							}
+							if(is_define(get_local('uid'))){
+							%>
+							<span class="fll w5 tx-c umh15 t-wh" onclick="open_w('put_questions_to','../html/put_questions_to.html',{targetuid:<%=user_data[i].uid%>,uid:get_local('uid'),tagetNakename:'<%=user_data[i].nakename%>'});event.preventDefault();event.stopPropagation();">@TA</span>
+							<%
+							}else{
+							%>
+							<span class="fll w5 tx-c umh15 t-wh" onclick="$toast('您还没有登录，请先登录',1000);setTimeout(function(){open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});event.preventDefault();event.stopPropagation();},1000)">@TA</span>
+							<%
+							}
+							%>
+						</div>
+					</div>
+			    </div>
+			</li>
+			<%
+			}
+			%>
+		</script>
+    </div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var lastPage = true,firstPageHaveData=true;
+		apiready = function() {
+			get_more_lecturer();
+			push_down(function(){
+				if(firstPageHaveData){
+					get_more_lecturer();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},1500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					get_more_lecturer('next');
+				}
+			});
+		};
+		function get_more_lecturer(typ){
+			var keyWords = api.pageParam.keyWords;
+			var base = new Base64(); 
+			var result = base.encode(keyWords);
+			var uid= get_local('uid');
+			if(typ=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			var pagesize = 10;
+			var URL = serverURL + 'app_interface/user/search_user/';
+			if(is_define(uid)){
+				URL+='?secret='+appSecret+'&uid='+uid+'&page='+page+'&keyword='+result+'&pagesize='+pagesize;
+			}else{
+				
+				URL+='?secret='+appSecret+'&page='+page+'&keyword='+result+'&pagesize='+pagesize;
+			}
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					if(ret.data.user_data.length>0){
+						if(typ=='next'){
+							$('#hot_lecturer').append(bt('hot_lecturer_list',ret.data));
+						}else{
+							$('#hot_lecturer').html(bt('hot_lecturer_list',ret.data));
+							push_down_over();
+						}
+						for(var i =0 ; i < ret.data.user_data.length;i++){
+							var idx = '#createTime'+ret.data.user_data[i].question_id;
+							var t = getTimeDifference(ret.data.user_data[i].add_time);
+							$(idx).text(t);
+						}
+						ue_script(api.winName,'setCourseCount('+ret.data.count+')');
+					}else{
+						if(page==1){
+							firstPageHaveData = false;
+						}
+						lastPage =false;
+						no_data_more('hot_lecturer');
+					}
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		function change_attention(el,type,tagetUid){
+			var URL = serverURL + 'app_interface/main/follow_user/';
+			var UID = get_local('uid');
+			var reduceId = '#reduce'+tagetUid;
+			var addId = '#add'+tagetUid;
+			if(is_define(UID)){
+				var data = {
+					values: {
+					secret:appSecret,
+					uid:tagetUid,
+					login_uid:UID
+					}
+				};
+				r_ajax(URL,data,function(ret){
+					if(ret.errCode == 0){
+						if(type == 0){
+						$(reduceId).addClass('dspn');
+						$(addId).removeClass('dspn');
+						$toast('关注已取消',500);
+					}
+					if(type == 1){
+						$(addId).addClass('dspn');
+						$(reduceId).removeClass('dspn');
+						$toast('关注成功',500);
+					}
+					}else{
+						$toast(ret.errMsg,1500);
+					}
+					api.parseTapmode();
+				})
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				},1000);
+			}
+		}
+	</script>
+</html>

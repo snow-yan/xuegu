@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>设置</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+		<style>
+        .switch
+        {
+			width: 52px;
+			height: 26px;
+			position: relative;
+			border: 1px solid #dfdfdf;
+			background-color: #fdfdfd;
+			box-shadow: #dfdfdf 0 0 0 0 inset;
+			border-radius: 13px;
+			border-top-left-radius: 13px;
+			border-top-right-radius: 13px;
+			border-bottom-left-radius: 13px;
+			border-bottom-right-radius: 13px;
+			background-clip: content-box;
+			display: block;
+			-webkit-appearance: none;
+			user-select: none;
+			outline: none;
+			padding:0px;
+			margin-top:3px;
+		}
+  		.switch:before
+  		{
+    		content: '';
+		    width: 26px;
+		    height: 24px;
+		    position: absolute;
+		    top: 0px;
+		    left: 0;
+		    border-radius: 12px;
+		    border-top-left-radius: 12px;
+		    border-top-right-radius: 12px;
+		    border-bottom-left-radius: 12px;
+		    border-bottom-right-radius: 12px;
+		    background-color: #fff;
+		    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+		}
+  		.switch:checked
+  		{
+    		border-color: #26df02;
+    		box-shadow: #26df02 0 0 0 16px inset;
+    		background-color: #26df02;
+    	}
+    	.switch:checked:before
+    	{
+      		left: 24px;
+      	}
+  		.switch.switch-anim
+  		{
+    		transition: border cubic-bezier(0, 0, 0, 1) 0.4s, box-shadow cubic-bezier(0, 0, 0, 1) 0.4s;
+    	}
+    	.switch.switch-anim:before
+    	{
+      		transition: left 0.3s;
+      	}
+    	.switch.switch-anim:checked
+    	{
+      		box-shadow: #26df02 0 0 0 13px inset;
+      		background-color: #26df02;
+      		transition: border ease 0.4s, box-shadow ease 0.4s, background-color ease 1.2s;
+      	}
+      	.switch.switch-anim:checked:before
+      	{
+        	transition: left 0.3s;
+        }
+        </style>
+	</head> 
+	<body class="c-edf0f5">
+		<div class="w10 h05e"></div>
+		<div class="box ubt c-wh ub-e4e4e4 t-333">
+			<p class="ovd pd05 ubb ub-e4e4e4" tapmode="">
+				<span class="sl umh2 pdl025">允许非WIFI网络播放</span>
+				<span class="sr umh2">
+					<input class="switch switch-anim" id="check_wifi" type="checkbox" onclick="get_wifi(this)">
+				</span>
+			</p>
+			<p class="ovd pd05 ubb ub-e4e4e4 dspn" tapmode="">
+				<span class="sl umh2 pdl025">允许非WIFI缓存视频</span>
+				<span class="sr umh2">
+					<input class="switch switch-anim" type="checkbox">
+				</span>
+			</p>
+		</div>
+		<div class="w10 h05e"></div>
+		<div class="box ubt c-wh ub-e4e4e4 t-333">
+			<p class="ovd pd05 ubb ub-e4e4e4" tapmode="c-e0e0e0" onclick="clear_cache()" >
+				<span class="sl umh2 pdl025">清除缓存</span>
+				<span class="sr umh15 t-999 pdt025 pdb025 w70e">
+					<span class="sr"><img src="../image/icon/right_gra.png" class="w15e"></span>
+					<span class="sr pdl01">M</span>
+					<span class="sr" id="size">0.00</span>
+				</span>
+			</p>
+		</div>
+		<div class="w10 h05e"></div>
+		<div class="box ubt c-wh ub-e4e4e4 t-333">
+			<p class="ovd pd05 ubb ub-e4e4e4"  tapmode="c-e0e0e0" onclick="open_w('protocol','protocol.html')">
+				<span class="sl umh2 pdl025">免责声明</span>
+				<span class="sr umh15 pdt025 pdb025"><img src="../image/icon/right_gra.png" class="w15e"></span>
+			</p>
+			<!--<p class="ovd pd05 ubb ub-e4e4e4"  tapmode="c-e0e0e0" onclick="check_update()">
+				<span class="sl umh2 pdl025">检查更新</span>
+				<span class="sr umh15 pdt02 pdb025"><img src="../image/icon/right_gra.png" class="w15e pdt01"></span>
+				<span class="sr umh25 ftz09 t-999 " id="version">版本号</span>
+			</p>-->
+			<p class="ovd pd05 ubb ub-e4e4e4"  tapmode="c-e0e0e0" onclick="open_w('about_us','about_us.html')">
+				<span class="sl umh2 pdl025">关于</span>
+				<span class="sr umh15 pdt025 pdb025"><img src="../image/icon/right_gra.png" class="w15e"></span>
+			</p>
+		</div>
+		<div class="box w10 pdt15">
+            <p class="w10 area_auto mart10 c-wh uc-a03" tapmode="c-e0e0e0" onclick="login_out()">
+                <span class="w10 tx-c t-ff7b00 umh3">退出登录</span>
+            </p>
+        </div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+	<script>
+	apiready = function(){
+		cache_size();
+		check_wifi();
+		$('#version').text(api.appVersion);
+		
+	};
+	function check_wifi(){
+		var allow_no_wifi_play = get_local('allow_no_wifi_play');
+		if(is_define(allow_no_wifi_play)){
+			$('#check_wifi').attr('checked','checked');
+			$('#check_wifi').removeClass('yes');
+		}else{
+			$('#check_wifi').removeAttr('checked');
+			$('#check_wifi').addClass('yes');
+		}
+	}
+	function cache_size() {
+		api.getCacheSize(function(ret) {
+			var sizes = ret.size;
+			var size = (sizes / 1024 / 1024).toFixed(2);
+			$('#size').text(size);
+		});
+	}
+	function clear_cache() {
+		api.clearCache(function() {
+			$toast('清除成功', 1500);
+			setTimeout(function(){
+				$('#size').text("0.00");
+			},1500);
+		});
+	}
+	function login_out(){
+		api.confirm({
+			title : '提示信息',
+			msg : '您确定要退出吗？',
+			buttons : ['确定', '取消']
+		}, function(ret, err){
+			if (ret){
+				if (ret.buttonIndex == 1){
+					var URL = serverURL + "app_interface/user/user_logout/";
+					var uid =get_local('uid');
+					var data = {
+				 		values :{
+				 			uid:uid,
+				 			secret:appSecret
+				 		}
+				 	};
+					r_ajax(URL,data,function(ret){
+				 		if(ret.errCode==0){
+							remove_Local('uid');//用户id
+							remove_Local('face');//用户头像
+							remove_Local('user_name');//用户名
+							remove_Local('nakename');//用户昵称
+							remove_Local('is_youke');//用户类型（游客、账户）
+							remove_Local('AuthenticationStatus');
+							remove_Local('allow_no_wifi_play');//是否允许无wifi视频播放
+							ue_script("root","set_local('uid','');rong_start()");
+							var weibo = api.require('weibo');
+							weibo.cancelAuth(function(ret, err) {
+							});
+				 			$toast(ret.errMsg,1500);
+				 			open_w('index','../index.html',{'index':'user'});	
+				 			refreshNews();	 		
+				 		}else{
+				 			$toast(ret.errMsg, 1500);
+				 		}
+				 	})
+				}
+			}
+		});
+	}
+	function get_wifi(el){
+		setTimeout(function(){
+			if($(el).hasClass('yes')){
+				set_local('allow_no_wifi_play','yes');
+				$('#check_wifi').removeClass('yes');
+			}else{
+				remove_Local('allow_no_wifi_play');
+				$('#check_wifi').addClass('yes');
+			}
+		},500);
+	}
+	</script>
+</html>

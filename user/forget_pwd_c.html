@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title></title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+        .h03e{height:0.03em}
+        .absl40p{ left:47.5%;}
+        .c-c0c0c0{  background: #c0c0c0}
+        .t-f9f9f9{  color: #f9f9f9}
+        .pdlr015{padding: 0 .15em 0.15em;}
+        </style>
+	</head> 
+	<body class="c-wh">
+		<div class="box w10">
+             <p class="w9 area_auto ubb ub-e0e0e0">
+                <span class="w10 tx-c umh25 pdt02 pdb02 pstnr">
+                	<span class=" pstna absl0 abst08"><img src="../image/icon/login_tel.png" class=" w12e h15e pdlr015" /></span>
+                    <input type="tel" oninput="myFunction()" id="mobile" placeholder="输入手机号" class="c-wh w9 pdl20 ubnone pdt05 pdb05 umh15 ftz07">
+                </span>
+             </p>
+             <p class="w9 area_auto  ubb ub-e0e0e0 ">
+                <span class="w10 tx-c umh25 pdt02 pdb02 pstnr">
+               		<span class=" pstna absl0 abst08"><img src="../image/icon/pwd_code.png" class=" w12e h15e pdl02" /></span>
+               		<span class=" pstna absr0 mart05 t-545454 border-radius-e0e0e0 ftz08 pdl05 umh2 pdr05" id="getCode"  tapmode='c-e0e0e0' onclick="getCode()">
+               			<font class="ftz085" id="getCodeFont">获取验证码</font>
+               		</span>
+               		<span class=" pstna absr0 mart05 t-545454 border-radius-e0e0e0 ftz08 pdl05 umh2 pdr05" id="getCodeIng" style="display: none;">
+               			<font class="ftz085" id="getCodeIngFont">重新获取(60s)</font>
+               		</span>
+                    <input type="tel" oninput="myFunction()" id="code" placeholder="输入验证码" class="c-wh w9 pdl20 ubnone pdt05 pdb05 umh15 ftz07">
+                </span>
+             </p>
+             <p class="w9 area_auto  ubb ub-e0e0e0 ">
+                <span class="w10 tx-c umh25 pdt02 pdb02 pstnr">
+                	<span class=" pstna absr0 pdt07 umh2 pdr05"  onclick="change_input_att('password')" ><img src="../image/icon/eyes.png" class=" w15e h12e" id="img"/></span>
+               		<span class=" pstna absl0 abst08" tapmode ><img src="../image/icon/password.png" class=" w12e h15e pdl02" /></span>
+                    <input type="password" oninput="myFunction()" id="password" placeholder="请输入6-16位密码，限英文+数字" class="c-wh w9 pdl20 ubnone pdt05 pdb05 umh15 ftz07">
+                </span>
+             </p>
+             <p class="w10 h50e"></p>
+             <p id="no_can_pwd" class="w9 area_auto  c-c0c0c0 uc-a02">
+                <span class="w10 tx-c umh25 pdt01 pdb01 t-f9f9f9" >确认重置</span>
+             </p>
+              <p id="can_pwd" class="w9 dspn area_auto  c-4371bc uc-a02" tapmode="op8" onclick="reset_password()">
+                <span class="w10 tx-c t-wh pdt01 pdb01 umh25">确认重置</span>
+             </p>
+        </div>
+        <div class="w10 h10e"></div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script>
+	apiready = function(){
+		
+	};
+	var registerCode;
+	function myFunction(){
+		$('#can_pwd').hide();
+		$('#no_can_pwd').show();
+		var mobile = $("#mobile").val();
+		var code = $("#code").val();
+		var password = $("#password").val();
+		if (is_define(mobile)&&is_define(code)&&is_define(password)) {
+			$('#can_pwd').show();
+			$('#no_can_pwd').hide();
+		}
+	}
+	function change_input_att(id){
+		var att = $api.attr($api.byId(id), "type");
+		if(att=='password'){
+			$api.attr($api.byId(id), "type","text");
+			$('#img').attr("src","../image/icon/eyes-light.png");
+		}else{
+			$api.attr($api.byId(id), "type","password");
+			$('#img').attr("src","../image/icon/eyes.png");
+		}
+	}
+	function reset_password(){
+		var URL = serverURL + 'app_interface/user/user_pass_reset/';
+		var phone_reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+		var login_pwd = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
+		var mobile = $("#mobile").val();
+		var password = $("#password").val();
+		var code = $("#code").val();
+		if (!is_define(mobile)) {
+			$toast("请输入手机号", 1000);	
+			return false;
+		}
+		if (!phone_reg.test(mobile)) {
+			$toast("手机号格式错误！", 1500);
+			return false;
+		}
+		if (!is_define(code)) {
+			$toast("请输入验证码", 1000);
+			return false;
+		}
+		if(code != registerCode ){
+			$toast("验证码输入错误，请重新输入！", 1500);
+			return false;
+		}
+		if (!is_define(password)) {
+			$toast("请设置登录密码", 1000);
+			return false;
+		}
+		if (!login_pwd.test(password)) {
+			$toast("密码格式错误！", 1500);
+			return false;
+		}
+		var data = {
+	 		values :{
+	 			user_name:mobile,
+	 			password:password,
+	 			secret:appSecret
+	 		}
+	 	};
+	 	r_ajax(URL,data,function(ret){
+	 		if(ret.errCode==0){
+	 			$toast(ret.errMsg, 1500);
+	 			setTimeout(function() {
+					close_w();
+				}, 1500);
+	 		}else{
+	 			$toast(ret.errMsg, 1500);
+	 		}
+	 	})
+	}
+	function getCode(){
+		var Url= "http://222.73.117.158/msg/HttpBatchSendSM?";
+		var phone_reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+		var account = "vip_xgw888";
+		var pswd = "Tch272025";
+		var msg0 ="您的验证码是：";
+		registerCode = MathRand(function(ret){});
+		var msg1 ="。请完成校验";
+		var needstatus = 'true';
+		var mobile = $('#mobile').val();
+		if (!is_define(mobile)) {
+			$toast("请输入手机号", 1500);
+			return false;
+		}
+		if (!phone_reg.test(mobile)) {
+			$toast("手机号格式错误！", 1500);
+			return false;
+		}
+		var URL = Url + 'account='+account+ '&pswd='+ pswd + '&mobile='+ mobile + '&msg='+msg0+registerCode+msg1+'&needstatus='+needstatus;
+		$("#getCodeFont").text("正在获取");
+		$api.get(URL,function(ret){
+			var msg = ret.split('\n');
+			var result = msg[0].split(',');
+			var backTime = result[0];
+			var code = result[1];
+			if (code == 0) {
+				$toast('已发送验证码',1500);
+				var t = 59;
+				$("#getCode").css({
+					display : "none"
+				});
+				$("#getCodeIng").css({
+					display : "block"
+				});
+				$("#getCodeIngFont").text("重发(60s)");
+				var t1 = setInterval(function() {
+					if (t >= 0) {
+						$("#getCode").css({
+							display : "none"
+						});
+						$("#getCodeIng").css({
+							display : "block"
+						});
+						$("#getCodeIngFont").text("重发(" + t + "s)");
+					} else {
+						$("#getCodeFont").text("重新获取");
+						$("#getCode").css({
+							display : "block"
+						});
+						$("#getCodeIng").css({
+							display : "none"
+						});
+						clearInterval(t1);
+					}
+					t--;
+				}, 1000);
+			} else {
+				$("#getCodeFont").text("获取验证码");
+				$toast('验证码发送失败，请重新发送',2000);
+			}
+		},'text');
+	}
+	</script>
+</html>

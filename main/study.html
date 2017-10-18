@@ -1,0 +1,371 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>学股</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/study.css">
+    <link rel="stylesheet" type="text/css" href="../css/course.css">
+    <link rel="stylesheet" type="text/css" href="../css/swiper.min.css">
+    <style>
+    .slide {
+          text-align: center;
+          font-size: 18px;
+          width: 33.3%;
+          /* opacity: 0.4; */
+          /* Center slide text vertically */
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          -webkit-justify-content: center;
+          justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          -webkit-align-items: center;
+          align-items: center;
+      }
+      .wrapper{
+        padding-left:8.6%;
+      }
+      .slide:last-child(1) {
+          width:16.5%;
+      }
+      .slide div{
+      	position:relative;
+        overflow: hidden;
+      }
+      .slide div img{
+        width:50%;
+        float:left;
+      }
+      .slide div div{
+            float: left;
+            width:50%;
+            margin-top:25%;
+            height:2px;
+            background: #002a55;
+            
+        }
+      .slide p{
+        margin-left:-50%;
+        margin-top:5px;
+      } 
+      .border-l{
+      	border-left:1px solid #dcdcdc;
+      }
+      .swiper-slide-active p{
+		  font-weight:bold; color:#fff;
+		}
+      .orange{ background: #f39800;}
+    </style> 
+</head>
+<body>
+  <header class="aui-bar aui-bar-nav header" id="header">
+    <div class="aui-title">学股</div>
+    <a class="aui-pull-right aui-btn"  onclick="open_w('search','../html/search.html')">
+        <span style="width:1.7rem;"><img src="../img/search.png" alt="" ></span>
+    </a>
+  </header>
+  <div class="title" id="tollgate"> </div>
+  	<script id="tollgate_tpl" type="text/html">
+    <div class="swiper-container" id="game">
+      	<div class="swiper-wrapper wrapper" >
+  			<%for(var i=0;i< tollgate_list.length; i++ ){%>
+  			
+			 <div class="swiper-slide slide">
+	            <div>
+	            <%if( tollgate_list[i].number < tollgate_find.tollgate_num){ %>
+	            	<!--闯关已通过-->
+	                <img src="<%=tollgate_list[i].icon3%>" alt="">
+	                 <% if(i!=5){ %>
+	            	 <div class="orange"></div> 
+	            	<% } %> 
+	           <% }else if(tollgate_list[i].number == tollgate_find.tollgate_num){ %> 
+	                 <!--正在闯关-->
+	                 <img src="<%=tollgate_list[i].icon2%>" alt="">
+	                <% if(i!=5){ %>
+	            	 	<div></div> 
+	            	<% } %> 
+	          	<% }else{ %>
+	                <!--未闯关-->
+	                <img src="<%=tollgate_list[i].icon1%>" alt="">
+	                <% if(i!=5){ %>
+	            	 	<div></div> 
+	            	<% } %> 
+	            <%}%>                         
+	            </div>
+	            <p><%=tollgate_list[i].title %></p>                  
+	        </div>
+    		<%}%>                                                                                                                  
+        </div>
+    </div>
+    <h3>
+    	<% 
+    	if(tollgate_course_find!=""){ 
+    		if(tollgate_course_find.cor_is_charge==1){ 
+    	%>
+    	 	<span class="yellow">【精品】</span>
+    		<% }%> 
+	   	 	<%=tollgate_course_find.cor_name%>
+	    <% }else{ %>
+	    	 常用的股市俗语（一）
+	    <% } %>
+    </h3>
+    <div class="bottom">
+        <span class="aui-pull-left left">
+          <span class="yellow"><%=tollgate_find.tollgate_num%>/6</span><span>|</span>已完成
+        </span>
+        <a class="center" onclick="open_w('training_camp','../html/new/training_camp.html')"><span >修炼</span></a>
+        <span class="aui-pull-right right">
+          <span class="yellow"><%=defeat_user_num%>%</span><span>|</span>已战胜
+        </span>  
+    </div>
+    </script>             
+ 
+  <div class="my_course">
+      <h4 class="course_title aui-border-b">学习计划</h4>
+      <!-- 没有课程 -->
+      <div class="empty">
+          <div class="add" onclick="open_w('course_list','../html/new/course_list.html')">
+          <strong><i class="aui-iconfont aui-icon-plus"></i>全部课程(<span id="all_course"></span>节)</strong></div>
+          <p>你的课程表空空如也，快去添加吧~</p>
+      </div>
+     <div class="aui-content"  id="study_plan"></div>
+    <script id="study_plan_tpl" type="text/html">
+	  	<ul class="aui-list aui-media-list">
+	   	<%
+	   		for(var i=0;i< data.length;i++){
+	   		if(i<3)	{
+	   	%>
+          <li class="aui-list-item">
+              <div class="aui-media-list-item-inner" >
+                  <div class="aui-list-item-media" style="width:7rem;">
+                      <img src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].cor_pic%>" >
+                  </div>
+                  <div class="aui-list-item-inner aui-margin-t-10">
+                      <div class="aui-list-item-text">
+                          <div class="aui-list-item-title  aui-ellipsis-1"><%=data[i].cor_name%>
+                          </div>
+                      </div>
+                      <div class="aui-list-item-text aui-margin-t-5"  style="height:1rem;"></div>
+                      <div class="aui-list-item-text">
+                          <span style="color:#8d8d8d;">
+			               	<img src="../img/eye.png" alt="" style="float:left;width:15px;margin:3px 5px 0 0;"><%=data[i].cor_view%>
+			              </span>
+                          <%if(data[i].cortab_status==0){%>
+                          <span class="lable_course1" onclick="open_w('class_details','../html/class_details.html',{'cor_id':'<%=data[i].cor_id%>'})">马上学习</span>
+                          <%}else{%>
+                          <span class="lable_course"  onclick="open_w('class_details','../html/class_details.html',{'cor_id':'<%=data[i].cor_id%>'})">上次观看</span>
+                          <%}%>
+                      </div>                      
+                  </div>
+              </div>
+          </li>
+        <%}}%>             
+        </ul>
+        <div class="footer">
+	        <div onclick="open_w('study_plan','../html/new/study_plan.html')">已加入<strong class="yellow"><%=count%>节</strong>课程</div>
+	        <div class="border-l" onclick="open_w('course_list','../html/new/course_list.html')"><b class="aui-iconfont aui-icon-plus aui-margin-r-5"></b>全部课程(<%=total%>节)</div>        
+        </div>
+	</script>
+  </div>
+  <div class="card" id="today"></div>
+  <script type="text/html" id="today_tpl">
+    	<img src="../image/icon/echo_bg.jpg" data-echo="<%=data.cor_pic%>" alt="" onclick="open_w('class_details','../html/class_details.html',{'cor_id':'<%=data.cor_id%>'})">
+      	<div class="title1 aui-ellipsis-1 ">
+        	<%=data.cor_name%>
+      	</div>	 
+  </script>  
+  <div class="recommend">
+      <h4 class="course_title aui-border-b">基础课程</h4>
+       <div class="aui-list-item-inner" style="padding:15px;">
+          <div class="aui-row aui-row-padded" id="base_course"></div>
+          <script id="base_course_tpl" type="text/html">
+			<%for(var i=0;i< data.length;i++){	%>
+			<div class="aui-col-xs-6"  onclick="open_w('class_details','../html/class_details.html',{'cor_id':'<%=data[i].basis_course_id%>'})">
+                  <img src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].apic%>" />
+                  <div class="headline aui-ellipsis-1"> 
+                      	<%=data[i].aname%>
+                  </div>
+             </div>
+			<%}%>  
+			</script>    
+      </div>
+      <div class="album-more" onclick="open_w('course_list','../html/new/course_list.html')">全部课程&gt;&gt;</div>        
+	
+  </div>
+  <div class="recommend">
+     <h4 class="course_title aui-border-b">推荐专辑</h4>
+      	<div class="aui-list-item-inner" style="padding:15px;">
+         	<div class="aui-row aui-row-padded" id="special">
+         	<script id="special_tpl" type="text/html">
+	   		<%for(var i=0;i< data.length;i++){	%>
+        		<div class="aui-col-xs-6" onclick="open_w('album_details','../html/new/album_details.html',{'aid':'<%=data[i].album_id%>',frameName:api.frameName});">
+                  <img  src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].apic%>" style="border-radius:5px;"/>
+                  <div class="headline"> 
+                      <strong class="yellow aui-margin-r-5 hide"><img src="../img/guzi.png" alt="">50</strong>
+                    	<%=data[i].aname%>
+                  </div>
+              </div>
+        	<%}%>             
+			</script>
+          </div>
+      </div>
+      <div class="album-more" onclick="open_w('album','../html/new/album.html')">更多专辑&gt;&gt;</div> 
+  </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/self.js"></script>
+<script type="text/javascript" src="../script/echo.min.js"></script>
+<script type="text/javascript" src="../script/swiper.min.js"></script>
+<script type="text/javascript" src="../script/template.js"></script>
+<script>
+ 
+  	apiready = function(){
+		var $header = $api.dom('#header');
+		$api.fixIos7Bar($header);
+		$api.fixStatusBar($header);
+		today_grail();
+		base_course();
+		special_list();
+       	tollgate();
+   		var uid=get_local('uid');
+		if(is_define(uid)){
+	         study_plan(uid);  
+        }else{
+        	$('#study_plan').css('display','none');	 
+        	$('.empty').css('display','block');
+        	
+        	uid=""; 
+        }	
+       	api.addEventListener({
+		    name:'viewappear'
+		}, function(ret, err){        
+		   	var uid=get_local('uid');
+			if(is_define(uid)){
+		         study_plan(uid);  
+	        }else{
+	        	$('#study_plan').css('display','none');	 
+	        	$('.empty').css('display','block');
+	        	
+	        	uid=""; 
+	        }
+		});
+       	
+	};
+	function is_login1(){
+		
+		location.reload();	
+	}
+
+	//闯关记录
+	function tollgate(){
+			var uid=get_local('uid');
+			if(!is_define(uid)){
+	        	uid=""; 
+	        }
+			var URL = serverURL + 'app_interface/newCourse/tollgate_index/';
+			URL+='?secret='+appSecret+'&uid='+uid;
+			g_ajax(URL,function(ret)
+			{	//alert(JSON.stringify(ret))
+				if(ret.errCode==200){
+					$('#tollgate').html(bt('tollgate_tpl',ret));
+					var num=ret.tollgate_find.tollgate_num;
+					var mySwiper = new Swiper('#game', {
+				        slidesPerView: 'auto',
+				        paginationClickable: true,
+				        slideToClickedSlide:true,
+				        spaceBetween:0,
+				        initialSlide:num-1,
+				    }); 
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+				Echo.init();
+				api.parseTapmode();
+			})
+	} 
+	//学习计划
+	function study_plan(uid){	
+			var URL = serverURL + 'app_interface/newCourse/study_list/';
+			URL+='?secret='+appSecret+'&uid='+uid;
+			g_ajax(URL,function(ret)
+			{	//log(JSON.stringify(ret))
+				if(ret.errCode==200||ret.errCode==101){
+					if(ret.errCode==200){
+						$('.empty').css('display','none');
+						$('#all_course').text(ret.total);	 
+						$('#study_plan').css('display','block').html(bt('study_plan_tpl',ret));
+					}else{
+						$('#study_plan').css('display','none');
+						$('.empty').css('display','block');	
+						$('.empty .add').click(function(){
+			        		open_w('course_list','../html/new/course_list.html')
+			        	})	 
+					}
+					
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+				Echo.init();
+				api.parseTapmode();
+			})
+	} 
+	// 获取今日大盘
+    function today_grail(){
+			var URL = serverURL + 'app_interface/newCourse/today_grail/';
+			URL+='?secret='+appSecret;
+			g_ajax(URL,function(ret)
+			{	//alert(JSON.stringify(ret))
+				if(ret.errCode==200){
+					$('#today').html(bt('today_tpl',ret));
+					
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+				Echo.init();
+				api.parseTapmode();
+			})
+	} 
+	//基础课程
+	function base_course(){
+			var URL = serverURL + 'app_interface/newCourse/recommend_basis_course/';
+			URL+='?secret='+appSecret;
+			g_ajax(URL,function(ret)
+			{	//alert(JSON.stringify(ret))
+				if(ret.errCode==200){
+					var h=$('#base_course img').width()*0.56;
+					$('#base_course img').height(h);
+					$('#base_course').html(bt('base_course_tpl',ret));
+					
+					
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+				Echo.init();
+				api.parseTapmode();
+			})
+	} 
+	//推荐专辑
+	function special_list(){
+			var URL = serverURL + 'app_interface/newCourse/recommend_album/';
+			URL+='?secret='+appSecret;
+			g_ajax(URL,function(ret)
+			{	//alert(JSON.stringify(ret))
+				if(ret.errCode==200){
+					$('#special').html(bt('special_tpl',ret));
+					
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+				Echo.init();
+				api.parseTapmode();
+			})
+	} 
+	
+</script>
+</html>

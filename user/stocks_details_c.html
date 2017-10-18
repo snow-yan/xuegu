@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>谈股详情</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style>
+			.absr-06{right:-0.6em}
+			.absbl-per-10{right:10%;bottom:5%}
+		</style>
+	</head>
+	<body class="c-wh">
+		<input type="hidden" id="tg_id" value=""/>
+		<div id="stocks"></div>
+		<script type="text/html" id="stocks_list">
+			<div class="box w10 ovd ubb ub-e0e0e0">
+				<div class=" pdl07 pdr07 pdt07 pdb05 pstnr">
+					<div class="w8 ovd">
+						<div class="fll dsplb">
+							<img src="<%=data.face%>" class="uc-a w25e h25e marr05"  tapmode='op8' onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=data.tg_uid%>,uid:get_local('uid'),name:api.winName,frameName:api.frameName});event.preventDefault();event.stopPropagation();">
+						</div>
+						<p class=" umh15 t-333 ftz095"><%=data.nakename%></p>
+						<p class="txo umh15 ftz075 mart01 t-999">
+							<img src="../image/icon/time_s.png" class="w10e pdt02 pdr03">
+							 <font class="" id="tangu<%=data.tg_id%>"></font>       
+						</p>
+					</div>	
+				</div>
+				<p class="ovd w95 area_auto ftz08 t-646464 tx-lr">
+					<span class=" pdl02 pdr02"><%=data.tg_content%></span>
+				</p>
+				<p class="ovd w95 area_auto pdt02 pdb02">
+					<span onclick="add_comment(<%=data.tg_id%>)">
+						<span class="sr t-c0c0c0 umh2"><font class="ftz08 pd02" id="pinglun<%=data.tg_id%>"><%=data.tg_com_count%></font></span>
+						<span class="sr pdt06 pdl03 pdr03"><img src="../image/icon/pinglun.png" class="w12e h10e"></span>
+					</span>
+					<span tapmode="op8" onclick="dianzan(<%=data.tg_id%>)">
+						<span class="sr t-c0c0c0 umh2 pdr05"><font class="ftz08 pd02" ><%=data.tg_zan_count%></font></span>
+						<span class="sr pdt06 pdr03"><img id="" src="../image/icon/zan.png" class="w12e h10e"></span>
+					</span>
+				</p>
+				<div class="ovd w95 area_auto ftz08">
+					<%
+					if(is_define(data.comments)){
+					%>
+				    <p class="marl02 marr02 c-f7f7f7 uc-a02 marb05">
+						<%
+						var comment = data.comments;
+						for(var j=0;j<comment.length;j++){
+						if(j<3){
+						%>
+						<span class="pdl08 pdr08 area_auto pdt025 ovd t-333">
+							<font class="t-4371bc umh15 "><%=comment[j].nakename%>：</font><%=comment[j].cm_content%>
+						</span>
+						<%
+						}
+						}
+						%>
+						<span style="display: none;">
+							<%
+							for(var n=3;n<comment.length;n++){
+							%>
+							<span class="pdl08 pdr08 area_auto pdt025 ovd t-333">
+								<font class="t-4371bc umh15 "><%=comment[n].nakename%>：</font><%=comment[n].cm_content%>
+							</span>
+							<%
+							}
+							%>
+						</span>
+						<%
+						if(comment.length>3){
+						%>
+						<span onclick="more_comment(this)" class=" w10 area_auto ubt ub-e0e0e0 mart05 tx-c ovd t-999 pdt025 pdb025">
+							<font class=" umh25">更多评论</font>
+							<img src="../image/icon/more.png" class="h15e pdt05 pdl05">
+						</span>
+						<%
+						}
+						%>
+					</p>
+					<%
+					}
+					%>
+				</div>
+			</div>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			talk_stocks_list();
+		};
+		function more_comment(el){
+			$(el).prev().toggle();
+			if($(el).children('img').attr('src') == '../image/icon/yincang.png'){
+				$(el).children('img').attr('src','../image/icon/more.png');
+			}else{
+				$(el).children('img').attr('src','../image/icon/yincang.png');
+			}
+		}
+		function talk_stocks_list(){
+			var notificationId = api.pageParam.notification_id;
+		    var tg_id = api.pageParam.tg_id;
+			var uid = api.pageParam.uid;
+			var URL = serverURL + '/app_interface/tangu/tangu_detail/';
+			
+			if(is_define(notificationId)){
+				URL+='?secret='+appSecret+'&uid='+uid+'&tg_id='+tg_id+'&notification_id='+notificationId;
+			}else{
+				URL+='?secret='+appSecret+'&uid='+uid+'&tg_id='+tg_id;
+			}
+			g_ajax(URL,function(ret){
+				if(ret.errCode ==0){
+					if(is_define(notificationId)){
+			    		refreshNews();
+			    		api.execScript({
+			    			name:'comment_to_me',
+			    			frameName:'comment_to_me_c',
+	                        script: 'getCommentMeList();'
+                        });
+			    		api.execScript({
+			    			name:'my_dynamics',
+			    			frameName:'my_dynamics_c',
+	                        script: 'pinglun_have_new();'
+                        });
+		    		}
+					$('#stocks').html(bt('stocks_list',ret));
+					var idx = '#tangu'+ret.data.tg_id;
+					var t = timetostr(ret.data.tg_date);
+					$(idx).text(t);
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		//评论
+		function add_comment(tg_id){
+			var uid = get_local('uid');
+			if(is_define(uid)){
+				openFrameFull("ui_comment",{frameName:api.frameName,tg_id:tg_id,uid:uid},'rgba(0,0,0,0)');
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					open_w('login','login.html');
+				},1000);
+			}
+		}
+		//谈股点赞
+		function dianzan(tg_id){
+			$toast("自己不能给自己点赞",1500);
+		}
+	</script>
+</html>

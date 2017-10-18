@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>搜索</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+        .pdl20{padding-left:2em;}
+			input {
+				color: #666;
+				font-size: 12px;
+				height: 16px;
+				padding-top: 1px;
+				padding-bottom: 2px;
+			}
+			::-webkit-input-placeholder {
+				color: #999;
+				line-height: normal;
+				height: 16px;
+				padding-top: 1px;
+				padding-bottom: 2px;
+				font-size: 12px;
+				vertical-align: middle;
+			}
+		</style>
+	</head> 
+	<body class="c-edf0f5">
+		<!--<div class="umh3 t-wh w10 c-4371bc" id="header">
+			<div class="box h30e w95 area_auto">
+				<div class="ovd umh3 absl0 w10 tx-c pstnr">
+					<span class="w9 fll pdt07 pdb075 umh15 absl0 abst0">
+						<span class="pdl07 umh1 pdt025 pdb025 ovd uc-a10 c-wh tx-l">
+							<img src="../image/icon/search_gra.png" class="w10e h10e">
+								<input oninput="javascript:searchKeyWords()" id="keyWords" class="w8 ovd" type="search" placeholder="点击搜索股票名称/代码..." />
+						</span>
+					</span>
+					<span class="w1 fll umh3 ovd t-wh tx-c" tapmode="op5"  ontouchend="close_w();"><font class="ftz09">取消</font></span>
+				</div>
+			</div>
+		</div>-->
+		<div class="umh3 t-wh w10 c-4371bc" id="header">
+			<div class="w95 box ovd">
+				<div class="w9 fll umh3">
+					<div class="umh15 pdt07 pdb075">
+						<div class="umh1 pdt025 pdb025 ovd uc-a10 c-wh">
+							<span class="umh0 fll pdl025 marl02"><img class="w10e h10e marb01" src="../image/icon/search_gra.png"/></span>
+							<form action="#" tapmode="active" onsubmit="return searchKeyWords()">
+								<input class="w8 fll txo pdl02" onblur="javascript:searchKeyWords()" id="keyWords" type="search" placeholder="点击搜索股票名称/代码..."/>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="w1 fll umh3 tx-c" tapmode onclick="close_w();">
+					<span class="umh3 t-wh ftz09">取消</span>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script>
+	apiready = function(){
+		open_f("search_c","search_c.html",'true',api.pageParam);
+		var systemType = api.systemType;
+		if(systemType== 'android'){
+			var t = '<input class="w8 fll txo pdl02" oninput="javascript:searchKeyWords()" id="keyWords" type="search" placeholder="点击搜索股票名称/代码..."/>'
+			$('form').html(t);
+		}
+	}
+	function searchKeyWords(){
+		var keyWords = stripscript($("#keyWords").val());
+		if(is_define(keyWords)){
+			api.execScript({
+				frameName : 'search_c',
+				script : 'get_search_list("'+keyWords+'")'
+			});
+		}else{
+			$toast('关键字不能为空！',1500);
+		}
+	}
+	function set_keyWords(kw){
+		$('#keyWords').val(kw);
+	}
+	</script>
+</html>

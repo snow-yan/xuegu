@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="format-detection" content="telephone=no"/>
+		<title>学股网新手大礼包</title>
+		<link type="text/css" href="../../css/xslb.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="xslbtop">
+			<img src="../../img/xslbtop2.jpg">
+		</div>
+		<div class="lqinfo">
+			<div class="lblogined">
+				<img src="../../img/xslbbg01.png" >
+			</div>
+			<div class="lqlist">
+				<img src="../../img/xslbbg04.png" >
+				<ul class="xslblist" id="gift"></ul>
+				<script type="text/html" id="gift_tpl">
+				<%
+				for(var i=0;i<data.length;i++){
+				%>
+			   <li class="clo_two pstnr ubb ub-e4e4e4" onclick="open_w('class_details','../class_details.html',{'cor_id':'<%=data[i].course_id%>'})">
+					<img src="../../image/icon/echo_bg.jpg" data-echo="<%=data[i].cor_pic%>" style="border-radius:5px;"><span class="lqtitle"><%=data[i].cor_name%></span>
+					<p>
+						<span class="lqguzi"><img src="../../img/lbguzuico.png"><%=data[i].cor_charge_money%></span>
+						<span class="lqplay"><img src="../../img/lbplay.png"><%=data[i].cor_view%></span>
+					</p> 
+				</li>
+					
+				<%
+				}
+				%>
+				</script>
+			</div>
+			<img src="../../img/xslbbg03.png">
+		</div>
+		<div class="xslbbottom">
+			<img src="../../img/xslbbottom.jpg">
+		</div>
+	</body>
+	<script type="text/javascript" src="../../script/api.js"></script>
+	<script type="text/javascript" src="../../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../../script/init.js"></script>
+	<script type="text/javascript" src="../../script/app.js"></script>
+	<script type="text/javascript" src="../../script/self.js"></script>
+	<script type="text/javascript" src="../../script/echo.min.js"></script>
+	<script type="text/javascript" src="../../script/template.js"></script>
+	<script type="text/javascript">
+	apiready = function() {
+		gift_datail();
+		extraa(); 
+	};
+	function gift_datail(){
+		var URL = serverURL + 'app_interface/activityManage/get_course_by_id/';
+		URL+='?secret='+appSecret+'&id='+api.pageParam.gift_id;
+		g_ajax(URL,function(ret)
+		{	
+			//alert(JSON.stringify(ret))
+			if(ret.errCode==200){
+				$('#gift').html(bt('gift_tpl',ret));
+				Echo.init();
+			}else{
+				$toast(ret.errMsg,1500);		
+			}
+			api.parseTapmode();
+		})
+	} 
+	function extraa(){
+		var uid = get_local('uid');
+		var URL = serverURL + 'app_interface/activityManage/update_read_status/';
+		URL+='?secret='+appSecret+'&uid='+uid;
+		g_ajax(URL,function(ret){
+	
+		})
+	} 
+	</script>
+</html>

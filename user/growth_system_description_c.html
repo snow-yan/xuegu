@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>成长体系说明</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style type="text/css">
+        	.rule p{
+        		line-height: 1.5em;
+        		font-size: .9em;
+        	}
+        	.rule p.main-line{
+        		font-size: 1em;
+        		padding-top: .2em;
+        	}
+        </style>
+	</head> 
+	<body class="c-wh">
+	<div id="escription">
+    <script id="escription_left" type="text/html">
+		<div class="pdl05 pdr05 pdt05 rule ftz09 t-666">
+		    <%:=data.detail%>
+		</div>
+	</script>
+	</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script>
+	apiready = function(){
+	growth_Description();
+	};
+	function growth_Description(){   
+			var URL = serverURL + 'app_interface/protocal/get_protocal/';
+				URL+='?secret='+appSecret+'&type='+2;
+		    g_ajax(URL,function(ret){
+				if(ret.errCode ==0){
+					$('#escription').html(bt('escription_left',ret));
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+	</script>
+</html>

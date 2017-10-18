@@ -1,0 +1,237 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,addrets=no">
+    <title>答题卡</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+  	<link rel="stylesheet" type="text/css" href="../../css/study.css">
+</head>
+<body class="aui-bg-blue">
+<div class="question-content" id="question"></div>
+	<script type="text/html" id="question_tpl">
+    <div class="question-title">
+	    <ul class="questionmenu">
+		     <li class="q_menu1"><img src="../../img/questionmenu_h_01.png"></li>
+		     <li class="q_menu2"><img src="../../img/questionmenu_02.png"></li>
+		     <li class="q_menu3"><img src="../../img/questionmenu_03.png"></li>
+		     <li class="q_menu4"><img src="../../img/questionmenu_04.png"></li>
+		     <li class="q_menu5"><img src="../../img/questionmenu_05.png"></li>
+	    </ul>
+     	<img src="<%=question_list[sort].title%>" class="titleimg"> 
+    	<img src="../../img/answterbg_t.jpg" class="question-titlebg">
+    </div>
+    <div class="answer-list">
+    	<%for(var i=0;i< question_list[sort].extra_arr.length;i++){	%>
+         <div class="answercontent" onclick="answer('<%=question_list[sort].extra_arr[i][0]%>','<%=question_list[sort].exam_id%>','<%=question_list[sort].id%>',this)">
+         	<img src="<%=question_list[sort].extra_arr[i][1]%>">
+         </div>
+         <%}%>
+    </div>
+    </script>
+	<!--pop-->
+	<div class="pop_window">
+        <img src="../../img/sktimg.png" class="rabbit s_state" />
+        <img src="../../img/dktimg.png" class="rabbit f_state" />
+        <!--闯关成功-->
+        <a  class="s_state cgz" id="tollgate_success">
+            <img src="../../img/rightbtn.png" class="resultsbtn">
+        </a>
+        <!--重新修炼-->
+        <a class="f_state cgz" id="xiulian">
+            <img src="../../img/wrongbtn.png" class="resultsbtn">
+        </a>
+        <!--全部完成3星-->
+        <a  class="allpass_state3">
+            <img src="../../img/star3.png" class="resultsbtn" style="top:70%">
+            <img src="../../img/allpass.png" class="resultsbtn apbtn" id="allpass1">
+        </a>
+        <!--全部完成5星-->
+        <a class="allpass_state5">
+       		<img src="../../img/star5.png" class="resultsbtn" style="top:70%">
+            <img src="../../img/allpass.png" class="resultsbtn apbtn" id="allpass2">
+        </a>
+        <p class="victorytext">已战胜
+            <span id="defeat_num">15%</span>人
+        </p>
+        <div class="pop_windowup">
+            <img src="../../img/rprompt.png" class="pop_prompt s_state" >
+            <img src="../../img/wprompt.png" class="pop_prompt f_state" >
+            <div class="pop_data">
+                <div class="blueblock"></div>
+                <div class="dataleft"><a class="floatleft">答对</a><br><span class="floatleft" id="success_num">0</span></div>
+                <div class="dataright"><a class="floatright">答错</a><br><span class="floatright" id="error_num">0</span></div>
+            </div>
+        </div>
+        <div class="pop_windowdown"></div>
+    </div>
+	<!--/pop-->
+	<div class="popmask"></div>
+</body>
+<script type="text/javascript" src="../../script/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript">
+	var sreenheight = $(window).height();
+	var titleheight = $(".header").height();
+	var titlebgheight = $(".question-titlebg").height();
+	var tollgate_id;
+	var sort;	
+	apiready = function() {
+		sort=0;
+		tollgate_id=api.pageParam.train_id;
+		question(tollgate_id,sort);
+	};
+	function question(tollgate_id,sort){
+		//当前问题序号
+		var uid=get_local('uid');
+		var URL = serverURL + 'app_interface/newCourse/tollgate_exam_question/';
+		URL+='?secret='+appSecret+'&uid='+uid+'&tollgate_id='+tollgate_id+'&sort='+sort;
+		g_ajax(URL,function(ret)
+		{	
+			if(ret.errCode==200){
+				$('#question').html(bt('question_tpl',ret));
+				for(var i=0; i<5;i++){
+					if(i==sort){
+						var pretentimg = "../../img/questionmenu_h_0"+(i+1)+".png" ;
+					}else{
+						var pretentimg = "../../img/questionmenu_0"+(i+1)+".png" ;
+					}
+					$(".questionmenu li:eq('"+i+"') img" ).attr("src",pretentimg);
+				}
+			}else{
+				$toast(ret.errMsg,1500);		
+			}
+			Echo.init();
+			api.parseTapmode();
+		})
+	} 
+	function answer(answer,exam_id,exam_question_id,obj){
+		var URL = serverURL + 'app_interface/newCourse/tollgate_exam_question_answer/';
+		var data = {
+	 		values :{
+	 			secret:appSecret,
+	 			uid:get_local('uid'),
+	 			answer:answer,
+	 			tollgate_id:tollgate_id,
+	 			exam_id:exam_id,
+	 			exam_question_id:exam_question_id
+	 		}
+	 	};
+		r_ajax(URL,data,function(ret)
+		{	
+			//alert(JSON.stringify(ret))
+			if(ret.errCode==200){
+				var question_total=ret.question_total;//问题总数
+				var sort=ret.question_sort;//当前是第几题
+				var success_num=ret.success_num;//答对的个数
+				var error_num=ret.error_num;//答错的个数
+				var percent = ret.percent;       // 超过人数比率
+                var current_num = ret.current_num;       // 当前是第几关
+                var tollgate_total = ret.tollgate_total;       // 总关数
+                var next_tollgate_id = ret.next_tollgate_id;       // 下一关的闯关ID
+                var is_look = ret.is_look;       // 是否观看所有课程视频
+				if(ret.question_status>0){// 是否回答正确 大于0正确
+				//回答正确
+					$(obj).prepend("<div class='anwser_right'></div>")
+				}else{
+					$(obj).prepend("<div class='anwser_wrong'></div>")
+				}
+				setTimeout(function(){
+					if(sort<question_total){
+						question(tollgate_id,sort);
+					}else if(sort==question_total){
+						// 如果是当前题号等于总题数  代表是最后一题   对用户进行反馈
+                        $(".pop_window").css("display","block");
+                        $(".popmask").css("display","block");
+                        $("#success_num").text(success_num);
+                        $("#error_num").text(error_num);
+                         if(error_num == 0){
+                            // 全部答对
+                            $(".s_state").css("display","block");
+                            $(".f_state").css("display","none");
+                           
+                            $("#defeat_num").text(percent+'%');
+							api.execScript({
+							    name: 'index',
+							    frameName: 'study',
+							    script: "is_login1()"
+							});
+							api.execScript({
+							    name: 'training_camp',
+							    frameName: 'training_camp_c',
+							    script: "reload1()"
+							});
+                            // 当前闯关数==总关数  则代表用户是最后一关  则代表用户通关
+                            if(current_num == tollgate_total){
+
+                                // 如果==1代表 用户有未看完的课程
+                                if(is_look == 1){
+                                    $(".allpass_state3").css("display","block");
+                                    $(".cgz,.allpass_state5").css("display","none");
+                                    $(".victorytext").css("bottom","5%").html("解锁精品课程可得五星，战胜<span>"+percent+"%</span>的人")
+                                }else{
+                                    // 代表用户看完了所有课程
+                                    $(".allpass_state5").css("display","block");
+                                    $(".cgz,.allpass_state3").css("display","none");
+                                    $(".victorytext").css("bottom","5%").html("已修炼完所有课程  ，战胜<span>"+percent+"%</span>的人")
+                                }
+                                $("#allpass1,#allpass2").click(function(){
+                                	$(".pop_window").css("display","none");
+                       			 	$(".popmask").css("display","none");
+                       			 	
+                       			 	open_w('index','../../index.html');
+                                });     // 改变链接
+                                //$(".victorytext").css("display","none");    // 隐藏超过人数
+                                $("#tollgate_success").find('img').attr('src','../../img/rightbtn.png');   // 改变按钮文字(图片)
+                            }else{
+                            	 $("#tollgate_success").click(function(){
+                            	 		close_win_name('play');
+		                        	 $(".pop_window").css("display","none");
+		                   			 $(".popmask").css("display","none");
+		                            open_w('training_camp','training_camp.html');
+		                            setTimeout(function(){
+						 				close_win_name('answer');
+						 				
+						 			},500);
+                            	});
+                            }
+
+                        }else{
+                            // 有错误  错一题 就代表闯关失败
+                            $(".s_state").css("display","none");
+                            $(".f_state").css("display","block");
+                            $(".victorytext").css("display","none");
+                            $('#xiulian').click(function(){
+                            	open_w('play','play.html',{tollgate_id:tollgate_id});
+						 		close_win_name('answer');
+						 		
+                            });
+
+                        }
+
+					}
+				},1000)
+				
+			}else{
+				$toast(ret.errMsg,1500);		
+			}
+			Echo.init();
+			api.parseTapmode();
+		})
+	} 
+	$(function(){
+		var fch=$(document).height();
+	    $('.popmask').css({"height":fch});
+		$(".question-content").css({"height":sreenheight-titleheight,"marginTop":titleheight})
+		$(".question-title").css("height",titlebgheight)
+		
+	})
+</script>
+</html>

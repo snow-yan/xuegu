@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>精彩回放详情</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var vcloudPlay;
+		apiready = function() {
+			vcloudPlay = api.require('vcloudPlay');
+			get_video_info();
+			//监听播放错误
+			vcloudPlay.addEventListener({
+			    name : "playErrorListener"
+			},function(ret, err) {
+			    console.log(JSON.stringify(ret));
+			});
+		};
+		function get_video_info(){
+			var vid = api.pageParam.vid;
+			var URL = serverURL + 'app_interface/live/live_huifang_get_video_info/';
+			var data = {
+				values :{
+					secret : appSecret,
+					vid : vid 
+				}
+			};
+			r_ajax(URL,data,function(ret){
+				if(ret){
+//					console.log(json2str(ret));
+					playLive(ret.data.fileurl);
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			}); 
+		}
+		function playLive(fileurl){
+			vcloudPlay.playLive({
+			    x : 0,
+			    y : 0,
+			    w : api.frameWidth,
+			    h : parseInt(api.frameWidth*16/9.38),
+			    fixedOn : api.frameName,
+			    fixed : true,
+			    playUrl:fileurl,
+			    mediaType : 'videoOnDemand',
+			    decodeType : "hardware"
+			},function(ret, err) {
+			    console.log(JSON.stringify(ret));
+			});
+		}
+		function playStop(){
+			vcloudPlay.stop(function(ret, err) {
+				if(ret.status){
+					ue_script('play_live','close()');
+				}
+			});
+		}
+	</script>
+</html>
+	

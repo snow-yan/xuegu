@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>搜索牛人</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<link rel="stylesheet" href="../cool_css/swiper.min.css">
+		<style>
+			.pdl02-per{padding-left:2%}
+			.w13{width:13%;}
+			.pre {
+				color: #4371bc;
+			}
+			.pre_after {
+				color: #898888;
+			}
+		</style>
+	</head>
+	<body class="c-ebf2fc">
+		<div class="w10 c-4371bc" id="header">
+			<div class="box w95 area_auto pstnr h30e t-wh">
+				<p class="pstna absl0 abst0 pdt05 pdb05 h20e" ontouchstart="close_w();">
+					<img src="../image/icon/left.png" class="w20e h20e">
+				</p>
+				<p class="ovd tx-c umh25 ftz12" id="title"></p>
+			</div>
+			<div class="h20e umh2 c-edf0f5">
+				<p class="ftz085 pdl05 ubb ub-e0e0e0">找到<font id="course_count">0</font>个牛人</p>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript">
+		apiready = function() 
+		{	
+			var pras = api.pageParam;
+			$('#title').text(pras.keyWords);
+			open_f('search_more_lecture_c','search_more_lecture_c.html','true',pras);
+		};
+		function setCourseCount(count){
+			$('#course_count').text(count);
+		}
+	</script>
+</html>

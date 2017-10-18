@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>提现</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+            .ub-1{border:1px solid #c1c1c1;border-radius: 5px;}
+            .ub-2{border:1px solid #c1c1c1;border-radius: 20px;}
+            .ub-colorff0000{border-color:#ff0000}
+            .c-4371bc{background-color:#4371bc}
+            .ub-color4371bc{border-color:#4371bc}
+            .ub_b{border-bottom:1px solid #c1c1c1}
+            .mart065{margin-top:.65em}
+            input::-webkit-input-placeholder {/* WebKit browsers */
+				font-size: 14px;
+				line-height: 20px;
+				color: #c1c1c1;
+			}
+			input:-moz-placeholder {/* Mozilla Firefox 4 to 18 */
+				font-size: 14px;
+				line-height: 20px;
+				color: #c1c1c1;
+			}
+			input::-moz-placeholder {/* Mozilla Firefox 19+ */
+				font-size: 14px;
+				line-height: 20px;
+				color: #c1c1c1;
+			}
+			input:-ms-input-placeholder {/* Internet Explorer 10+ */
+				font-size: 14px;	
+				line-height: 20px;
+				color: #c1c1c1;
+			}
+        </style>
+	</head> 
+	<body class="c-edf0f5">
+		<input type="hidden" id="tx_type" value="2" />
+		<div class="w10 h05e c-edf0f5"></div>
+		<div class="w10 h30e"></div>
+		<div class="w10 h25e">
+		    <div class="w5 box h25e ub-1">
+                <input class="w9 box tx-c w10 umh10 mart065 ftz10 t-666 c-edf0f5" id="num" min="100" type="number" placeholder="请输入金额" >
+			</div>
+		</div>
+		<div class="w10 h20e"></div>
+		<div class="h20e w9 box ovd ub_b marb05">
+			<img class="w15e fll pdr02" src="../image/icon/edit.png"/>
+			<input type="text" class="w7 mart025 fll c-edf0f5 t-666 ftz085" id="user_name" placeholder="请输入真实姓名"/>
+		</div>
+		<div class="w10 ovd">
+		    <div class="w9 h35e box ub_b" tapmode='' onclick="swich_pay('1')">
+		        <img src="../icon/1.png" class="h30e w30e fll">
+		        <!--<div class="fll h30e marl03 w5">
+		            <div class="umh15 ftz12 t-bla">支付宝支付</div>
+		            <div class="umh1 ftz09 t-c1c1c1">有支付宝账户</div>
+		        </div>-->
+		        <div class="fll h25e marl03 w7 umh25 ftz12 t-c1c1c1">
+		           <input type="text" class="w10 c-edf0f5 ftz09 t-666" id="tx_name1" placeholder="请输入支付宝账户"/>
+		        </div>
+		        <div class="flr h10e w10e mart10 ub-2">
+		        	<div class="w05e h05e c-ff0000 mart02 marl02 ub-2 ub-colorff0000 dspn" id="pay1"></div>
+		        </div>
+		    </div>
+		    <div class="w9 h30e box mart05 pdb05 ub_b" tapmode='' onclick="swich_pay('2')">
+		        <img src="../icon/2.png" class="h30e w30e fll">
+		        <div class="fll h25e marl03 w7 umh25 ftz12 t-c1c1c1">
+		           <input type="text" class="w10 c-edf0f5 ftz09 t-666" id="tx_name2" placeholder="请输入微信账户名"/>
+		        </div>
+		        <div class="flr h10e w10e mart10 ub-2">
+		            <div class="w05e h05e c-ff0000 mart02 marl02 ub-2 ub-colorff0000"  id="pay2"></div>
+		        </div>
+		    </div>
+		    <div class="w10 h15e"></div>
+		    <div class="box w10 pdt05" tapmode='op7' onclick="sureTiXian()">
+	            <p class="w9 area_auto c-4371bc uc-a02">
+	                <span class="w10 tx-c t-wh umh25">提现</span>
+	            </p>
+	        </div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+	<script>
+		apiready = function(){
+			document.getElementById("num").setAttribute("placeholder",api.pageParam.integral/10);
+		};
+		function swich_pay(type){
+			if(type=='1'){
+				$('#pay1').removeClass('dspn');
+				$('#pay2').addClass('dspn');
+				$('#tx_type').val(type);
+				$("#tx_name2").val('');
+			}else{
+				$('#pay2').removeClass('dspn');
+				$('#pay1').addClass('dspn');
+				$('#tx_type').val(type);
+				$("#tx_name1").val('');
+			}
+		}
+		function sureTiXian(){
+			var uid = api.pageParam.uid;
+			var tx_money = parseInt($('#num').val());
+			if(!is_define(tx_money)){
+				$toast('请输入提现金额',1500);
+				return false;
+			}else if(isInteger(tx_money)){
+				if(tx_money<100){
+					$toast('提现金额不能小于100',1500);
+					return false;
+				}else if(tx_money>api.pageParam.integral/10){
+					$toast('提现金额不足，请重新输入',1500);
+					return false;
+				}
+			}else{
+				$toast('提现金额只能是整数',1500);
+				$('#num').val('');
+				return false;
+			}
+			var user_name = $('#user_name').val();
+			if(!is_define(user_name)){
+				$toast('请输入真实姓名',1500);
+				return false;
+			}
+			var tx_type = $('#tx_type').val();
+			var tx_name_id = '#tx_name'+tx_type;
+			var tx_name = $(tx_name_id).val();
+			if(!is_define(tx_name)){
+				$toast('请输入相关账户',1500);
+				return false;
+			}
+			var URL = serverURL+'app_interface/user/my_tixian/';
+			var data = {
+				values:{
+					uid : uid,
+					tx_truename : user_name,
+					tx_type : tx_type,
+					tx_name : tx_name,
+					tx_money : tx_money,
+					secret : appSecret
+				}
+			};
+			r_ajax(URL,data,function(ret){
+		 		if(ret.errCode==0){
+					$toast(ret.errMsg, 1500);
+					var integral = api.pageParam.integral;
+					api.execScript({
+						name:'account_management',
+						frameName:'account_management_c',
+						script :'setAccount("'+(integral-tx_money*10)+'")'
+					});
+					api.execScript({
+						name:'root',
+						frameName:'user',
+						script :'getUserInfo()'
+					});
+					setTimeout(function(){
+						close_w();
+					});
+		 		}else{
+		 			$toast(ret.errMsg, 1500);
+		 		}
+		 	})
+			function isInteger(obj) {
+				return typeof obj === 'number' && obj%1 === 0
+			}
+		}
+	</script>
+</html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>战法课程播放</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/zhanfa.css" />
+</head>
+<body class="aui-bg-white">
+    <div>
+        <div class="head">
+        	 <h3 class="aui-padded-b-15 border-b" id="cor_name"></h3>
+	          <div class="jianjie aui-font-size-12"><b>简介</b></div> 
+	          <div class="gray_w aui-font-size-12 aui-ellipsis-4 line-h-1" id="cor_info">
+	            
+	          </div>
+        </div>
+        <script type="text/html" id="zhanfa_detail_tpl">
+			 
+		</script>
+        <div class="play_list">
+            <h3 class="border-b" id="aname">【樊老师老散经典实战案例】</h3>
+            <ul id="course_list"></ul>
+             <script type="text/html" id="course_list_tpl">   
+            <%
+            	
+				for(var i=0;i<data.length;i++){
+					if(data[i].cor_id==cor_id){
+			%>  
+              	<li class="play"><%=i+1%><span class="aui-margin-l-10"><%=data[i].cor_name%></span></li> 
+            	<%
+            		}else{
+            	%>
+            	<li onclick="play_other(<%=data[i].cor_id%>,'<%=data[i].cor_name%>','<%=data[i].cor_info%>')"><%=i+1%><span class="aui-margin-l-10"><%=data[i].cor_name%></span></li> 
+            <%
+				}
+			}
+			%>
+           	</script>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/swiper.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script>
+	var cor_id
+	apiready=function(){
+		cor_id=api.pageParam.cor_id;
+		var aname=api.pageParam.aname;
+		var cor_name=api.pageParam.cor_name;
+		var cor_info=api.pageParam.cor_info;
+		$('#aname').text(aname);
+		$('#cor_name').text(cor_name);
+		$('#cor_info').text(cor_info);
+		course_list();
+	}
+	
+ 	// 获取战法课程目录 
+	function course_list(){
+		var URL = serverURL + 'app_interface/coursePack/coursePack_course_list/';
+			URL+='?secret='+appSecret+'&aid='+api.pageParam.aid;
+			g_ajax(URL,function(ret)
+			{
+//				alert(JSON.stringify(ret));
+				if(ret.errCode==0){
+				var cor_id=api.pageParam.cor_id;
+					$('#course_list').html(bt('course_list_tpl',ret));	
+				}else{
+					$toast("操作失败",1500);		
+				}
+			})
+	}
+	function play_other(cor_id1,cor_name,cor_info){
+		cor_id=cor_id1;
+		$('#cor_name').text(cor_name);
+		$('#cor_info').text(cor_info);
+		course_list();
+		api.execScript({
+			name:api.winName,
+            script: 'get_course_details("'+cor_id+'")'
+        });
+	}
+</script>
+</html>

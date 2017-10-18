@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>大礼包</title>
+	<style>
+	body{font-size:62.5%; background:#fa4c29;}
+	body, p,a{ margin:0; padding:0; font-size:14px; text-decoration:none;}
+	ul,li{margin:0;padding:0; list-style:none;}
+	.libaocontent{ position:relative; width:100%; }
+	.libaobg{ position:relative; z-index:1; width:100%;}
+	.libaobg img{ width:100%; display:block;}
+	.libaocourseboxw{ background:#fa4c29; overflow:hidden;}
+	.libaocourse{ width:94%; background:#fff; margin:0 auto; overflow:hidden; position:relative;  z-index:2; padding-bottom:8%; border-radius:0.3rem;}
+	.libaocourse > a{ width:50%; float:left;}
+	.libaocourse .libaocourse_list{ width:44%; padding:4% 0 0 4%; float:left;}
+	.libaocourse_list .libaocourseimg img{ width:100%; }
+	.libaocoursetitle{ font-size:0.8rem; color:#333333; width:100%; height:1.2rem;  line-height:1.2rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+	.libaocourseico{ font-size:0.7rem;}
+	.lbcoursegz{ float:left; line-height:100%; padding-left:13%; background:url(../img/guzi.png) no-repeat 0 0; background-size:0.8rem; color:#ff9900; font-weight:bold;}
+	.lbcoursev{ float:right; line-height:100%; padding-left:13%;  background:url(../img/vnum.png) no-repeat 0 0;  background-size:1rem; color:#888;}
+	.lbbottom{width:100%; position:relative; margin-top:10px;}
+	.lbbottom img{width:100%; display:block; z-index:3;}
+	.lbbottom a{ display:block; width:35%; height:25%; position:absolute; top:8%; left:32%;}
+	.libaotop img{width:100%; display:block;}
+	</style>
+</head>
+<body>
+	<div class="libaotop">
+		<img src="../img/libaobg2top.jpg" >
+	</div>
+	<div class="libaocourseboxw">
+		<div class="libaocourse" id="course_list"></div>
+		<script id="course_list_tpl" type="text/html">
+	   	<%
+	   	for(var i=0;i< data.length;i++){
+	   	%>
+			<div class="libaocourse_list" onclick="open_w('class_details','../html/class_details.html',{'cor_id':<%=data[i].cor_id%>,'UID':get_local('uid'),pic:'<%=data[i].cor_pic%>',video_unique:'<%=let_v%>'});">
+		        <div class="libaocoursebox">
+		          <p class="libaocourseimg"><img src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].cor_pic%>"></p>
+		            <p class="libaocoursetitle"><%=data[i].cor_name%></p>
+		            <p class="libaocourseico">
+		                <a class="lbcoursegz"><%=data[i].cor_charge_money%></a>
+		                <a class="lbcoursev"><%=data[i].cor_view%></a>
+		            </p>
+		        </div>  
+		    </div>	  
+		<%
+		}
+		%>
+		</script>
+
+	</div>
+	<!--<div class="lbbottom">
+	<a href="javascript:;"></a>
+	<img src="../img/lbbottom2.png">
+	</div>-->
+</body>
+<script type="text/javascript" src="../script/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/echo.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/self.js"></script>
+<script type="text/javascript" src="../script/template.js"></script>
+<script type="text/javascript">
+	apiready = function() {
+		var docheight=$(document).height();
+		$(".libaocontent").css("height",docheight);
+		Courselist();			
+				
+	};
+	function Courselist(){
+	  
+		var URL = serverURL + 'app_interface/dalibao/get_list/';
+			URL+='?secret='+appSecret;
+	        g_ajax(URL,function(ret){
+	      	//alert(JSON.stringify(ret))
+//	      	var letvObj = ret.data[0].cor_letv_msg;
+//	      	alert(letvObj.data.video_unique)
+			if(ret.errCode ==0){
+			    $('#course_list').html(bt('course_list_tpl',ret));
+				Echo.init();
+				
+			}else{
+				$toast(ret.errMsg,1500);
+			}
+		})
+	}
+</script>
+</html>

@@ -1,0 +1,305 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>充值中心</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/pay.css" />
+</head>
+<body class="aui-bg-white">
+   <div class="pay_c">
+   		<img src="../../img/pay.png" alt="" width="100%">
+   		<div class="head">
+   			<div class="title1">充谷子</div>
+   			<div class="qita">
+	   			<div class="extra">
+		   			<span>￥</span>
+		   			<span>
+		   			<input maxlength="4" type="tel"  placeholder="0" oninput="write1(this)" id="price"  onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"/>
+					</span>
+		   			<span class="equal">=</span><span id="guzi">0谷子</span><span class="btn">立即支付</span>
+	   			</div>
+	   			<div class="write aui-padded-l-15"><img src="../../img/pay_a.png" alt="" />谷随心动，想充就充！</div>
+   			</div>
+   		</div>
+   		<div class="price">
+   			<ul>
+   				<li>
+   					<div class="lable" onclick="pay(1,this)" id="nav1">
+   						<div class="rmb">￥<span>8</span></div>
+   						<div class="guzi">谷子：80</div>
+   					</div>
+   				</li>
+				<li>
+   					<div class="lable" onclick="pay(2,this)"  id="nav2">
+   						<div class="rmb">￥<span>28</span></div>
+   						<div class="guzi">谷子：280</div>
+   					</div>
+   				</li>
+				<li>
+   					<div class="lable" onclick="pay(3,this)"  id="nav3">
+   						<div class="rmb">￥<span>68</span></div>
+   						<div class="guzi">谷子：680</div>
+   					</div>
+   				</li> 
+				<li>
+   					<div class="lable" onclick="pay(4,this)"  id="nav4">
+   						<div class="rmb">￥<span>128</span></div>
+   						<div class="guzi">谷子：1280</div>
+   					</div>
+   				</li>
+				<li>
+   					<div class="lable" onclick="pay(5,this)"  id="nav5">
+   						<div class="rmb">￥<span>268</span></div>
+   						<div class="guzi">谷子：2680</div>
+   					</div>
+   				</li>
+				<li>
+   					<div class="lable" onclick="pay(6,this)"  id="nav6">
+   						<div class="rmb">￥<span>588</span></div>
+   						<div class="guzi">谷子：5880</div>
+   					</div>
+   				</li>    				  				   				
+   			</ul>
+   		</div>
+   		<div class="call" style="margin-top:1rem;">充值如有问题请联系<span style="color:#ec0000;">官方客服电话：400-029-6649</span></div>
+   </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/md5.js"></script>
+<script type="text/javascript" src="../../script/ksort.js"></script>
+<script type="text/javascript" src="../../script/interface.js"></script>
+<script>
+	var wxPay,t,jine;
+	apiready = function(){
+		wxPay = api.require('wxPay');
+		t = setInterval(function(){
+			checkPay();
+		},2000);
+		$('.extra .btn').click(function(){
+			var txt1=$("#price").val();
+			if (!is_define(txt1)) {
+			$toast("金额不能为空", 1000);
+			return false;
+			}
+			//判断是否安装微信
+       	 	var wx = api.require('wx');
+			wx.isInstalled(function(ret, err) {
+			    if (ret.installed) {
+			       surePay(txt1);  
+			    } else {
+			        $toast('亲，您还未安装微信客户端',1000);
+			    }
+			});
+			
+		})
+		
+		
+	}; 
+ 	
+	function write1(obj){
+		var txt=$(obj).val();
+		if(txt!=0){
+			$(".extra").css('color','#f39800');
+			$(".extra input").css('color','#f39800');
+			$('.extra .equal').css('border','1px solid #f39800');
+			$('.extra .btn').css('background','#f39800');
+			$('.extra #guzi').text(txt*10+'谷子');
+		}else{
+			$(".extra").css('color','#888888');
+			$(".extra input").css('color','#888888');
+			$('.extra .equal').css('border','1px solid #888888');
+			$('.extra .btn').css('background','#888888');
+			$('.extra #guzi').text(txt*10+'谷子');
+		}
+	}
+	function pay(type,obj){
+		if($('#price').val()==0){
+	 		for(var i=1;i<7;i++){
+				$api.removeCls($api.byId('nav'+i), 'lable-active');
+			   	$api.addCls($api.byId('nav'+type), "lable-active"); 			
+			}
+			jine=$('#nav'+type+" .rmb span").text();
+			//判断是否安装微信
+	        var wx = api.require('wx');
+			wx.isInstalled(function(ret, err) {
+			    if (ret.installed) {
+			       surePay(jine);  
+			    } else {
+			        $toast('亲，您还未安装微信客户端',1000);
+			    }
+			});
+		}
+		
+ 	}
+	
+	var signParams,MustSendData;
+	function surePay(m){
+		var uid = get_local('uid');
+		var URL = serverURL + "app_interface/WxPayUnifiedOrder/";
+		var data = {
+			values:{
+				uid :uid,
+				jine : m,
+				secret : appSecret
+			}
+		};
+		r_ajax(URL,data,function(ret){
+			
+	 		if(ret.errCode==0){
+				signParams = {
+                    appid: ret.data.data.appid,
+                    partnerid: ret.data.data.mch_id,
+                    prepayid: ret.data.data.prepay_id,
+                    package: 'Sign=WXPay',
+                    noncestr: ret.data.data.nonce_str,
+                    timestamp: Math.round(new Date().getTime() / 1000),
+                };
+                MustSendData = ret.data.MustSendData;
+                signParams.sign = fetchSign(signParams).toUpperCase();
+                WXpay(ret.data.data);
+                
+	 		}else{
+	 			
+	 			$toast(ret.errMsg, 1500);
+	 		}
+	 	});
+	}
+		function WXpay(data){
+			
+			var apiKey = data.appid;
+			wxPay.payOrder({
+			    apiKey: data.appid,
+			    orderId: data.prepay_id,
+			    mchId: data.mch_id,
+			    nonceStr: data.nonce_str,
+			    timeStamp: signParams.timestamp,
+		     	package: 'Sign=WXPay',
+			    sign: signParams.sign
+			}, function(ret, err) {
+			    if (ret.status) {
+			        //支付成功
+			        checkPay();
+			        clearInterval(t);
+			    } else {
+			    	$('.price .lable').removeClass('lable-active');	
+			    }
+			});
+		}
+		function fetchSign(postData) {
+	        return md5(jsonToPostDataStr(ksort(postData)) + '&key=THpbhPMUQArHMlCVXY9xLcaqF9woWl3I');
+	    }
+	
+	    function jsonToPostDataStr(json) {
+	        var PostDataStr = '';
+	        for (var i in json) {
+	            PostDataStr += i + '=' + json[i] + '&';
+	        }
+	        return PostDataStr == '' ? PostDataStr : PostDataStr.slice(0, -1);
+	    }
+	    function checkPay(){
+	    	var URL = serverURL + "app_interface/ChongZhiStatus/";
+	    	var data = {
+				values:{
+					uid :get_local('uid'),
+					MustSendData : MustSendData,
+					secret : appSecret
+				}
+			};
+			post_ajax(URL,data,function(ret){
+		 		if(ret.errCode==0){
+		 			if(ret.data.status ==1){
+		 				$toast('充值成功',1500);
+		 				api.execScript({
+		 					name :'root',
+		 					frameName : 'user',
+		 					script : 'getUserInfo()'
+		 				});
+		 				var frame = api.pageParam.frameName;
+		 				switch(frame){
+							case 'account_management_c':
+								api.execScript({
+				 					name :api.pageParam.winName,
+				 					frameName : 'account_management_c',
+				 					script : 'setAccount()'
+				 				});
+						 		setTimeout(function(){
+				 					close_w();
+				 				},500);
+				 				break;
+							case 'ask_questions_c':
+				 				api.execScript({
+				 					name :api.pageParam.winName,
+				 					frameName : 'ask_questions_c',
+				 					script : 'reload3();'
+				 				});
+				 				setTimeout(function(){
+				 					close_w();
+				 				},500);
+				 				break;
+							case 'put_questions_to_c':
+				 				api.execScript({
+				 					name :api.pageParam.winName,
+				 					frameName : 'put_questions_to_c',
+				 					script : 'reload4();'
+				 				});
+				 				setTimeout(function(){
+				 					close_w();
+				 				},500);
+				 				break;
+							case 'sure_order_c':
+				 				api.execScript({
+				 					name :api.pageParam.winName,
+				 					frameName : 'sure_order_c',
+				 					script : 'reload2();'
+				 				});
+				 				setTimeout(function(){
+				 					close_w();
+				 				},500);
+				 				break;
+							}
+		 					setTimeout(function(){
+				 					close_w();
+				 			},500);
+//		 			}else if(ret.data.status == 0){
+//		 				checkPay();
+		 			}
+		 		}
+	 		})
+	    }
+
+	    function post_ajax(serverURL,data,callback)
+		{
+		
+			var token=get_local("toekn");
+			
+			if (!is_json(data))
+			{
+				data=str2json(data);
+			}
+			api.ajax({
+				url : serverURL,
+				method : 'post',
+				timeout : 30,
+				dataType : 'json',
+				returnAll : false,
+				data : data
+			}, function(ret, err)
+			{
+				if (ret)
+				{
+					callback(ret)
+				}
+				else
+				{
+					net_error();//请求失败
+				}
+			});
+		}
+</script>
+</html>

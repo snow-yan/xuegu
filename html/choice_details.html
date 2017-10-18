@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>问答详情页</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style>
+			.t-858585{color:#858585}
+		</style>
+	</head>
+	<body class="c-wh">
+		<div class="w10 h30e c-4371bc" id="header">
+			<div class="box area_auto pstnr h30e t-wh">
+				<p class="pstna absl05 abst0 pdt05 pdb05 h20e" ontouchend="close_w();">
+					<img src="../image/icon/left.png" class="w20e h20e">
+				</p>
+				<p class="ovd tx-c umh25 ftz12">问答详情页</p>
+			</div>
+		</div>
+		<div id="footer" class="ubt h30e ub-e4e4e4 c-wh tx-c t-939393">
+			<span class="tx-c w333333 fll ubr ub-ccc t-545454 mart075 umh15" onclick="footer_info(0)" tapmode="">
+				<img src="../image/icon/icon_shears.png" class=" pdt01 w12e h12e pdr05"/>转发
+			</span>
+			<span class="tx-c w333333 fll t-545454 umh3" id="footer2" onclick="footer_info(1)" tapmode="">
+				<img src="../image/icon/qiangdas.png" class=" w12e h12e pdr05 pdt01 mart075"/><font id="qiangda">抢答</font>
+			</span>
+			<span class="tx-c w333333 fll ub-ccc ubl t-545454 umh15  mart075" onclick="footer_info(2)" tapmode="">
+				<img src="../image/icon/guanzhus.png" class=" w12e h12e pdr05 pdt01"/><font id="follow">关注</font>
+			</span>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript">
+		var fraName;
+		apiready = function() {
+			var pram = api.pageParam;
+			var tangu_id = pram.tangu_id;
+			getAnswerDetails();
+			
+		};
+		function footer_info(index){
+			var uid = get_local('uid');
+			var pram = api.pageParam;
+			var tangu_id = pram.tangu_id;
+			if(is_define(uid)){
+				if(uid == tangu_id){
+					if(index==0){
+						api.execScript({
+							name:api.winName,
+							frameName:'choice_details_self_c',
+	                        script: 'answer_forward();'
+                        });
+					}else if(index==1){
+						$toast("自己不能回答自己的问题",1500);
+					}else if(index==2){
+						ue_script_f("choice_details","choice_details_self_c","go_follow()");
+					}
+				}else{
+					if(index==0){
+						ue_script_f("choice_details","choice_details_c","answer_forward()");
+					}else if(index==1){
+						ue_script_f("choice_details","choice_details_c","add_answer()");
+					}else if(index==2){
+						ue_script_f("choice_details","choice_details_c","go_follow()");
+					}
+				}
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+			}
+				
+		}
+		function change_text(){
+			$('#qiangda').text("已抢答");
+		}
+		function change_text2(){
+			$('#follow').text("关注");
+		}
+		function change_text3(){
+			$('#follow').text("已关注");
+		}
+		function getAnswerDetails(){
+			var questionId = api.pageParam.question_id;
+			var URL = serverURL + 'app_interface/question/get_question_detail/';
+			URL+='?secret='+appSecret+'&question_id='+questionId;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					var uid = get_local('uid');
+					if(is_define(uid) && uid == ret.data.published_uid){
+						open_f_f('choice_details_self_c','choice_details_self_c.html','true',{data:ret,question_id:questionId});
+					}else{
+						open_f_f('choice_details_c','choice_details_c.html','true',{data:ret,question_id:questionId});
+					}
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		function setFrame(f){
+			fraName = f;
+		}
+	</script>
+</html>

@@ -1,0 +1,8 @@
+/*盒子应用*/
+.box{margin:0 auto;}
+/*.box:active{background-color:#666;color:#fff;}*/
+.box p{line-height:1.5em;min-height:1.5em}
+.box p span{display:block}
+.box p span.sl{float:left;display:block;}
+.box p span.sr{float:right;display:block;}
+

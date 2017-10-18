@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>学股网推广</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">
+	    <div class="box" id="agreement">
+		  <script type="text/html" id="agreement_text">
+			<div class=" ftz095"><%:=data.html_content%></div>
+		  </script>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script src="http://www.xueguwang.cn/static/xueguwang/zf/swiper.min.js"></script>
+	<script src="http://www.xueguwang.cn/static/xueguwang/zf/jquery-ui-1.10.3.min.js"></script>
+	<script src="http://www.xueguwang.cn/static/xueguwang/zf/jquery.fullPage.min.js"></script>
+	<script src="http://www.xueguwang.cn/static/xueguwang/zf/jquery.carouFredSel-6.0.4-packed.js" ></script>
+	<script type="text/javascript">
+
+		apiready = function() {
+			getAgreement();
+			
+		};
+		function getAgreement(){
+
+			var URL = serverURL + 'app_interface/html/get_html/';
+			URL+='?secret='+appSecret+'&html_id='+api.pageParam.target_id;
+			g_ajax(URL,function(ret)
+			{ 
+			    if(ret.errCode ==0){
+					$('#agreement').html(bt('agreement_text',ret));
+					api.execScript({
+						name:api.winName,
+	                    script: 'setTitle("'+ret.data.html_title+'");'
+                    });
+					api.parseTapmode();
+					
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		function isApplyAuthentication(){
+			var uid = get_local('uid');
+			if(is_define(uid)){
+				var status = get_local('AuthenticationStatus');
+				if(is_define(status)){
+					if (status == 0) {
+						open_w('apply_result', '../user/apply_result.html', {
+							status_info : "正在审核！"
+						});
+					} else if (status == 1) {
+						open_w('apply_result', '../user/apply_result.html', {
+							status_info : "认证通过！"
+						});
+					} else if (status == -1) {
+						open_w('apply_result', '../user/apply_result.html', {
+							status_info : "认证被拒绝！"
+						});
+					} else {
+						open_w('apply_authentication', '../user/apply_authentication.html');
+					}
+				}else{
+					open_w('apply_authentication', '../user/apply_authentication.html');
+				}
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+			}
+			
+		}
+	</script>
+</html>
+	

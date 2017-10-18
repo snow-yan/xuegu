@@ -1,0 +1,63 @@
+  #tab{
+      z-index:10; 
+    }
+   #tab img{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    width:5px;
+   }
+   #tab .content{
+    position: absolute;
+    top:35px;
+    width:100%;
+    background: #f0f2f3;
+    display: none;
+    z-index: 99;
+   }
+   #tab .content li{
+    line-height:35px;
+    text-align: center;
+   }
+    .tab_active{
+    color:#0055aa;
+    background: #fff;
+   }
+    #tab .content .tab_a{
+      z-index: 99;
+      position: absolute;
+      width:100%;
+      top:0;
+      left:100%;
+      background: #fff;
+      display: none;
+      color:#333;
+      
+    }
+    #tab .content .tab_a li{
+      line-height: 35px;
+      text-align: center; 
+      
+    }
+    .lable_course{
+    	display:inline-block;
+    	width:80px;
+    	text-align:center;
+    	line-height:1.4rem;
+      	color:#0055aa;
+      	border:1px solid #d9ecff;
+      	border-radius: 15px;
+      	float:right;
+     	padding-top:1px;
+    }
+    .lable_course1{
+      	color:#0055aa;
+      	background:#d9ecff;
+     	border-radius: 15px;
+      	float:right;
+      	display:inline-block;
+		width:80px;
+		text-align:center;
+		line-height:1.4rem;
+		padding-top:1px;
+    }     

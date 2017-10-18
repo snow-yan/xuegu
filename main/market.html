@@ -1,0 +1,577 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="format-detection" content="telephone=no">
+		<title>行情</title>
+		<link rel="stylesheet" type="text/css" href="../css/aui.css" />
+		<link rel="stylesheet" type="text/css" href="../css/hqstyle.css">
+	</head>
+	<body class="aui-bg-white">
+		<header class="aui-bar aui-bar-nav hqtop" id="header" style="position: fixed;">
+		    <a class="aui-pull-left aui-btn zxedit">
+		        <img src="../img/zxedit.png" alt="" style="width:1.2rem;">
+		    </a>
+		    <div class="cancel_edit" style="display:none;" id="cancle">取消</div>
+		    <div class=" aui-title" id="tab">
+		    	<a class="tabon">自选股</a><a>行情中心</a>
+			</div>
+		    <a class="aui-pull-right aui-btn" onclick="open_w('search','../html/market/search.html')">
+		       <img src="../img/seachico.png" style="width:1.2rem;">
+		    </a>
+		</header>
+		<div class="tab-content" >
+			<div class="zflist" >
+				<div class="listtitle_tab">
+					<span class="t1">个股</span>
+					<span class="t2 zx_cl">当前价</span>
+					<span class="t3 zx_cl zhangdief-order"> 
+						<a href="javascript:;" class="pxdown">涨跌幅<img src="../img/downico.png"></a> 
+						<a href="javascript:;" class="pxup">涨跌幅<img src="../img/upico.png"></a> 
+					</span>
+					<span class="t3 zx_on">选择操作</span>
+				</div>
+				<ul class="listcont zfph" id="optional"></ul>
+				<script id="optional_tpl" type="text/html">	
+				<%for(var i=0;i< data.length; i++ ){%>
+				<li  data-zxg-id="<%=data[i].zxg_id%>" id="zxg_id<%=i%>" data-type="<%=data[i].type%>">
+					<span class="t1"><div id="name<%=i%>"><%=data[i].name%></div><em id="code<%=i%>"><%=data[i].code%></em></span> 
+					<span class="t2 zx_cl" id="pre_price<%=i%>"></span> 
+					<span class="t3 zx_cl" id="zhangfu<%=i%>"></span> 
+					<span class="t4 zx_on">
+						<input name="" type="checkbox" class="aui-radio" value="">
+					</span> 
+				</li>
+				<%}%>
+				</script>
+			</div>
+			<div class="hqbottom zxall zx_on" >
+				<div class="zx_fdell"  onclick="delete_optional_stock();">删除</div>
+				<div class="zx_dell" href="javascript:;" onclick="delete_optional_stock();">删除</div>
+				<div class="zx_all" href="javascript:;">全选</div>
+			</div>
+			<div class="addzxlink zx_cl" onclick="open_w('search','../html/market/search.html')">
+				<a>+添加自选股</a>
+				<p>
+					未曾拥有自选股，快去添加吧~
+				</p>
+			</div>
+			<div style="width:100%; height:2.5rem; background:#fff;"></div>
+		</div>
+		<div class="tab-content" style="display: none;" id='hangqing'></div>
+		<script id="hangqing_tpl" type="text/html">	
+			<div class="st_zs">  
+			<%
+			var type=0 ,U=0,T=0 ,data1;
+			if(type == 0 || type == 1 ||  type == 2 ||  type == 3)
+			{ 
+				data1 = data.ding_bu_san_ge.hs_datas; 
+				T = 0; 
+				if( type == 0 || type == 1)
+				{ 
+					 U = 0; 
+				}
+				else
+				{ 
+					 U = 1;
+				}
+			}else {
+			
+				if( type == 4){
+					  data1 = data.ding_bu_san_ge.gg_datas; 
+					  T = 1; 
+					  U = 2; 
+				}else {
+
+				    if(type == 5){ 
+						data1 = data.ding_bu_san_ge.mg_datas;
+						T = 2;  
+						U = 3; 
+					} 
+			    }
+				  
+			}
+			%>	
+			 
+			<%for(var i=0;i< 3; i++ ){%>
+				<%if(type != 5){%>
+					<%if(100-data1[i][2]/data1[i][3]*100 < 0 ){%>
+					<div class="st_zsnum numdown" onclick="open_w('stock_detail','../html/market/stock_detail.html',{'type':<%=T%>,'code':'<%=data1[i].code%>'})">
+					<%}else{%>
+					<div class="st_zsnum" onclick="open_w('stock_detail','../html/market/stock_detail.html',{'type':<%=T%>,'code':'<%=data1[i].code%>'})">
+					<%}%> 
+						<!--下跌增加 numdown -->
+						<%=data1[i][0]%><br>
+						<span><%=data1[i][3]%></span><br>
+						<em>
+						<%=toDecimal(data1[i][3]-data1[i][2])%>
+						（<%=toDecimal(100-data1[i][2]/data1[i][3]*100)%>%）
+						</em>
+					</div>
+				<%}else{%>
+					<%if(data1[i][2]*100 < 0){%>
+					<div class="st_zsnum numdown" onclick="open_w('stock_detail','../html/market/stock_detail.html',{'type':<%=T%>,'code':'<%=data1[i].code%>'})">
+					<%}else{%>
+					<div class="st_zsnum" onclick="open_w('stock_detail','../html/market/stock_detail.html',{'type':<%=T%>,'code':'<%=data1[i].code%>'})">
+					<%}%> 
+					<%=data1[i][0]%><br>
+					<span><%=data1[i][1]%></span><br>
+					<em>
+					<%=toDecimal(data1[i][4])%>
+					（<%=toDecimal(data1[i][2]*100)%>%）
+					</em>	
+				</div>
+				<%}%> 
+				<%if(i!=2){%>
+					<i></i>
+				<%}%>	
+			<%}%> 
+			</div>
+			
+			<div class="zflist difubang">
+				<div class="listtitle zd_tab">
+					<i></i><h2>涨跌幅榜</h2>
+					<p>
+						<a class="goup uptop">涨</a><a class="godown">跌</a>
+					</p><a class="hqmore" onclick="open_w('zhangfu','../html/market/zhangfu.html')">更多&gt;&gt;</a>
+				</div>
+				<div class="listtitle_tab">
+					<span class="t1">名称</span><span class="t2">当前价</span><span class="t3">涨跌幅</span>
+				</div>
+				<ul class="listcont zfph gao">
+					<%for(var i=0;i< data.zhang_die_fu_zhang.length; i++ ){%>
+						<li  onclick="open_w('stock_detail','../html/market/stock_detail.html',{'type':<%=T%>,'code':'<%=data.zhang_die_fu_zhang[i].symbol%>'})">
+							<span class="t1"><%=data.zhang_die_fu_zhang[i].name%><br><em><%=data.zhang_die_fu_zhang[i].symbol%></em></span>
+    						<span class="t2"><%=data.zhang_die_fu_zhang[i].trade ? toDecimal(data.zhang_die_fu_zhang[i].trade) : (toDecimal(data.zhang_die_fu_zhang[i].lasttrade) ? toDecimal(data.zhang_die_fu_zhang[i].lasttrade): toDecimal(data.zhang_die_fu_zhang[i].price))%></span>
+    						<%if( (data.zhang_die_fu_zhang[i].changepercent ? data.zhang_die_fu_zhang[i].changepercent : data.zhang_die_fu_zhang[i].diff) < 0) {%>
+    						<span class="t3 aui-text-green"><%=toDecimal(data.zhang_die_fu_zhang[i].changepercent ? data.zhang_die_fu_zhang[i].changepercent : data.zhang_die_fu_zhang[i].chg)%>%</span>
+    						<%}else{%>
+    						<span class="t3 aui-text-danger"><%=toDecimal(data.zhang_die_fu_zhang[i].changepercent ? data.zhang_die_fu_zhang[i].changepercent : data.zhang_die_fu_zhang[i].chg)%>%</span>
+    						<%}%>
+						</li>
+					<%}%>
+				</ul>
+				<ul class="listcont zfph di" style="display:none;">
+					<%for(var i=0;i< data.zhang_die_fu_die.length; i++ ){%>
+						<li onclick="open_w('stock_detail','../html/market/stock_detail.html',{'type':<%=T%>,'code':'<%=data.zhang_die_fu_die[i].symbol%>'})">
+							<span class="t1"><%=data.zhang_die_fu_die[i].name%><br><em><%=data.zhang_die_fu_die[i].symbol%></em></span>
+    						<span class="t2"><%=data.zhang_die_fu_die[i].trade ? toDecimal(data.zhang_die_fu_die[i].trade) : (toDecimal(data.zhang_die_fu_die[i].lasttrade) ? toDecimal(data.zhang_die_fu_die[i].lasttrade): toDecimal(data.zhang_die_fu_die[i].price))%></span>
+    						<%if( (data.zhang_die_fu_die[i].changepercent ? data.zhang_die_fu_die[i].changepercent : data.zhang_die_fu_die[i].diff) < 0) {%>
+    						<span class="t3" style="color:#06a06f"><%=toDecimal(data.zhang_die_fu_die[i].changepercent ? data.zhang_die_fu_die[i].changepercent : data.zhang_die_fu_die[i].chg)%>%</span>
+    						<%}else{%>
+    						<span class="t3" style="color:#f83c3f"><%=toDecimal(data.zhang_die_fu_die[i].changepercent ? data.zhang_die_fu_die[i].changepercent : data.zhang_die_fu_die[i].chg)%>%</span>
+    						<%}%>
+						</li>
+					<%}%>
+				</ul>
+			</div>
+			<div class="zflist chengjiaoe">
+				<div class="listtitle cj_tab">
+					<i></i><h2>成交额排行榜</h2>
+					<p>
+						<a class="cj_g dqcj">高</a><a class="cj_d ">低</a>
+					</p><a class="hqmore"  onclick="open_w('chengjiao','../html/market/chengjiao.html')">更多&gt;&gt;</a>
+				</div>
+				<div class="listtitle_tab">
+					<span class="t1">名称</span><span class="t2">当前价</span><span class="t3">成交额</span>
+				</div>
+				<ul class="listcont zfph gao">
+					<%for(var i=0;i< data.cheng_jiao_liang_gao.length; i++ ){%>
+						<li onclick="open_w('stock_detail','../html/market/stock_detail.html',{'type':<%=T%>,'code':'<%=data.cheng_jiao_liang_gao[i].symbol%>'})">
+							<span class="t1"><%=data.cheng_jiao_liang_gao[i].name%><br><em><%=data.cheng_jiao_liang_gao[i].symbol%></em></span>
+    						<span class="t2"><%=data.cheng_jiao_liang_gao[i].trade ? toDecimal(data.cheng_jiao_liang_gao[i].trade) : (toDecimal(data.cheng_jiao_liang_gao[i].lasttrade) ? toDecimal(data.cheng_jiao_liang_gao[i].lasttrade): toDecimal(data.cheng_jiao_liang_gao[i].price))%></span>
+    						<span class="t3" style="color:#f83c3f"><%=toDecimal((data.cheng_jiao_liang_gao[i].amount ? data.cheng_jiao_liang_gao[i].amount :data.cheng_jiao_liang_gao[i].diff)/100000000)%>亿</span>
+						</li>
+					<%}%>
+				</ul>
+				<ul class="listcont zfph di" style="display: none;">
+					<%for(var i=0;i< data.cheng_jiao_liang_di.length; i++ ){%>
+						<li  onclick="open_w('stock_detail','../html/market/stock_detail.html',{'type':<%=T%>,'code':'<%=data.cheng_jiao_liang_di[i].symbol%>'})">
+							<span class="t1"><%=data.cheng_jiao_liang_di[i].name%><br><em><%=data.cheng_jiao_liang_di[i].symbol%></em></span>
+    						<span class="t2"><%=data.cheng_jiao_liang_di[i].trade ? toDecimal(data.cheng_jiao_liang_di[i].trade) : (toDecimal(data.cheng_jiao_liang_di[i].lasttrade) ? toDecimal(data.cheng_jiao_liang_di[i].lasttrade): toDecimal(data.cheng_jiao_liang_di[i].price))%></span>
+    						<span class="t3" style="color:#f83c3f"><%=toDecimal((data.cheng_jiao_liang_di[i].amount ? data.cheng_jiao_liang_di[i].amount :data.cheng_jiao_liang_di[i].diff)/10000)%>万</span>
+						</li>
+					<%}%>
+				</ul>
+			</div>
+			<div class="zflist huanshoulv">
+				<div class="listtitle hs_tab">
+					<i></i><h2>换手率排行榜</h2>
+					<p>
+						<a class="hs_g dqcj">高</a><a class="hs_d ">低</a>
+					</p><a class="hqmore" onclick="open_w('huanshou','../html/market/huanshou.html')">更多&gt;&gt;</a>
+				</div>
+				<div class="listtitle_tab">
+					<span class="t1">名称</span><span class="t2">当前价</span><span class="t3">换手率</span>
+				</div>
+				<ul class="listcont zfph gao">
+					<%for(var i=0;i< data.huan_shou_lv_gao.length; i++ ){%>
+						<li onclick="open_w('stock_detail','../html/market/stock_detail.html',{'type':<%=T%>,'code':'<%=data.huan_shou_lv_gao[i].symbol%>'})">
+							<span class="t1"><%=data.huan_shou_lv_gao[i].name%><br><em><%=data.huan_shou_lv_gao[i].symbol%></em></span>
+    						<span class="t2"><%=data.huan_shou_lv_gao[i].trade ? toDecimal(data.huan_shou_lv_gao[i].trade) : (toDecimal(data.huan_shou_lv_gao[i].lasttrade) ? toDecimal(data.huan_shou_lv_gao[i].lasttrade): toDecimal(data.huan_shou_lv_gao[i].price))%></span>
+    						<span class="t3" style="color:#f83c3f"><%=toDecimal(data.huan_shou_lv_gao[i].turnoverratio ?data.huan_shou_lv_gao[i].turnoverratio : data.huan_shou_lv_gao[i].chg)%>%</span>
+						</li>
+					<%}%>
+				</ul>
+				<ul class="listcont zfph di" style="display: none;">
+					<%for(var i=0;i< data.huan_shou_lv_di.length; i++ ){%>
+						<li onclick="open_w('stock_detail','../html/market/stock_detail.html',{'type':<%=T%>,'code':'<%=data.huan_shou_lv_di[i].symbol%>'})">
+							<span class="t1"><%=data.huan_shou_lv_di[i].name%><br><em><%=data.huan_shou_lv_di[i].symbol%></em></span>
+    						<span class="t2"><%=data.huan_shou_lv_di[i].trade ? toDecimal(data.huan_shou_lv_di[i].trade) : (toDecimal(data.huan_shou_lv_di[i].lasttrade) ? toDecimal(data.huan_shou_lv_di[i].lasttrade): toDecimal(data.huan_shou_lv_di[i].price))%></span>
+    						<span class="t3" style="color:#f83c3f"><%=toDecimal(data.huan_shou_lv_di[i].turnoverratio ?data.huan_shou_lv_di[i].turnoverratio : data.huan_shou_lv_di[i].chg)%>%</span>
+						</li>
+					<%}%>
+				</ul>
+			</div>
+			<div class="zflist">
+				<div class="listtitle">
+					<i></i><h2>龙虎榜</h2>
+				</div>
+				<ul class="lhtop" >
+					<%for(var i=0;i< data.long_hu_bang.length; i++ ){
+						if(i==10){
+							break;
+						}
+					%>
+					<li onclick="open_w('search','../html/market/search.html',{'code':'<%=data.long_hu_bang[i].symbol%>'})">
+						<%if(data.long_hu_bang[i].zhangfu < 0){%>
+						<div class="lhbbox greenbox">
+						<%}else{%>
+						<div class="lhbbox">
+						<%}%>
+							<h2><%=data.long_hu_bang[i].name%>(<%=data.long_hu_bang[i].symbol%>)</h2>
+							<p>
+								<span class="fleft">涨跌幅</span><span class="fright lhb_zdf"><%=data.long_hu_bang[i].zhangfu%>%</span>
+							</p>
+							<p style="margin-top:10px;">
+								<span class="fleft">净额</span><span class="fright"><%=toDecimal(data.long_hu_bang[i].chengjiaoe)%>万</span>
+							</p>
+						</div>
+					</li>
+					<%}%>
+				</ul>
+			</div>
+			<div style="width:100%; height:2.5rem; background:#fff;"></div>
+		</script>	
+	</body>
+	<script type="text/javascript" src="../script/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var objs = [];
+		var obj_length = 0;
+		var obj_flage = 1;
+		apiready=function(){
+			var $header = $api.dom('#header');
+		    $api.fixIos7Bar($header);
+			$api.fixStatusBar($header);
+			//tab切换 
+			$('#tab a').click(function(){
+				$(this).addClass('tabon').siblings().removeClass('tabon');
+				var index=$(this).index();
+				$('.tab-content:eq('+index+')').show().siblings('.tab-content').hide();
+				if(index==1){
+					$(".hqtop .zxedit").hide();
+				}else{
+					$(".hqtop .zxedit").show();
+				}
+			})
+			stock_center();
+			optional_stock();
+			//添加自选
+			if ($(".listcont").children("li").length == 0) {
+				$(".addzxlink p").show();
+			} else {
+				$(".addzxlink p").hide();
+			}
+			
+		}
+		function refresh(){
+			location.reload(); 
+		}
+		function edit(){
+			//编辑自选
+			$(".hqtop .zxedit").click(function() {
+				$(this).hide();
+				$("#cancle").show();
+				$(".zx_on").show();
+				$(".zx_cl").hide();
+				//编辑
+			})
+			$(".hqtop #cancle").click(function() {
+				$(this).hide();
+				$(".hqtop .zxedit").show();
+				$(".zx_on").hide();
+				$(".zx_cl").show();
+				$(".listcont li span .aui-radio").removeAttr("checked");
+				//取消编辑
+			})
+			//全选
+			$(".zx_all").click(function() {
+				$("#optional .aui-radio").prop('checked', 'true');
+			})
+			//显示/隐藏删除按钮
+			$(".hqtop #cancle,.zx_all,#optional .aui-radio,.zx_dell").click(function() {
+				if ($(".listcont li span .aui-radio:checked").length == 0) {
+					$(".zx_dell").hide();
+					$(".zx_fdell").show();
+				} else {
+					$(".zx_fdell").hide();
+					$(".zx_dell").show();
+				}
+			})
+		}
+		function optional_stock(){
+			var uid = get_local('uid');
+			if(is_define(uid)){
+		        var URL = serverURL + 'app_interface/user/my_zixuangu/';
+				var data = {
+					values:{
+						secret : appSecret,
+						uid : uid,
+					}
+				};
+				r_ajax(URL,data, function(ret) {
+					//alert(JSON.stringify(ret))
+					if(ret.errCode==0){
+						$('#optional').html(bt('optional_tpl',ret));
+						var j=0;
+						for(var i=0; i<ret.data.length;i++){
+							var code1=ret.data[i].code;
+							var type1=ret.data[i].type;
+							var URL1 = serverURL + 'app_interface/hq/get_gupiao_info/';
+							URL1+='?secret='+appSecret+'&code='+code1+'&type='+type1;
+							g_ajax(URL1,function(rett) {
+								
+								if(rett.errCode==0){
+									var pre_price=rett.data.result[0]['data'].nowPri;
+									var zhangfu=rett.data.result[0]['dapandata'].rate;
+									
+									$('#pre_price'+j).text(pre_price);
+									if(zhangfu<0){
+										$('#zhangfu'+j).css('color','#06a06f').text(zhangfu+'%');
+									}else{
+										$('#zhangfu'+j).css('color','#f83c3f').text(zhangfu+'%');
+									}
+										var name=$('#name'+j).text();
+										var code=$('#code'+j).text();
+										var zxg_id=$('#zxg_id'+j).attr('data-zxg-id');
+										var type=$('#zxg_id'+j).attr('data-type');
+										var obj = {
+								            'name' : name,
+								            'code':code,
+								            'pre_price':pre_price,
+								            'zhangdiefu' : zhangfu,
+								            'zxg_id':zxg_id,
+								           	'type':type
+								            
+								       };
+								       objs.push(obj);
+								      
+								       if(++obj_length >= $("#optional li").length)
+								       {
+								       	
+								       	 $(".listtitle_tab .t3 .pxup").click();
+								        
+								       }
+								       //涨跌排序
+										$(".listtitle_tab .t3 .pxup").click(function(){
+											$(this).hide().siblings().show();
+											//降序
+											$("#optional").html('');
+									        for(var i = 0; i < objs.length; i++){
+												for (var j = i + 1; j < objs.length; j++){
+													var p;
+													if (objs[i]['zhangdiefu'] < objs[j]['zhangdiefu'])
+													{
+														p = objs[i];
+														objs[i] = objs[j];
+														objs[j] = p;
+													}
+												} 
+											}
+											
+									        obj_flage = 1;
+									        for(var i = 0; i < objs.length; i++)
+									        {
+									        var  aa = "open_w('stock_detail','../html/market/stock_detail.html',{'type':"+objs[i]['type']+",'code':'"+objs[i]['code']+"'})";
+									        var str='<li onclick='+aa+' data-zxg-id='+objs[i]['zxg_id']+'>';
+									         	str+='<span class="t1"><div>'+objs[i]['name']+'</div><em>'+objs[i]['code']+'</em></span>'; 
+												str+='<span class="t2 zx_cl">'+objs[i]['pre_price']+'</span>';
+												if(objs[i]['zhangdiefu']<0){
+													str+='<span class="t3 zx_cl" style="color:#06a06f">'+objs[i]['zhangdiefu']+'%</span>' ;
+												}else{
+													str+='<span class="t3 zx_cl" style="color:#f83c3f">'+objs[i]['zhangdiefu']+'%</span>'
+												}
+												str+='<span class="t4 zx_on"><input name="" type="checkbox" class="aui-radio" value=""></span>'; 
+												str+='</li>';
+												
+									         $("#optional").append(str);   
+									        }
+										    
+										})
+										$(".listtitle_tab .t3 .pxdown").click(function(){
+											$(this).hide().siblings().show();
+											//升序
+											$("#optional").html('');
+									        for(var i = 0; i < objs.length; i++){
+												for (var j = i + 1; j < objs.length; j++){
+													var p;
+													if (objs[i]['zhangdiefu'] > objs[j]['zhangdiefu'])
+													{
+														p = objs[i];
+														objs[i] = objs[j];
+														objs[j] = p;
+													}
+												} 
+											}
+									        obj_flage = 0;
+									        for(var i = 0; i < objs.length; i++)
+									        {
+									        
+									        var  aa = "open_w('stock_detail','../html/market/stock_detail.html',{'type':"+objs[i]['type']+",'code':'"+objs[i]['code']+"'})";
+									        
+									        var str='<li onclick='+aa+' data-zxg-id='+objs[i]['zxg_id']+'>';
+									         	str+='<span class="t1"><div>'+objs[i]['name']+'</div><em>'+objs[i]['code']+'</em></span>'; 
+												str+='<span class="t2 zx_cl">'+objs[i]['pre_price']+'</span>';
+												if(objs[i]['zhangdiefu']<0){
+													str+='<span class="t3 zx_cl" style="color:#06a06f">'+objs[i]['zhangdiefu']+'%</span>' ;
+												}else{
+													str+='<span class="t3 zx_cl" style="color:#f83c3f">'+objs[i]['zhangdiefu']+'%</span>'
+												}
+												str+='<span class="t4 zx_on"><input name="" type="checkbox" class="aui-radio" value=""></span>'; 
+												str+='</li>';
+												console.log(str);
+									         $("#optional").append(str);    
+									        }
+										    
+										})
+								      
+									j++;
+									edit();
+								}else{
+									$toast(rett.errMsg, 1500);
+								}
+							
+							})
+						}
+					}else{
+						$toast(ret.errMsg, 1500);
+					}
+				})
+	        }else{
+	        	$toast('您还没有登录，请先登录', 1000);
+				setTimeout(function() {
+					if (api.systemType == 'ios') {
+						open_w('ios_login', '../user/ios_login.html', {
+							'winName' : api.winName,
+							'frameName' : api.frameName
+						});
+					} else {
+						open_w('login', '../user/login.html', {
+							'winName' : api.winName,
+							'frameName' : api.frameName
+						});
+					}
+				}, 1000);
+	        
+	        }
+			
+		}
+		//删除自选股
+		function  delete_optional_stock(){
+		 	$("#optional li").each(function(){
+			 if($(this).find("input[type='checkbox']").is(':checked')){
+			 		var zxg_id=$(this).attr('data-zxg-id');
+			    	var uid = get_local('uid');
+					var URL = serverURL + 'app_interface/user/delete_zixuangu/';
+					var data = {
+						values:{
+							secret : appSecret,
+							uid : uid,
+							zxg_id:zxg_id
+						}
+					};
+					var content=$(this);	
+					r_ajax(URL,data, function(ret) {
+						if(ret.errCode==1){
+							content.remove();
+							if($("#optional .aui-radio:checked").length == 0){
+		                    	$(".zx_dell").hide();	
+		                    	$(".zx_fdell").show();
+		                	}else{
+		                    	$(".zx_fdell").hide();
+		                    	$(".zx_dell").show();
+		                	}
+						}else{
+							$toast(ret.errMsg,1500);	
+						}
+					})
+			    
+			 	}
+		 	});
+
+		}
+		// 行情中心
+    	function stock_center(){
+			var URL = serverURL + 'app_interface/hq/get_index/';
+			URL+='?secret='+appSecret;
+			g_ajax(URL,function(ret)
+			{	
+				//alert(JSON.stringify(ret))
+				if(ret.errCode==0){
+					$('#hangqing').html(bt('hangqing_tpl',ret));
+					//涨跌榜切换
+					$(".zd_tab p .goup").click(function(){
+						$(this).addClass("uptop").siblings().removeClass("downtop");
+						//显示涨幅榜
+					    $("div.difubang ul.di").hide();
+					    $("div.difubang ul.gao").show();
+					});
+					$(".zd_tab p .godown").click(function(){
+						$(this).addClass("downtop").siblings().removeClass("uptop");	
+						//显示跌幅榜
+					    $("div.difubang ul.gao").hide();
+					    $("div.difubang ul.di").show();
+					});
+					//成交额切换
+					$(".cj_tab p .cj_g").click(function(){
+						$(this).addClass("dqcj").siblings().removeClass("dqcj");
+						//成交额高榜
+					    console.log($("div.chengjiaoe ul.di").length);
+					    $("div.chengjiaoe ul.di").hide();
+					    $("div.chengjiaoe ul.gao").show();
+					});
+					$(".cj_tab p .cj_d").click(function(){
+						$(this).addClass("dqcj").siblings().removeClass("dqcj");	
+						//成交额低榜
+					    $("div.chengjiaoe ul.gao").hide();
+					    $("div.chengjiaoe ul.di").show();
+					});
+					//换手率榜切换
+					$(".hs_tab p .hs_g").click(function(){
+						$(this).addClass("dqcj").siblings().removeClass("dqcj");
+						//换手率高榜
+					    $("div.huanshoulv ul.di").hide();
+					    $("div.huanshoulv ul.gao").show();
+					});
+					$(".hs_tab p .hs_d").click(function(){
+						$(this).addClass("dqcj").siblings().removeClass("dqcj");	
+						//换手率低榜
+					    $("div.huanshoulv ul.gao").hide();
+					    $("div.huanshoulv ul.di").show();
+					});		
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+			})
+		}
+		
+	</script>
+</html>

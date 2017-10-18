@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>我要学习</title>
+		 <link rel="stylesheet" href="../cool_css/cool.css">
+		 <link rel="stylesheet" href="../cool_css/swiper.min.css">
+	</head>
+	<body class="c-wh">
+	    <input type="hidden" id="page" value="1"/>
+	    <input type="hidden" id="lable" value="全部课程"/>
+		<ul id="more_class"></ul>
+		<script id="more_class_left" type="text/html">
+			   <%
+			   for(var i=0;i< data.length;i++){
+			   var le_msg = str2json(data[i].cor_letv_msg);
+			   var let_v=le_msg.data.video_unique;
+			   %>
+			   <li class="clo_two pstnr ubb ub-e4e4e4">
+				    <div class=" w95 area_auto" onclick="open_w('class_details','../html/class_details.html',{'cor_id':'<%=data[i].cor_id%>',UID:get_local('uid'),pic:'<%=data[i].cor_pic%>',video_unique:'<%=let_v%>'})">
+						<div class="col_list">
+							<div class="pdt07 pdb07 pdl02 pdr05 pstnr">
+								<img src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].cor_pic%>" class="w10 h10 uc-a02 ovd" style=" height:<%=api.frameWidth/3.4-15%>px;" alt="" />
+								<span class=" pstna absb12 marb025 absr10 marr025 c-616161 uc-a10 t-wh ftz07 ovd pdr05  pdl05">
+									<img src="../image/icon/live_small.png" class="w15e h12e pdr02"/>
+									<font class=" umh15"><%=data[i].cor_view%></font>
+								</span>
+							</div>
+						</div>
+						<div class="col_list">
+							<div class="pdr02 pdt07">
+								<p class="umh125 pdb025 ftz085 txo"><%=data[i].cor_name%></p>
+								<p class="t-c0c0c0 ftz09 w10" style="max-height: 3.3em;overflow: hidden;">
+									<%
+									var lable = data[i].cor_label.split(' ');
+									for(var j=0;j<lable.length;j++){
+									if(is_define(lable[j])){
+									%>
+									<span class="fll pdt01 pdb01 pdl05 pdr05 marr03 mart025 umh1 border-radius-e0e0e0 dsplb"><font class="ftz07"><%=lable[j]%></font></span>
+									<%	
+									}
+									}
+									%>
+								</p>
+							</div>
+						</div>
+						<%
+						if(is_define(data[i].cor_charge_money)&& data[i].cor_charge_money != 0){
+						%>
+						<p class="pstna absl50p absb05 ovd t-ff7b00 umh15 ftz075"><img src="../image/icon/guzi.png" class="w10e pdt03 pdr01" alt="" /><%=data[i].cor_charge_money%></p>
+						<%}else{%>
+						<p class="t-ff7b00 pstna absl50p absb07 ftz075">限时免费</p>
+						<%
+						}
+						%>
+					</div>
+				</li>
+			<%
+			}
+			%>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var lastPage = true,lable,firstPageHaveData = true;
+		apiready = function() {
+			var pars = api.pageParam.pars;
+			if(is_define(pars)){
+				Video_Courselist('first',pars);
+				setLable(pars);
+			}else{
+				Video_Courselist();
+			}
+			push_down(function(){
+				lable = $('#lable').val();
+				if(firstPageHaveData){
+					Video_Courselist('first',lable);
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					lable = $('#lable').val();
+					Video_Courselist('next',lable);
+				}
+			});
+		};
+		function Video_Courselist(type,lable){
+		    if(type=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			var pagesize = 10;
+			var URL = serverURL + 'app_interface/course/all_course/';
+		    if(is_define(lable) && lable!= '全部课程'){
+			    URL+='?secret='+appSecret+'&label='+lable+'&page='+page+'&pagesize='+pagesize;
+			}else{
+				URL+='?secret='+appSecret+'&page='+page+'&pagesize='+pagesize;
+		    }
+		    g_ajax(URL,function(ret){
+//		    console.log(json2str(ret));
+				if(ret.errCode ==0){
+				    if(ret.data.length>0){
+					    if(type=='next'){
+							$('#more_class').append(bt('more_class_left',ret));
+						}else{
+							$('#more_class').html(bt('more_class_left',ret));
+							push_down_over();
+						}
+					}else{
+						if(page==1){
+							firstPageHaveData = false;
+						}
+						lastPage =false;
+						no_data_more('me_want_study');
+					}
+					api.parseTapmode();
+					Echo.init({offset: 0,throttle:0});
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		function setLable(lable){
+			$('#lable').val(lable);
+		}
+		function choiceLable1(){
+			var winName = api.winName;
+			var frameName = api.frameName;
+			openFrameFull('../html/class_screen',{'winName':winName,'frameName':frameName})
+		}
+ 	</script>
+</html>

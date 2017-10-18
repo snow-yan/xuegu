@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>订单支付</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/course_order.css" />
+    <style>
+       
+        .toast{
+            width:100%;
+            height:100%;
+            padding:15% 10%;
+            display: none;
+            z-index: 999;
+            background: rgba(0,0,0,0.5);
+            position: fixed;
+            top: 0;
+            width:100%;
+        }
+        .toast .detail{
+            background: #fff;
+            padding:0.5rem 0;
+            border-radius: 15px;
+        }
+        .toast .title{
+            text-align: center;
+            font-weight: bold;
+            color:#000;
+            
+        }
+        .toast .title img{
+            display: inline-block;
+            height:2.5rem;
+            vertical-align: middle;
+        }
+        .toast .title div{
+            display: inline-block;
+            line-height:1.0rem; 
+            vertical-align: middle;
+            text-align: left;
+            margin:0.25rem 0 0 0.5rem;
+        }
+        .toast .content{
+            border: 1px solid #dedede;
+            border-radius: 10px;
+            padding:0.5rem 0.5rem 0 0.5rem;
+            margin:0.5rem;
+        }
+        .toast .dingdan{
+            font-size: 0.6rem;
+            font-weight: bold;
+            color:#dd0202;
+            text-align: center;
+            line-height:1rem; 
+            border-bottom: 1px solid #dedede;
+            padding-bottom: 0.5rem;
+        }
+        .toast .company{
+            font-size: 0.6rem;
+            padding-top:0.5rem;
+        }
+        .toast .company div{
+            line-height: 1rem;
+            padding-bottom: 0.25rem;
+        }
+        .btnn {
+            background: #cd0202;
+            width:90%;
+            line-height:2rem;
+            color:#fff;
+            text-align: center;
+            margin:0 auto;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="content1">
+        <div class="bank_lable">
+            <span>银行转账</span>
+        </div>
+        <div class="bank_detail">
+            <div class="gray_w1 au-font-size-12">
+                注：您可以选择就近的银行进行对公打款完成订单支付，收款账号如下
+            </div>
+            <div class="aui-margin-t-10">公司名称：陕西今日网络信息科技有限公司</div>
+            <div>开户行：中信银行沣惠路支行</div>
+            <div>账号：8111 7010 1400 0004 65</div>
+        </div>
+    </div>
+    <div class="aui-btn aui-btn-block"  onclick="pay()" style="margin:0.75rem auto;width:90%">确认订单</div></p>
+   	<div class="toast">
+        <div class="detail">
+            <div class="title">
+                <img src="../../img/alerta.png" alt="">
+                <div>恭喜您，订单提交成功<br>请尽快支付哦！</div>
+             </div>
+            <div class="content">
+                <div class="dingdan">
+                    您的订单号<br><span id="order_number"></span><br>（提交凭证请注意妥善保管）
+                </div>
+                <div class="company">
+                    <div><b>打款账号如下：</b></div>
+                    <div>
+                        公司名称<br>
+                        陕西今日网络信息科技有限公司
+                    </div>
+                    <div>
+                        开户行<br>
+                       中信银行股份有限公司西安沣惠路支行
+                    </div> 
+                    <div>
+                        账号<br>
+                        8111 7010 1400 0004 656
+                    </div>                                       
+                </div>
+            </div>
+            <div class="title aui-margin-b-10 aui-font-size-12">如有疑问请联系<br>学股网客服哦（400-029-6649）！</div>
+            <div class="btnn">确认</div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script>
+   apiready = function(){
+   		pay_success();
+     	$('.btnn').click(function(){
+     		$('.toast').css('display','none');
+     		open_w('my_order','../../user/my_order.html')
+     	})
+    }
+  function pay(){
+  		 Loading(0)
+  		setTimeout(function(){
+			  Loading(-1)
+	  		$('.toast').css('display','block');
+		},1500);
+		
+	 
+  }
+  function pay_success(){
+			var URL = serverURL + 'app_interface/coursePack/coursePack_order_id_find/';
+			URL+='?secret='+appSecret+'&id=94';
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode==0){
+					$('#order_number').text(ret.data.order_number);
+				}else{
+					$toast("操作失败",1500);		
+				}
+			})
+		}
+</script>
+</html>

@@ -1,0 +1,174 @@
+ html,body,header,section,footer,div,ul,ol,li,img,a,span,em,del,legend,center,var,fieldset,form,label,dl,dt,dd,cite,input,hr,time,mark,code,figcaption,figure,textarea,h1,h2,h3,h4,h5,h6,p{
+            margin:0;
+            border:0;
+            padding:0;
+            font-style:normal;
+        }
+        html{
+            font-family:"微软雅黑";
+            font-size: 20px;
+        }
+        a {
+
+            text-decoration: none;
+            background-color: transparent;
+        }
+        @media only screen and (min-width: 400px) {
+            html {
+                font-size: 21.33333333px !important;
+            }
+        }
+        @media only screen and (min-width: 414px) {
+            html {
+                font-size: 21px !important;
+            }
+        }
+        @media only screen and (min-width: 480px) {
+            html {
+                font-size: 25.6px !important;
+            }
+        }
+        textarea:-ms-input-placeholder {
+          color: #dddddd;
+        }
+        .header {
+            position: relative!important;
+            width: 100%;
+            z-index: 999;
+        }
+        .aui-bar{
+            overflow: hidden;
+            line-height: 2.25rem;
+            padding-left: 0.5rem;
+            background-color: #0055aa !important;
+            color:#fff;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        .aui-pull-left{
+            font-size: 0.7rem;
+            float:left;
+            color:#fff;
+        }
+        .aui-pull-right{
+          background: #004c99;
+          line-height:1.3rem;
+          margin-top: 0.5rem;
+          margin-right:0.5rem;
+          font-size: 0.7rem !important;
+          border-radius: 5px;
+          padding: 0 0.5rem;
+          font-size: 0.6rem;
+          font-weight: 400;
+          float: right;
+          color:#fff;    
+        }
+         #title{
+          font-size: 18px;
+          color:#333;
+          width:99%;
+          line-height: 20px;
+          font-weight: bold;
+             border:none;
+             outline:none;
+         }
+          #content img{
+            width:100% !important; 
+            margin:10px auto;
+        }
+        .editor{
+          width:100%;
+          overflow: hidden;position: fixed;
+        }
+        .publish-article-title {
+          background: #fff;
+          padding:10px;
+          border-bottom: 1px solid #dcdcdc;
+        }
+        .publish-article-content {
+          padding:10px;
+          background: #fff;
+        }
+        .publish-article-content .article-content {
+          color:#333;
+          font-size: 14px;
+          padding-bottom: 10px;
+          -webkit-user-select: text;
+          overflow-y: auto;
+          outline: none;
+        }
+        .publish-article-content .footer-btn {
+          overflow: hidden;
+        }
+        .publish-article-content .footer-btn .upload-img {
+          display: inline-block;
+          vertical-align: bottom;
+          width: 25px;
+          float:right;
+
+        }
+        .footer-btn .upload-img img{
+          width:100%;
+        }
+        #content p{
+            color: #888888;
+        }
+        .zishu{
+            color:#898989;
+            font-size:14px;
+        }
+        .zishu img{
+          vertical-align: middle;
+          margin:-0.1rem 0.25rem 0 0;
+            display: inline-block;
+        }
+      .mask{
+          position: fixed;
+          top:0;
+          width:100%;
+          height:100%;
+          background: rgba(0,0,0,0.5);
+         display: none;
+       }
+      .mask .content{
+        position: absolute;
+        top:30%;
+        left:5%;
+        width:89%;
+        border-radius: 10px;
+        background: #fff;
+        padding-top:10px;
+      }
+      .mask .title{
+        color:#898989;
+        font-size: 14px;
+        padding:0 10px 15px 15px;
+      }
+      .mask .title img{
+          display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+          margin-top: -2px;
+      }
+      .mask input {
+        width:90%;
+        background: #f2f2f2;
+        padding:15px;
+        font-size: 14px;
+          border:none;
+        outline:none;
+      }
+      .mask .bottom{
+        height:40px;
+      }
+      .mask .bottom div{
+        width:49.5%;
+        float:left;
+          font-size: 16px;
+        text-align: center;
+        line-height: 20px;
+        margin:10px 0;
+
+      }
+      .red-w{color:#f94141;}
+      .border-l{border-left:1px solid #c0c0c0;}      

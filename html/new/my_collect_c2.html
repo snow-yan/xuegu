@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>我的收藏</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+     <link rel="stylesheet" href="../../cool_css/cool.css">
+</head>
+<body> 
+    <div class="aui-content aui-margin-t-10">
+        <!-- 文章 -->
+        <input type="hidden" id="page" value="1"/>
+        <ul class="aui-list aui-media-list" id="article_list"></ul>
+         <script id="article_list_tpl" type="text/html">
+		   	<%
+		   	for(var i=0;i< data.length;i++){	
+		   	%>
+		  	<li class="aui-list-item aui-list-item-middle" onclick="open_w('article_detail','article_detail.html',{'article_id':'<%=data[i].collect_id%>'})">
+                <div class="aui-media-list-item-inner" >
+                    <div class="aui-list-item-media" style="width: 3rem;">
+                        <img src="../../image/icon/echo_bg.jpg" data-echo="<%=data[i].headImgUrl%>" class="aui-img-round aui-list-img-sm">
+                    </div>
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title aui-font-size-14">
+                                收藏了<span class="aui-text-blue aui-margin-l-5"><%=data[i].username%></span>
+                            </div>
+                            <div class="aui-list-item-right"><%=data[i].time%></div>
+                        </div>
+                        <div class="aui-list-item-text aui-margin-t-5">
+                           <p class="aui-ellipsis-1 aui-text-blue"><%=data[i].content%></p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+			<%
+			}
+			%>
+		</script>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script>
+	var lastPage = true,firstPageHaveData = true;
+	apiready = function() {
+		article_list();
+		push_down(function(){
+			if(firstPageHaveData){
+				article_list();
+			}else{
+				setTimeout(function(){
+					push_down_over();
+				},500);
+			}
+		});
+		scrollBottom(function(){
+			if(lastPage){
+				article_list('next');	
+			}
+		});
+	};   
+ 
+	 function  article_list(type){
+	 	var uid = get_local('uid');	
+	 	if(type=='next'){
+			var page = $('#page').val();
+			page = parseInt(page)+1;
+			$('#page').val(page);
+		}else{
+			var page =1;
+			$('#page').val(page);
+		}
+		var pagesize = 10;
+		var URL = serverURL + 'app_interface/newMobile/article_my_collect/';
+		URL+='?secret='+appSecret+'&page='+page+'&uid='+uid;
+		g_ajax(URL,function(ret)
+		{	
+			if(ret.errCode==200 || ret.errCode==101){
+				//alert(JSON.stringify(ret))
+				if(ret.errCode ==200 ){
+					if(type=='next'){
+						$('#article_list').append(bt('article_list_tpl',ret));
+					}else{
+						$('#article_list').html(bt('article_list_tpl',ret));
+					}
+					
+				}else{
+					if(page==1){
+						firstPageHaveData = false;
+							lastPage = false;
+						firstPage_no_data('article_list');
+					}
+					lastPage =false;
+					no_data_more('article_list');
+				}
+				push_down_over();
+				Echo.init();
+				api.parseTapm
+			}else{
+				$toast(ret.errMsg,1500);		
+			}
+		})
+	} 
+</script>
+</html>

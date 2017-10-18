@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>账户管理</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+        .pdl06-per{padding-left:6%}
+        .wm_per{width: 92%;margin-left:5%}
+        </style>
+	</head> 
+	<body class="c-wh">
+		<div class=" h05e w10 c-edf0f5"></div>
+		<div class=" box w10 tx-c mart30"> 
+			<img src="../image/icon/user_manage.png" class="w3 h3" />
+		</div>
+		<div class=" box w10 tx-c umh25 t-999 ftz09 " id="msg">你好！！你的账户空空</div>
+		<div class=" box w10 tx-c pdt05">
+			<span class="dsplb pstnr">
+				<img src="../image/icon/user_img.png" class="h20e" />
+				<div class="t-ff7b00 tx-c pstna abst0 h20e umh2" style="left: 2.4em ;">
+					<font class="">剩余<font id="guzi"></font></font>
+				</div>
+			</div>
+		</div>
+		<!--<div class="box w10">
+            <p class="w85 area_auto mart10 c-4371bc uc-a02" onclick="open_recharge()" tapmode="op8">
+                <span class="w10 tx-c t-wh umh25">充值</span>
+            </p>
+        </div>-->
+        <div class="box w10">
+            <p class="w85 area_auto mart10 c-4371bc uc-a02" onclick="open_recharge()" tapmode="op8">
+                <span class="w10 tx-c t-wh umh25">充值</span>
+            </p>
+        </div>
+        <!--<div class="box w10">
+            <p class="w85 area_auto mart10 uba-4371bc c-wh uc-a02 ovd" onclick="open_withdraw_deposit()"  tapmode="c-e0e0e0" >
+                <span class=" tx-c t-4371bc umh25 w10">提现</span>
+            </p>
+        </div>-->
+        <div class="w85 area_auto  tx-l umh2 pdt05 t-999 ftz10">友情提示</div>
+		<div class="w85 area_auto box pstnr tx-l umh2 t-999 ftz09 ovd">
+			<span class="pstna absl01 abst0">*</span>
+			<p class="sl wm_per ">
+				<span class="sl">谷子：学股网用户的服务可以用谷子结算，可通过充值获得谷子，1元人民币=10谷子.</span>
+			</p>
+		</div>
+		<div class="w85 area_auto box pstnr tx-l umh2 t-999 ftz09 ovd pdt025">
+			<span class="pstna absl01 abst0">*</span>
+			<p class="sl wm_per ">
+				<span class="sl">谷子的有效期：充值购买的谷子永久有效.</span>
+			</p>
+		</div>
+		<!--<div class="w85 area_auto box pstnr tx-l umh2 t-999 ftz09 ovd pdt025">
+			<span class="pstna absl01 abst0">*</span>
+			<p class="sl wm_per ">
+				<span class="sl">100元以上才可以提现，提现申请经系统审核通过审核后预计3个工作日到账，请注意查看。提现必须整百提取.</span>
+			</p>
+		</div>-->
+		<div class="w85 area_auto box pstnr tx-l umh2 t-999 ftz09 ovd pdt025">
+			<span class="pstna absl01 abst0">*</span>
+			<p class="sl wm_per ">
+				<span class="sl">充值请填写金额、上限9999元.</span>
+			</p>
+		</div>
+		<div class="h10e"></div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script>
+		apiready = function(){
+			setAccount();
+			
+		};
+
+		function open_recharge(){
+			if(api.systemType=='android'){
+				open_w('recharge_andriod','../html/new/recharge_andriod.html',{winName:api.winName,frameName:api.frameName})
+			}else{
+				open_w('recharge_ios','../html/new/recharge_ios.html',{winName:api.winName,frameName:api.frameName})
+			}
+			
+		}
+		function setAccount() {
+		
+			var uid = get_local("uid");
+			var URL = serverURL + 'app_interface/user/get_other_user_info/';
+			var data = {
+				values : {
+					targetuid  : uid,
+					loginuid : 0,
+					secret : appSecret
+				}
+			}
+			r_ajax(URL, data, function(ret) {
+				//alert(JSON.stringify(ret))
+				if (ret.errCode == 0) {
+					if (ret.data.integral > 0) {
+						$('#guzi').text(ret.data.integral);//谷子数量
+						$('#msg').hide();
+					}else{
+						$('#guzi').text('0');
+						$('#msg').show();
+					} 
+				} else {
+					$toast(ret.errMsg, 1500);
+				}
+			})
+		}
+	</script>
+</html>

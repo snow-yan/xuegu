@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<title>签到</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style>
+			html, body {
+				background: none;
+			}
+			.abslb-per{left:20%;bottom: -1em}
+			.absrb-per{right:20%;bottom: -1em}
+			.absrt-05{right:-0.5em;top:-0.5em}
+		</style>
+	</head>
+	<body>
+		<div style="height:80px"></div>
+		<div class="w10 box ovd dspn" style="height: 100%;" id="offset_h">
+			<p id="calendar_w" class=" area_auto" style="height: auto;">
+				<span class="w10 h30e c-4983e2 pdb025 uc-tr zindex7 uc-tl pstnr mart10 ">
+					<span class="pstna zindex7 absrt-05" tapmode onclick="close_uicalendar()"><img src="../image/icon/close_down.png" class="w15e h15e"></span>
+					<span class="sl w2 pdt075 tx-c"  onclick="switch_month(0)" tapmode><img src="../image/icon/left.png" class="w20e h20e"></span>
+					<span class="sl w6  tx-c pdt025 umh3  t-wh" id="time"></span>
+					<span class="sl w2 pdt075 tx-c" onclick="switch_month(1)" tapmode><img src="../image/icon/right.png" class="w20e h20e"></span>
+				</span>
+				<span class="w10 h20e ftz10 c-wh ovd">
+					<span class="w10 h10e c-4983e2 area_auto pstnr">
+						<span class=" pstna abslb-per"><img src="../image/icon/rili_pic.png" class="w10e h20e"></span>
+						<span class="pstna absrb-per" ><img src="../image/icon/rili_pic.png" class="w10e h20e"></span>
+					</span>
+					<span class="w10 h10e c-wh area_auto"></span>
+				</span>
+				<span class="w10 area_auto h15e tx-c c-wh t-ff7b00">累计获得<font id="calendar_num">0</font>成长值</span>
+			</p>
+		</div>
+		<div class="w10 area_auto " id="null_div"></div>
+		<div id="bg_right_w" class=" uc-bl uc-br box h50e c-wh dspn" >
+			<span class="flr tx-r"><img src="../image/icon/bg_right.png" class="h50e tx-r w50e"></span>
+			<span class="flr w65" >
+					<span class="flr w8 mart10 h20e t-wh tx-r uc-a10 ftz09 c-ff7b00">
+						<span class="uc-a20 fll" ><img src="../image/icon/xmaoqiandao.jpg" class="w20e h20e uc-a"></span>
+						<span class="fll pdl02 umh15  pdt03">你已经连续签到<font id="continuous_day">0</font>天</span>
+					</span>
+					<span class="flr w8 t-999 umh2 tx-c ftz08">
+						<span class="fll pd025">*</span>
+						<span class="fll ftz085">连续签可获得更多的成长值</span>
+					</span>
+			</span>
+		</div>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+    <script type="text/javascript" src="../script/self.js"></script>
+	<script>
+			apiready = function(){
+				ue_script('growth_task','switch_text()');
+				is_sign_in();
+			}
+			function is_sign_in(){
+				var URL= serverURL + 'app_interface/user/is_day_sign/';
+				URL+='?secret='+appSecret+'&uid='+api.pageParam.uid;
+				g_ajax(URL,function(ret)
+				{
+					UICalendar(ret.data);
+				})
+			}
+			function UICalendar(type){
+				setSpecialDates();
+				if(type==0){
+					var date_info={
+			      		 color: '#ffffff',
+			       		 bg: 'widget://image/icon/red_bg.png'
+					}
+				}else{
+					var date_info={
+			      		 color: '#666666',
+			       		 bg: 'widget://image/icon/rili_bg.png'
+					}
+				}
+				var h=$api.offset($api.byId('offset_h')).h+80;
+				var UICalendar = api.require('UICalendar');
+				UICalendar.open({
+				    rect: {
+				        x: 10,
+				        y: h,
+				        w: api.frameWidth-20,
+				        h: 250
+				    },
+				    styles: {
+				        bg: 'widget://image/icon/rili_white_bg.png',
+				        week: {
+				            weekdayColor: '#666666',
+				            weekendColor: '#666666',
+				            size: 14
+				        },
+				        date: {
+				            color: '#666666',
+				            selectedColor: '#666666',
+				            selectedBg: 'widget://image/icon/rili_bg.png',
+				            size: 14
+				        },
+				        today: date_info
+				       
+				    },
+				    switchMode: 'vertical',
+				    fixedOn: api.frameName,
+				    fixed: false
+				}, function(ret, err) {
+					//log(json2str(ret));
+				    if(ret){
+				    	$('#time').text(ret.year+"年"+ret.month+"月");
+				    	setSpecialDates();
+//				    	var d = new Date();
+//						var years=d.getFullYear();
+//						var months=d.getMonth()+1;
+//						var days=d.getDate();
+//				    	if(ret.eventType=="normal"){
+//				    		if(ret.year==years&&ret.month==months&&ret.day==days){
+//								submit_sign_in();			    		
+//				    		}
+//				    	}
+				    }else{
+				    }
+				});
+			}
+			//这是签到过的日期列表
+			function setSpecialDates(){
+				$('#offset_h').css('display','block');
+				$('#bg_right_w').css('display','block');
+				$('#calendar_w').css('width',api.frameWidth-20);
+				$('#bg_right_w').css('width',api.frameWidth-20);
+				$('#null_div').css('height',250);
+				var URL= serverURL + 'app_interface/user/user_sign_list/';
+				URL+='?secret='+appSecret+'&uid='+api.pageParam.uid;
+				g_ajax(URL,function(ret)
+				{
+					show_growth_info();
+					var date_ymd=new Array();
+					for (var i = 0; i < ret.data.length; i++) {
+						var date_info={
+						 	date: timetostr_ymd(ret.data[i].date),
+					        color: '#666666',
+					        bg: 'widget://image/icon/rili_bg.png'
+						}
+						date_ymd.push(date_info);
+					}
+					var UICalendar = api.require('UICalendar');
+					UICalendar.setSpecialDates({
+					    specialDates:date_ymd					    
+					});	
+				})
+			}
+			function show_growth_info(){
+				var URL= serverURL + 'app_interface/user/user_sign_info/';
+				URL+='?secret='+appSecret+'&uid='+api.pageParam.uid;
+				g_ajax(URL,function(ret)
+				{
+					if(ret.errCode==0){
+						$("#calendar_num").text(ret.data.grade);//总成长值
+						$("#continuous_day").text(ret.data.days);//连续签到
+					}else{
+					}
+					
+				})
+			}
+			function switch_month(type){
+				var UICalendar = api.require('UICalendar');
+				if(type==0){
+					UICalendar.prevMonth(function(ret, err) {
+						if (ret) {
+					       $('#time').text(ret.year+"年"+ret.month+"月");
+					    } else {
+					    }
+					});
+				}else{
+					UICalendar.nextMonth(function(ret, err) {
+					if (ret) {
+					       $('#time').text(ret.year+"年"+ret.month+"月");
+					    } else {
+					    }
+					});
+				}
+			}
+			function close_uicalendar(){
+				ue_script('growth_task','switch_show()');
+				close_f('ui_calendar');
+			}
+		</script>
+	</body>
+</html>

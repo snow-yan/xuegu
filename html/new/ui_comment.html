@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<title>评论</title>
+		<link rel="stylesheet" href="../../cool_css/cool.css">
+		<style>
+			html, body {
+				background: none;
+			}
+		</style>
+	</head>
+	<body onclick="close();">
+	</body>
+	<script type="text/javascript" src="../../script/api.js"></script>
+	<script type="text/javascript" src="../../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../../script/init.js"></script>
+	<script type="text/javascript" src="../../script/app.js"></script>
+	<script type="text/javascript" src="../../script/echo.min.js"></script>
+    <script type="text/javascript" src="../../script/interface.js"></script>
+    <script type="text/javascript" src="../../script/self.js"></script>
+	<script>
+		var inputField;
+		apiready = function(){
+			inputField= api.require('inputField');
+			add_comment();
+			api.addEventListener({
+				name : 'tap'
+			}, function(ret, err) {
+				setTimeout(function(){
+					close_f('ui_comment');
+				},50)
+			});
+			scrollBottom(function(){
+				close_f('ui_comment');
+			});
+		}
+		function add_comment(){
+			var tg_id = api.pageParam.tg_id;
+			inputField.open({
+			bgColor : '#708090',
+			lineColor : '#e0e0e0',
+			fileBgColor : '#fff',
+			borderColor : '#fff',
+			maxLines : '5',
+			sendImg : 'widget://image/icon/button1.png',
+			fixedOn : api.frameName
+			}, function(ret, err) {
+				if (ret) {
+					var msg = ret.msg;
+					if (msg){
+						if(api.pageParam.frameName=="talk_detail_c"){
+							if(api.pageParam.cm_id==undefined){
+								publish_pinglun(msg);
+							}else{
+								rely_pinglun(msg)
+							}
+						}else if(api.pageParam.frameName=="article_detail_c"){
+							if(api.pageParam.at_uid==undefined){
+								publish_pinglun1(msg);
+							}else{
+								rely_pinglun1(msg)
+							}
+						}
+					} else {}
+							
+				} else {
+				}
+			});
+			setTimeout(function() {
+				inputField.becomeFirstResponder(function(ret, err) {
+					if (ret.status) {
+					} else {
+					}
+				});
+			},100)
+			inputField.setInputFieldListener(function(ret, err) {
+			});
+		}
+		function close(){
+			var inputField= api.require('inputField');
+			inputField.close();
+			setTimeout(function(){
+				close_f();
+			});
+		}
+//		谈股详情页的评论
+		function publish_pinglun(msg){
+			var tg_id = api.pageParam.tg_id;
+			var uid = api.pageParam.uid;
+			var URL = serverURL + 'app_interface/newMobile/tangu_add_comment/';
+			var cm_content = msg;
+			//alert(tg_id+'--'+uid+'--'+cm_content)
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					tg_id : tg_id,
+					message : cm_content
+				}
+			};
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode ==200){
+					inputField.resignFirstResponder();
+					back();
+					
+				}else if(ret.errCode==118){
+					$toast(ret.errMsg,1500);	
+				}else{
+	
+					$toast(ret.errMsg,1500)	
+				}
+			})
+		}
+		//		谈股详情页评论的回复
+		function rely_pinglun(msg){
+			var tg_id = api.pageParam.tg_id;
+			var cm_id = api.pageParam.cm_id;
+			var uid = api.pageParam.uid;
+			var URL = serverURL + 'app_interface/newMobile/tangu_add_reply_comment/';
+			var cm_content = msg;
+			//alert(tg_id+'--'+uid+'--'+cm_content+'--'+cm_id)
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					tg_id : tg_id,
+					cm_id: cm_id,
+					message : cm_content
+				}
+			};
+			r_ajax(URL,data,function(ret)
+			{
+				//alert(JSON.stringify(ret))
+				if(ret.errCode ==200){
+					inputField.resignFirstResponder();
+					back();
+					
+				}else if(ret.errCode==124){
+					$toast(ret.errMsg,1500);	
+				}else{
+	
+					$toast(ret.errMsg,1500)	
+				}
+			})
+		}
+		function publish_pinglun1(msg){
+			var article_id = api.pageParam.article_id;
+			var uid = api.pageParam.uid;
+			var URL = serverURL + 'app_interface/newMobile/article_add_comment/';
+			var cm_content = msg;
+			//alert(tg_id+'--'+uid+'--'+cm_content)
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					article_id : article_id,
+					message : cm_content
+				}
+			};
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode ==200){
+					inputField.resignFirstResponder();
+					back();
+					
+				}else if(ret.errCode==118){
+					$toast(ret.errMsg,1500);	
+				}else{
+	
+					$toast(ret.errMsg,1500)	
+				}
+			})
+		}
+		function rely_pinglun1(msg){
+			var article_id = api.pageParam.article_id;
+			var at_uid = api.pageParam.at_uid;
+			var uid = api.pageParam.uid;
+			var URL = serverURL + 'app_interface/newMobile/article_add_reply_comment/';
+			var cm_content = msg;
+			//alert(tg_id+'--'+uid+'--'+cm_content+'--'+cm_id)
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					article_id : article_id,
+					at_uid:at_uid,
+					message : cm_content
+				}
+			};
+			r_ajax(URL,data,function(ret)
+			{
+				//alert(JSON.stringify(ret))
+				if(ret.errCode ==200){
+					inputField.resignFirstResponder();
+					back();
+					
+				}else if(ret.errCode==124){
+					$toast(ret.errMsg,1500);	
+				}else{
+	
+					$toast(ret.errMsg,1500)	
+				}
+			})
+		}
+		
+		function back(){
+			switch (api.pageParam.frameName){
+				case"talk_detail_c":
+					ue_script_f('talk_detail','talk_detail_c',"comment()");
+					break;
+				case"article_detail_c":
+					ue_script_f('article_detail','article_detail_c',"comment()");
+					break;
+			}
+			setTimeout(function(){
+				close_f('ui_comment');
+			},1000);
+		}
+	</script>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<title>评论</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style>
+			html, body {
+				background: none;
+			}
+		</style>
+	</head>
+	<body onclick="close();">
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+    <script type="text/javascript" src="../script/self.js"></script>
+	<script>
+		var inputField;
+		apiready = function(){
+			inputField= api.require('inputField');
+			add_comment();
+			api.addEventListener({
+				name : 'tap'
+			}, function(ret, err) {
+				setTimeout(function(){
+					close_f('ui_comment');
+				},50)
+			});
+			scrollBottom(function(){
+				close_f('ui_comment');
+			});
+		}
+		function add_comment(){
+			var tg_id = api.pageParam.tg_id;
+			
+			inputField.open({
+			bgColor : '#708090',
+			lineColor : '#e0e0e0',
+			fileBgColor : '#fff',
+			borderColor : '#fff',
+			maxLines : '5',
+			sendImg : 'widget://image/icon/button1.png',
+			fixedOn : api.frameName
+			}, function(ret, err) {
+				if (ret) {
+					
+				var msg = ret.msg;
+				if (msg){
+					if(api.pageParam.frameName=="class_details_c"){
+						class_add_commment(msg);
+					}else if(api.pageParam.frameName=="choice_details_c"){
+						publish_question_answer(msg);
+					}else if(api.pageParam.frameName=="zhanfa_course_c"){
+						 $toast('亲，购买后才可以评论哦！',1500);
+						
+					}else{
+						publish_pinglun(msg);
+					}
+				} else {}
+			
+					
+				} else {
+				}
+			});
+			setTimeout(function() {
+				inputField.becomeFirstResponder(function(ret, err) {
+					if (ret.status) {
+					} else {
+					}
+				});
+			},100)
+			inputField.setInputFieldListener(function(ret, err) {
+			});
+		}
+		function close(){
+			var inputField= api.require('inputField');
+			inputField.close();
+			setTimeout(function(){
+				close_f();
+			});
+		}
+		function class_add_commment(msg){
+			var URL = serverURL + 'app_interface/course/publish_course_comment/';
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : api.pageParam.uid,
+					cor_id : api.pageParam.cor_id,
+					content : msg
+				}
+			};
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode ==0){
+					inputField.resignFirstResponder();
+					back();
+				}else{
+					$toast(ret.errMsg,1500);	
+				}
+			})
+		}
+		function publish_pinglun(msg){
+			var tg_id = api.pageParam.tg_id;
+			var uid = api.pageParam.uid;
+			var URL = serverURL + 'app_interface/tangu/publish_pinglun/';
+			var cm_content = msg;
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					tg_id : tg_id,
+					cm_content : cm_content
+				}
+			};
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode ==0){
+					inputField.resignFirstResponder();
+					back();
+				}else{
+					$toast(ret.errMsg,1500)	
+				}
+			})
+		}
+		
+		function publish_question_answer(msg){
+			var question_id = api.pageParam.question_id;
+			var uid = api.pageParam.uid;
+			var URL = serverURL + 'app_interface/question/question_answer/';
+			var answer_content = msg;
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					question_id : question_id,
+					answer_content : answer_content
+				}
+			};
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode ==0){
+					inputField.resignFirstResponder();
+					back();
+				}else{
+					$toast(ret.errMsg,1500)	
+				}
+			})
+		}
+		
+		function back(){
+			switch (api.pageParam.frameName){
+				case"choice_details_c":
+					ue_script_f('root','talk_stocks',"get_bull_talk_stocks_list();");
+					ue_script("choice_details","getAnswerDetails()");
+					break;
+				case"class_details_c":
+					ue_script_f('class_details','class_details_c',"refresh_comment_data()");
+					break;
+				case"bull_talk_stocks_c":
+					ue_script_f('bull_talk_stocks','bull_talk_stocks_c',"get_bull_talk_stocks_list()");
+					break;
+				case"his_talk_stocks_c":
+					ue_script_f('his_talk_stocks','his_talk_stocks_c',"his_talk_stocks_list()");
+					setTimeout(function(){
+						ue_script('teacher_info',"refreshData("+api.pageParam.targetuid+")");
+					},300);
+					break;
+				case"teacher_info_c":
+					ue_script('teacher_info',"refreshData("+api.pageParam.targetuid+")");
+					break;
+				case"home":
+					ue_script_f('root','home',"getHomeData()");
+					break;
+				case"talk_stocks":
+					ue_script_f('root','talk_stocks',"get_bull_talk_stocks_list();");
+					break;
+				case"stocks_details_c":
+					ue_script_f('stocks_details','stocks_details_c',"talk_stocks_list()");
+					break;
+			    case"my_talk_stocks_c":
+					ue_script_f('my_talk_stocks','my_talk_stocks_c',"get_bull_talk_stocks_list()");
+					break;
+			}
+			setTimeout(function(){
+				close_f('ui_comment');
+			},1000);
+		}
+	</script>
+</html>

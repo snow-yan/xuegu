@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>系统通知</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+        </style>
+	</head> 
+	<body class="c-edf0f5">
+		<input type="hidden" id="page" value="1" />
+		<ul id="notice"></ul>
+		<div class="h10e c-edf0f5"></div>
+		<div id="noData"></div>
+		<script type="text/html" id="noticeList">
+			<%
+			for(var i=0;i<data.length;i++){
+			%>
+			<li class="pdl05 pdr05">
+				<div class="umh3 tx-c pdb05">
+					<span class="t-wh c-999 uc-a02 pd025 pdl05 pdr05" id="notice<%=data[i].id%>"></span>
+				</div>
+				<div class="uc-a02 c-wh">
+					<p class="tx-c umh3 ubb ub-e0e0e0"><%=data[i].title%></p>
+					<div class="pdl05 pdr05 pdb10">
+						<p class="pdt05"><%=data[i].message%></p>
+					</div>
+				</div>
+			</li>
+			<%
+			}
+			%>
+		</script>
+		<!--<ul>
+			<li class="pdl05 pdr05">
+				<div class="umh3 tx-c pdb05">
+					<span class="t-wh c-999 uc-a02 pd025 pdl05 pdr05">今天	10:16</span>
+				</div>
+				<div class="uc-a02 c-wh">
+					<p class="tx-c umh3 ubb ub-e0e0e0">产品更新</p>
+					<div class="pdl05 pdr05 pdb10">
+						<p class="pdt05">新版本V-4.1.05</p>
+						<p class="t-ccc ftz08 pdt01 pdb05">2016-11-01 最新跟新</p>
+						<p class="t-ccc t-898888 ftz09 umh15">1、本次产品更新在原有基础上做较大的框架修改；</p>
+						<p class="t-ccc t-898888 ftz09 umh15">2、增加直播板块；</p>
+						<p class="t-ccc t-898888 ftz09 umh15">2、修改往期出现的BUG问题；</p>
+					</div>
+				</div>
+			</li>
+		</ul>-->
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+    <script type="text/javascript" src="../script/self.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var lastPage = true,firstPageHaveData =true;
+		apiready = function(){
+			refreshNews();
+			getSystemNotice();
+			push_down(function(){
+				if(firstPageHaveData){
+					getSystemNotice();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					})
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					getSystemNotice('next');
+				}
+			});
+		};
+		function getSystemNotice(type){
+			if(type=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;	
+			}
+			var uid = get_local('uid');
+			var pagesize = 10;
+			var URL = serverURL + 'app_interface/user/tongzhi_list/';
+			URL+='?secret='+appSecret+'&page='+page+'&pagesize='+pagesize+'&uid='+uid;
+			g_ajax(URL,function(ret)
+			{
+//				console.log(json2str(ret))
+				if(ret.errCode ==0){
+					if(ret.data&&ret.data.length>0){
+						if(type=='next'){
+							$('#notice').append(bt('noticeList',ret));
+						}else{
+							$('#notice').html(bt('noticeList',ret));
+						}
+						for(var i=0;i<ret.data.length;i++){
+							var ID = '#notice'+ ret.data[i].id;
+							$(ID).text(getTime(ret.data[i].time));
+						}
+					}else{
+						if(page==1 ){
+							firstPageHaveData = false;
+							firstPage_no_data('noData');
+						}else{
+							lastPage = false;
+							no_data_more('noData')
+						}
+					}
+					push_down_over();
+					api.parseTapmode();
+					api.execScript({
+						name:'my_dynamics',
+						frameName:'my_dynamics_c',
+						script:'getNotices()'
+					});
+					refreshNews();	
+				}else{
+					$toast(ret.errMsg,1500)
+				}
+			})
+		}
+	</script>
+</html>

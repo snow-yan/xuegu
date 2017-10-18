@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>战法课程</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/zhanfa.css" />
+    <link rel="stylesheet" href="../../cool_css/cool.css">
+</head>
+<body class="aui-bg-white">
+	<div id="zhanfa_detail">
+        
+    </div>
+	<script type="text/html" id="zhanfa_detail_tpl">
+		<img src="../../image/icon/echo_bg.jpg" data-echo="<%=data.apic%>" alt="" width="100%;">
+        <div class="head">
+            <h3 class="aui-padded-b-15 border-b"><%=data.aname%></h3>
+            <div class="jianjie aui-font-size-12"><b>简介</b></div> 
+            <div class="gray_w aui-font-size-12 aui-ellipsis-4 line-h-1">
+               <%=data.intro%>
+            </div>
+        </div>  
+	</script>
+     <div class="detail" id="zhanfa_message_tpl">
+            <div class="aui-tab aui-bg-white" id="tab">
+                <div class="aui-tab-item aui-active1"><div>详情</div></div>
+                <div class="aui-tab-item"><div class="border-l">目录</div></div>
+                <div class="aui-tab-item pinglun1"><div class="border-l">评论</div></div>
+            </div>
+            <div class="aui-list aui-padded-15" id="ainfo">
+            	<script type="text/html" id="ainfo_tpl">
+               		 <%:=data.ainfo%>
+           	 	</script>
+            </div>
+            <ul class="aui-list aui-media-list hide" id="course_list">
+                           
+            </ul>
+            <script type="text/html" id="course_list_tpl">
+            <%
+				for(var i=0;i<data.length;i++){
+			%>
+               	<li class="aui-list-item padd">
+                    <span class="number"><%=i+1%></span>
+                    <div class="aui-media-list-item-inner border-b">
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text aui-font-size-16">
+                                 <%=data[i].cor_name%>
+                            </div>
+                            <div class="aui-list-item-text" >
+                                <p class="aui-ellipsis-1 gray_w1" style="width:70%;"><%=data[i].cor_info%></p>
+                               	<span class="study" onclick="open_play(<%=data[i].cor_id%>);">开始学习</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            <%
+			}
+			%>
+           	</script>
+            <div class="aui-list hide" >
+                <ul class="aui-media-list " id="comment_list">
+                       
+                </ul>
+                 <script type="text/html" id="comment_list_tpl">
+		            <%
+						for(var i=0;i<data.length;i++){
+					%>
+		             <li class="aui-list-item aui-list-item-middle aui-padded-t-10">
+                        <div class="aui-media-list-item-inner">
+                            <div class="aui-list-item-inner">
+                                <div class="aui-list-item-text">
+                                    <div class="blue_w line-h-12">
+                                        <img src="../../img/heart.png" class="heart">
+                                        <span><%=data[i].user_name%></span>
+                                        <span class="aui-margin-l-5 phone"><%=data[i].user_tel%></span>
+                                    </div>
+                                </div>
+                                <div class="aui-list-item-text pinlun ">
+                                    <div class="aui-ellipsis-1"><%=data[i].content%></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>  	
+		            <%
+					}
+					%>
+		          </script>
+                <img src="../../img/pinlun.png" alt="" class="pinlun_e" onclick="add_comment()">                
+            </div>   
+        </div>
+       
+        
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script>
+	var aname ,service_url;
+    apiready = function(){
+    	var buy=api.pageParam.buy;
+        $('#tab>div').click(function(){
+            $(this).addClass('aui-active1').siblings().removeClass('aui-active1');
+            var index=$(this).index();
+            $('.aui-list').eq(index).css('display','block').siblings('.aui-list').css('display','none');
+        })
+		zhanfa_detail();
+		if(buy==0){
+    		$('.pinglun1').hide();
+    	}else{
+    		$('.pinglun1').show();
+    	}	
+		
+    }
+    function open_play(cor_id){
+    	var buy=api.pageParam.buy;
+    	var special_price=api.pageParam.special_price;
+    	var URL = serverURL + 'app_interface/newMobile/coursePack_is_watch/';
+			URL+='?secret='+appSecret;
+		g_ajax(URL,function(ret)
+		{
+			
+			if(ret.errCode==200){
+				for(var i=0;i<ret.data.length;i++){
+					if(api.pageParam.aid!=ret.data[0]){
+					
+			 			$('.study').attr('onclick','');
+			 		}else{
+			 			if(buy==0){
+				    		open_w('play.html','play.html',{'aid':api.pageParam.aid,'cor_id':cor_id,'aname':aname})
+				    	}else{
+				    		open_w('order_confirm.html','order_confirm.html',{'aid':api.pageParam.aid,'special_price':special_price})
+				    	}	
+			 		}
+				}
+			}else{
+				$toast("操作失败",1500);		
+			}
+		})
+    	
+    	
+    }
+   	function add_comment(){
+		var uid = get_local('uid');
+		if(is_define(uid)){
+			openFrameFull("../../user/ui_comment",{uid:uid,winName:api.winName,frameName:api.frameName});
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				open_w('login','../../user/login.html');
+			},1000);
+		}
+	}
+	// 获取战法课程详情 
+    function zhanfa_detail(){
+			var URL = serverURL + 'app_interface/coursePack/coursePack_find/';
+			URL+='?secret='+appSecret+'&aid='+api.pageParam.aid;
+			g_ajax(URL,function(ret)
+			{
+				
+				if(ret.errCode==0){
+					service_url=ret.data.service_url
+					aname=ret.data.aname;
+					$('#zhanfa_detail').html(bt('zhanfa_detail_tpl',ret));
+					$('#ainfo').html(bt('ainfo_tpl',ret));
+					var content=$('#ainfo').html();
+ 					var html=content.replace('src="/', 'src="' + "http://www.xueguwang.cn/");
+ 					$('#ainfo').html(html)
+					Echo.init();
+					course_list();
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+			})
+		}
+	// 获取战法课程目录 
+	function course_list(){
+		var URL = serverURL + 'app_interface/coursePack/coursePack_course_list/';
+			URL+='?secret='+appSecret+'&aid='+api.pageParam.aid;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode==0){
+					$('#course_list').html(bt('course_list_tpl',ret));
+					comment_list();	
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+			})
+	}
+	// 获取战法课程评论
+	function comment_list(){
+		var URL = serverURL + 'app_interface/coursePack/coursePack_comment_list/';
+			URL+='?secret='+appSecret+'&aid='+api.pageParam.aid;
+			g_ajax(URL,function(ret)
+			{
+				//alert(JSON.stringify(ret))
+				if(ret.errCode==0 || ret.errCode==101){
+					if(ret.errCode==0 ){
+					$('#comment_list').html(bt('comment_list_tpl',ret));
+					}else{
+						firstPage_no_data('comment_list');
+					}	
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+			})
+	} 
+	//链接连线投顾
+	function chat(){
+		open_w('zhanfa_chat','../zhanfa_chat.html',{'cor_kefuurl':service_url,'aid':api.pageParam.aid})
+	}  
+</script>
+</html>

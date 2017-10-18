@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>个人资料</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+	</head> 
+	<body class="c-edf0f5">
+		<div class="w10 h30e c-4371bc" id="header">
+			<div class="box w95 area_auto pstnr h30e t-wh">
+				<p class="pstna absl0 abst0  pdb05 umh3 h20e" tapmode ontouchstart="close_w();" >取消</p>
+				<p class="ovd tx-c umh25 ftz12">个人资料</p>
+				<p class="pstna absr03 abst0  pdb05 umh3 h20e" tapmode ontouchstart="personal_Data();" >提交</p>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script>
+	apiready = function(){
+		var pras = api.pageParam;
+		open_f("user_info_c","user_info_c.html",'false',pras);
+	}
+    function personal_Data(){
+	    api.execScript({
+			frameName:'user_info_c',
+			script:"avatar_Modification();"
+		});
+    }
+	</script>
+</html>

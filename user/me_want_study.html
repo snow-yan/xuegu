@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>我要学习</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<link rel="stylesheet" href="../cool_css/swiper.min.css">
+		<style>
+			.pdl02-per{padding-left:2%}
+			.w13{width:13%;}
+			.pre {
+				color: #4371bc;
+			}
+			.pre_after {
+				color: #898888;
+			}
+		</style>
+	</head>
+	<body class="c-wh">
+		<div class="w10 c-4371bc" id="header">
+			<div class="box w95 area_auto pstnr h30e t-wh">
+				<p class="pstna absl0 abst0 pdt05 pdb05 h20e" ontouchstart="close_w();">
+					<img src="../image/icon/left.png" class="w20e h20e">
+				</p>
+				<p class="ovd tx-c umh25 ftz12">我要学习</p>
+				<span class="pstna absr0 abst0 pdt05 pdb05 umh0" tapmode onclick="open_w('search','../html/search.html')">
+					<img src="../image/icon/search.png" class="w20e h20e">
+				</span>
+			</div>
+			<div class="c-eeeeee ovd h25e">
+				<div class="swiper-container pdb025 pdt025 w85 fll pdl02-per ovd" id="swipe">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide" id="all">
+							<div tapmode="" onclick="thisMore(this)">
+								<p class="tx-c umh2" id="nav0">
+									<font class="ftz09 tap pre">全部课程</font>
+								</p>
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div tapmode="" onclick="thisMore(this)">
+								<p class="tx-c umh2" id="nav1"><font class="ftz09 tap pre_after">股票入门</font></p>
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div tapmode="" onclick="thisMore(this)">
+								<p class="tx-c umh2" id="nav2"><font class="ftz09 tap pre_after">买入技巧</font></p>
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div tapmode="" onclick="thisMore(this)">
+								<p class="tx-c umh2" id="nav3"><font class="ftz09 tap pre_after">炒股指导</font></p>
+							</div>
+						</div>
+					</div> 
+				</div>
+				<div class="flr c-eeeeee w13" tapmode onclick="choiceLable();">
+					<p class="tx-l umh2 pdb025 pdt025"><img src="../image/icon/plus.png" class="w20e h20e"></p>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var my_swipe;
+		apiready = function() 
+		{	
+			load_swiper();
+			var pars = api.pageParam.pageParam;
+			open_f('me_want_study_c','me_want_study_c.html','true',{'pars':pars});
+			if(is_define(pars)){
+				changeTap(pars);
+			}
+		};
+		function load_swiper()
+		{
+			my_swipe = new Swiper('#swipe',
+			    {
+				loop:false,
+				slidesPerView:4,
+				spaceBetween: 0,
+				slideToClickedSlide:false
+			    }
+			);
+		}
+		function thisMore(el){
+			var lable = $(el).children().children('font').text();
+			$('.tap').removeClass('pre');
+			$('.tap').addClass('pre_after');
+			$(el).children().children('font').attr('class','ftz09 tap pre');
+			api.execScript({
+				frameName:'me_want_study_c',
+				script:"Video_Courselist('first','"+lable+"');setLable('"+lable+"')"
+			});
+		}
+		function changeTap(txt,name){
+			var tapAll = $('.tap');
+			var html = '<div class="swiper-slide">';
+			html += '<div tapmode="" onclick="thisMore(this)">';			
+			html += '<p class="tx-c umh2" id="nav1"><font class="ftz09 tap pre">'+txt+'</font></p>';				
+			html += '</div></div>';
+			var allLables = allLable();
+			var LableArr = allLables.split('-');
+//			console.log(allLables);
+			if(is_define(txt)){
+				$('.tap').removeClass('pre');
+				$('.tap').addClass('pre_after');
+				if( allLables.indexOf(txt) > -1 ){
+					for(var i =0;i<LableArr.length;i++){
+						if(LableArr[i]==txt){
+							$('.tap').eq(i-1).attr('class','ftz09 tap pre');
+						}
+					}
+					
+				}else{
+					$('#all').after(html);
+					my_swipe.update();
+				}
+			}
+			if(name == 'me_want_study'){
+				api.execScript({
+					frameName:'me_want_study_c',
+					script:"Video_Courselist('first','"+txt+"');setLable('"+txt+"')"
+				});
+			}
+			function allLable(){
+				var tap = $('.tap');
+				var tapData='-';
+				for(var i =0;i<tap.length;i++){
+					if(i==tap.length-1){
+						tapData +=$($('.tap')[i]).text();
+					}else{
+						tapData +=$($('.tap')[i]).text()+'-';
+					}
+				}
+				return tapData;
+			}
+		}
+		function choiceLable(){
+			api.execScript({
+				frameName:'me_want_study_c',
+				script:'choiceLable1();'
+			});
+		}
+	</script>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>最新课程</title>
+		<link rel="stylesheet" href="../../cool_css/cool.css">
+		<style>
+			.ellipsis-3 {
+				
+				display: -webkit-box;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				word-wrap: break-word;
+				word-break: break-all;
+				white-space: normal !important;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+			}
+		</style>
+	</head>
+	<body class="c-wh">
+	    <input type="hidden" id="page" value="1"/>
+		<ul id="more_class"></ul>
+		<script id="more_class_left" type="text/html">
+				   <%
+				   for(var i=0;i< data.length;i++){
+				   %>
+				   <li class="pstnr ubb ub-e4e4e4" onclick="open_w('zhanfa_course','zhanfa_course.html',{'aid':'<%=data[i].aid%>','special_price':'<%=data[i].special_price%>'})">
+			   		<div class="w1 h18 fll tx-c circle dspn" onclick="changeStatus(this);">
+						<div class="grayBagCircle dsplb">
+							<div class="whiteCircle"></div>
+						</div>
+					</div>
+					<div class="clo_two pstnr textPic">
+					    <div class="w95 area_auto">
+							<div class="col_list" style="width:52%;">
+								<div class="pdt07 pdb07 pdl02 pdr05 pstnr">
+									<img src="../../image/icon/echo_bg.jpg"  data-echo="<%=data[i].course_img%>" class="w10 uc-a02 ovd" alt="" />
+								</div>
+							</div>
+							<div class="col_list" style="width:48%;">
+								<div class="pdr02 pdt07">
+									<p class="umh125 pdb025 ftz085 txo"><%=data[i].aname%></p>
+									<p class="t-c0c0c0 ftz075 w10 ellipsis-3">
+										<%=data[i].intro%>
+									</p>
+								</div>
+							</div>
+							<p class="pstna absl50p absb05 ovd t-ff7b00 umh15 ftz075">￥<%=data[i].special_price%></p>
+							
+						</div>
+					</div>
+				</li>
+			<%
+			}
+			%>
+		</script>
+	</body>
+	<script type="text/javascript" src="../../script/api.js"></script>
+	<script type="text/javascript" src="../../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../../script/init.js"></script>
+	<script type="text/javascript" src="../../script/app.js"></script>
+	<script type="text/javascript" src="../../script/echo.min.js"></script>
+	<script type="text/javascript" src="../../script/self.js"></script>
+    <script type="text/javascript" src="../../script/template.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			Video_Courselist();
+			
+			
+		};
+		function Video_Courselist(type){
+		  
+			var URL = serverURL + 'app_interface/coursePack/coursePack_list/';
+				URL+='?secret='+appSecret;
+		        g_ajax(URL,function(ret){
+		       
+				if(ret.errCode ==0){
+				    $('#more_class').html(bt('more_class_left',ret));
+					Echo.init();
+					
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+ 	</script>
+</html>

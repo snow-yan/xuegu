@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>交易明细</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+          .absr05-per{right:4%;top:20%}
+        </style>
+	</head> 
+	<body class="c-edf0f5">
+		<input type="hidden" id="page" value="1"/>
+		<div id="trade">
+			<div id="kong" class="w10 h05e dspn"></div>
+		</div>
+		<script type="text/html" id="tradeList">
+			<div class="box ubtb c-wh w10 ub-e4e4e4">
+			<%for(var i=0;i<data.length;i++){%>
+				<p class="ovd ubb w10 ub-e4e4e4 pdt05 pdb05 pstnr">
+					<span class="pstna absr05-per umh3 t-999 ftz09"><font><%=data[i].integral%></font>谷子</span>
+					<span class="w9 area_auto tx-l t-666"><%=data[i].note%></span>
+					<span class="w9 area_auto tx-l ftz08 t-999"><%=timetostr(data[i].time)%></span>
+				</p>
+			<%}%>
+			</div>
+		</script>
+		<div class="h10e w10"></div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script>
+		var lastPage =true,firstPageHaveData = true;
+		apiready = function(){
+			getTradeList();
+			push_down(function(){
+				if(firstPageHaveData){
+					getTradeList();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					getTradeList('next');
+				}
+			});
+		};
+		
+		function getTradeList(type){
+			var uid = get_local('uid');
+				var pagesize = 10;
+				if(type=="next"){
+					var page = $('#page').val();
+					page = parseInt(page)+1;
+					$('#page').val(page);
+				}else{
+					var page =1;
+					$('#page').val(page);
+					lastPage =true;
+				}
+			var pagesize = 10;
+			var URL = serverURL + 'app_interface/user/my_zhangdan/';
+			var data = {
+				values :{
+					uid : uid,
+					page : page,
+					pagesize : pagesize,
+					secret :appSecret
+				}
+			};
+			r_ajax(URL,data,function(ret){
+				if(ret.errCode==0){
+					if(ret.data.length>0){
+						$('#kong').removeClass('dspn');
+						if(type=='next'){
+							$('#trade').append(bt('tradeList',ret));
+						}else{
+							$('#trade').html(bt('tradeList',ret));
+						}
+					}else{
+						if(page==1){
+							firstPageHaveData = false;
+							lastPage = false;
+							firstPage_no_data('trade');
+						}else{
+							lastPage = false;
+							no_data_more('trade');
+						}
+					}
+					push_down_over();
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			});
+		}
+	</script>
+</html>

@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+</head>
+<body>
+    <div class="login">
+        <img src="../img/login_bg.png" alt="">
+        <div id="header">
+            <img src="../img/login_back.png" alt="" class="top" ontouchstart="close_w();">
+        </div>
+        <form class="form-list" style="top:30%;">
+            <div class="control_btn control_btn_active" onclick="login()">登录</div>
+            <div class="control_btn aui-bg-white" onclick="register()">注册</div>
+            <div class="aui-text-center aui-text-blue aui-margin-t-15" id="youke" onclick="tourist()" >游客模式</div>                 
+        </form>
+        <div style="position: absolute;width:100%;top:60%;"><img src="../img/ios.png" alt="" style="width:100%;"/></div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/self.js"></script> 
+<script>
+	apiready = function() {
+		var pras=api.pageParam;
+		if(pras.frameName=="recharge_ios_c"||pras.frameName=="sure_order_c"||pras.frameName=="ask_questions_c"||pras.frameName=="put_questions_to_c"){
+			$('#youke').hide();
+		}
+		
+	}
+	function login(){
+		var pars=api.pageParam;
+		open_w('login','login.html',pars);
+		setTimeout(function(){
+			close_win_name('ios_login')
+		},500)
+	}
+	function register(){
+		open_w('register','register.html');
+		setTimeout(function(){
+			close_win_name('ios_login')
+		},500)
+	}
+	//游客模式
+	function tourist(){
+		var URL = serverURL + "app_interface/user/get_youke_user_info/";
+		var deviceId = api.deviceId.replace(/\-/g, "");
+		
+		var data = {
+	 		values :{
+	 			secret:appSecret,
+	 			shebei :deviceId
+	 		}
+	 	};
+	 	r_ajax(URL,data,function(ret){
+	 		//alert(JSON.stringify(ret))
+	 		if(ret.errCode==0){
+	 			set_local('uid',ret.data.uid);
+				set_local('user_name',ret.data.user_name);
+				set_local('is_youke',ret.data.is_youke);//用户类型（游客、账户）
+				ue_script("root","set_local('uid','"+ret.data.uid+"');rong_start()");
+	 			$toast('登录成功',1500);
+	 			back(ret.data.uid,ret.data.face,ret.data.nakename);
+	 		}else{
+	 			$toast(ret.errMsg, 1500);
+	 		}
+	 	})
+	}
+	function back(uid,face,nakename){
+	
+		refreshNews();
+		set_local('allow_no_wifi_play','yes');
+		set_local('face',face);
+		set_local('nakename',nakename);
+		var pars = api.pageParam;
+		switch (pars.frameName)
+		{
+		case 'hot_answer_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "getAnswerList();"
+			});
+			close();
+		  	break;
+		case 'hot_lecturer_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "getHotLecturer();"
+			});
+			close();
+		  	break;
+		case 'video_pause':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.winName+'_c',
+			    script: "Video_details();"
+			});
+			close();
+		  	break;
+	  	case 'class_details_c':
+			api.execScript({
+			    name: pars.winName,
+			    script: "setUID("+uid+","+pars.cor_id+");"
+			});
+			close();
+		  	break;
+		case 'course_list_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "shuaXin();"
+			});
+			close();
+		  	break;
+	  	case 'bull_talk_stocks_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "setUID("+uid+");"
+			});
+			close();
+		  	break;
+	  	case 'choice_details_c':
+			api.execScript({
+			    name: pars.winName,
+			    script: "getAnswerDetails();"
+			});
+			close();
+		  	break;
+		case 'course_list_c':
+			api.execScript({
+			    name: pars.winName,
+			    script: "add_plan();"
+			});
+			close();
+		  	break;
+	  	case 'choice_details_self_c':
+			api.execScript({
+			    name: pars.winName,
+			    script: "getAnswerDetails();"
+			});
+			close();
+		  	break;
+	  	case 'training_camp_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "reload1();"
+		});
+		close();
+	  	break;
+	  	case 'recharge_ios_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "reload1();"
+		});
+		close();
+	  	break;
+	  	case 'sure_order_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "reload2();"
+		});
+		api.execScript({
+		    name: 'album_details',
+		    frameName: 'album_details_c',
+		    script: "reload5();"
+		});
+		close();
+	  	break;
+	  	case 'ask_questions_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "reload3();"
+		});
+		close();
+	  	break;
+	  	case 'put_questions_to_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "reload4();"
+		});
+		close();
+	  	break;
+	  	case 'get_gift_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "is_getlibao();"
+		});
+			close();
+		break;
+		case 'album_details_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "reload5();"
+			});
+			close();
+		break;
+		default:
+			close();
+		}
+		function close(){
+			setTimeout(function() {
+				close_w();
+			}, 1000);
+		}
+	}
+</script>
+</html>

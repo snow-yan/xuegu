@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>我的订单</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../cool_css/cool.css">
+    <style>
+        body{
+            background: #dcdcdc;
+        }
+        .gray2{
+            color:#888888;
+        }
+        .red2{
+            color:#db2121;
+        }
+        .border-t{
+            border-top:1px solid #dcdcdc;
+        }
+        .y_b{
+            background: #f3f3f3;
+        }
+        .title{
+            padding:0.5rem 0.75rem;
+        }
+        .price{
+            color:#222;
+            font-size:0.6rem;
+            text-align: right;
+            padding:0.5rem 0.75rem; 
+        }
+        .aui-list-item{
+            padding-left:0 !important;
+            border-bottom:0.5rem solid #dcdcdc !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+    	<input type="hidden" id="page" value="1"/>
+        <ul class="aui-list aui-media-list"  id="order_list">
+           
+        </ul>
+         <script type="text/html" id="order_list_tpl">
+        <%
+			for(var i=0;i<data.length;i++){
+		%>
+          <li class="aui-list-item">
+            <div class="title">
+                <b>
+                    	订单状态：<span class="red2"><%=data[i].order_type%></span>
+                </b>
+                <span class="aui-pull-right aui-font-size-12 gray2"><%=data[i].cTime%></span>
+            </div>
+            <div class="title border-t">
+               	 订单号：<%=data[i].order_number%>
+            </div>
+            <div class="aui-media-list-item-inner y_b aui-padded-l-15">
+                <div class="aui-list-item-media" style="width:6rem;">
+                    <img src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].course_img%>" class="pic"> 
+                </div>
+                <div class="aui-list-item-inner aui-padded-t-10">
+                    <div class="aui-list-item-text aui-font-size-16">
+                       <%=data[i].title%>
+                    </div>
+                    <div class="aui-list-item-text">
+                        <p class="aui-ellipsis-2 gray2"> 
+                        	 <%=data[i].info%>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="aui-padded-t-10 aui-padded-l-15">付款人：<span><%=data[i].consignee_name%></span></div>
+            <div class="aui-padded-b-10 aui-padded-l-15">支付方式：<span><%=data[i].pay_type%></span></div>
+            <div class="price border-t">实付款：<b class="aui-font-size-18"> ￥<%=data[i].total_price%></b></div>
+        </li>
+        <%
+		}
+		%>
+      </script>
+    </div> 
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/self.js"></script>
+<script type="text/javascript" src="../script/echo.min.js"></script>
+<script type="text/javascript" src="../script/template.js"></script>
+<script>
+	var lastPage = true,firstPageHaveData = true;
+	apiready = function(){
+		order_list();
+		push_down(function(){
+			if(firstPageHaveData){
+				order_list();
+			}else{
+				setTimeout(function(){
+					push_down_over();
+				},500);
+			}
+		});
+		scrollBottom(function(){
+			if(lastPage){
+				order_list('next');
+			}
+		});
+		
+	};
+	function order_list(type){
+			var uid = get_local('uid')
+			if(type=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			var pagesize = 5;
+			var URL= serverURL + 'app_interface/coursePack/coursePack_order_list/';
+			URL+='?secret='+appSecret+'&uid='+uid+'&page='+page;
+			g_ajax(URL,function(ret)
+			{	
+				if(ret.errCode==0||ret.errCode==101){
+					if(ret.errCode==0){
+							if(type == 'next'){
+					
+								$('#order_list').append(bt('order_list_tpl',ret));
+							}else{
+					
+								$('#order_list').html(bt('order_list_tpl',ret));
+							}
+					}else{
+							if(page==1){
+								firstPageHaveData = false;
+								lastPage =false;
+								firstPage_no_data('order_list');
+								
+							}else{
+								lastPage =false;	
+								no_data_more('order_list');
+							}
+					}
+					Echo.init();
+					api.parseTapmode();	
+					push_down_over();
+				}else{
+					
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+</script>
+</html>

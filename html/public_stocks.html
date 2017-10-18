@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<title>评论</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style>
+			html, body {
+				background: none;
+			}
+		</style>
+	</head>
+	<body onclick="close();"></body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+    <script type="text/javascript" src="../script/self.js"></script>
+	<script>
+		var inputField;
+		apiready = function(){
+			inputField= api.require('inputField');
+			add_comment();
+			api.addEventListener({
+				name : 'tap'
+			}, function(ret, err) {
+				inputField.resignFirstResponder();
+				setTimeout(function(){
+					close_f('public_stocks');
+				},100);
+			});
+			scrollBottom(function(){
+				close_f('public_stocks');
+			});
+		}
+		function add_comment(){
+			inputField.open({
+				bgColor : '#708090',
+				lineColor : '#e0e0e0',
+				fileBgColor : '#fff',
+				borderColor : '#fff',
+				maxLines : '5',
+				sendImg : 'widget://image/icon/button1.png',
+				fixedOn : api.frameName
+			}, function(ret, err) {
+				if (ret) {
+					var msg = ret.msg;
+					if (msg) {
+						publish_pinglun(msg);
+					} else {
+					}
+				} else {
+					alert(JSON.stringify(err));
+				}
+			});
+			setTimeout(function() {
+				inputField.becomeFirstResponder(function(ret, err) {
+					if (ret.status) {
+					} else {
+					}
+				});
+			},200)
+			inputField.setInputFieldListener(function(ret, err) {
+			});
+		}
+		function close(){
+			var inputField= api.require('inputField');
+			inputField.close();
+			setTimeout(function(){
+				close_f();
+			},50);
+		}
+		function publish_pinglun(msg){
+			var uid = api.pageParam.uid;
+			var URL = serverURL + 'app_interface/tangu/publish_tangu/';
+			var tg_content = msg;
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					tg_content : tg_content
+				}
+			};
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode ==0){
+					$toast('发布成功',1500);
+					inputField.resignFirstResponder();
+					api.execScript({
+						name : api.winName,
+						frameName : api.winName+'_c',
+						script : 'get_bull_talk_stocks_list()'
+					});
+					setTimeout(function(){
+						close_f('public_stocks');
+					},1500);
+				}else{
+					$toast(ret.errMsg,1500)	
+				}
+			})
+		}
+	</script>
+</html>

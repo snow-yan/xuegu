@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title></title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+        	.t-ff0303{color:#ff0303;}
+        	.t-626262{color:#626262;}
+        	.c-ff6632{background-color:#ff6632;}
+        </style>
+	</head> 
+	<body class="c-edf0f5">
+		<div class="w10 h60e"></div>
+		<div class="w10 box tx-c"><img src="../image/icon/apply_success.png" id="renzheng" class="w4 h4 tx-c" /></div>
+		<div class="w10 box tx-c pdt10">
+			<font class="t-ff0303 ftz11" id="ok_info">恭喜你！</font>
+			<font class="t-626262 ftz10" id="text_info"></font>
+		</div>
+		<div class="box w10" style="display: none;" id="again_renzheng">
+            <p class="w4 area_auto mart10 c-ff6632 uc-a02" onclick="again_renzheng()" tapmode="op8">
+                <span class="w10 tx-c t-wh umh25">重新认证</span>
+            </p>
+        </div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+	<script>
+	apiready = function(){
+		if(api.pageParam.status_info=="认证被拒绝！"){
+			$('#renzheng').attr("src","../image/icon/renzheng02.png");
+			$('#again_renzheng').css("display","block");
+		}
+		if(api.pageParam.status_info!="认证通过！"){
+			$('#ok_info').text("");
+		}
+		$('#text_info').text(api.pageParam.status_info);
+		setTimeout(function(){
+			close_win_name("apply_authentication");
+		},300);
+		ue_script_f("root","user","AuthenticationInfo()");
+	};
+	function again_renzheng(){
+		open_w('apply_authentication', 'apply_authentication.html');
+	}
+	</script>
+</html>

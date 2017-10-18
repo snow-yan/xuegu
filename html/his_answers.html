@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>TA的问答</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">
+		<div class="w10 c-4371bc" id="header">
+			<div class="box w95 area_auto pstnr h30e t-wh">
+				<p class="pstna absl0 abst0 pdt05 pdb05 h20e" ontouchstart="close_w();">
+					<img src="../image/icon/left.png" class="w20e h20e">
+				</p>
+				<p class="ovd tx-c umh25 ftz12" id="title">TA的问答</p>
+				<span class="pstna absr0 abst0 pdt05 pdb05 umh0" tapmode onclick="open_w('search','search.html')">
+					<img src="../image/icon/search.png" class="w20e h20e">
+				</span>
+			</div>
+			<div class="clo_three c-wh ubb ub-e0e0e0">
+				<div class="col_list tx-c pdb05">
+					<div class="mart10">
+						<div class="ubr ub-e0e0e0">
+							<p class=" t-ef3f3f"><font class="ftz12 ftb" id="answer_count"></font><font class="ftz08">(条)</font></p>
+							<p class="ftz08 pdt025">问答数</p>
+						</div>
+					</div>
+				</div>
+				<div class="col_list tx-c pdb05">
+					<div class="mart10">
+						<div class="ubr ub-e0e0e0">
+							<p class=" t-ef3f3f"><font class="ftz12 ftb" id="best_count"></font><font class="ftz08">(条)</font></p>
+							<p class="ftz08 pdt025">采纳数</p>
+						</div>
+					</div>
+				</div>
+				<div class="col_list tx-c pdb05">
+					<div class="mart10">
+						<div class="ubr ub-e0e0e0">
+							<p class="t-ef3f3f"><font class="ftz12 ftb" id="huida_lv"></font><font class="ftz08">%(满意度)</font></p>
+							<p class="ftz08 pdt025">用户满意度</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			var uid = get_local('uid');
+			var UID = api.pageParam.uid;
+			if(is_define(uid) && uid == UID ){
+				$('#title').text('我的问答');
+			} 
+			open_f('his_answers_c','his_answers_c.html','false',api.pageParam);
+		};
+		function setData(answer_count,best_count,huida_lv){
+			$('#answer_count').text(answer_count);
+			$('#best_count').text(best_count);
+			$('#huida_lv').text(huida_lv);
+			
+		}
+	</script>
+</html>

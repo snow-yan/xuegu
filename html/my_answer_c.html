@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>我的答主</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style type="text/css">
+			.abst15{top:1.5em}
+		</style>
+	</head>
+	<body class="c-wh">
+		<!--我的答主-->
+		<input type="hidden" id="page" value="1"/>
+		<div class="h05e c-ebf2fc"></div>
+		<div class=" box w10 ovd" id="answer">
+			<ul class="c-wh" id="my_answer"></ul>
+			<script type="text/html" id="my_answer_list">
+				<%
+				for(var i=0;i<data.length;i++){
+				if(i==data.length-1){
+				%>
+				<li tapmode="c-e0e0e0">
+				<%
+				}else{
+				%>
+				<li class="ubb ub-e0e0e0" tapmode="c-e0e0e0">
+				<%
+				}
+				%>
+				    <div class="pdl07 pdr07 area_auto">
+						<div class="pdl02 pdr02 pdt07 pdb07 pstnr ovd">
+							<div class="w6 ovd" onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=data[i].friend_uid%>,uid:get_local('uid'),name:api.winName,frameName:api.frameName});event.preventDefault();event.stopPropagation();">
+								<div class="fll dsplb pstnr">
+									<%
+									if(is_define(data[i].face)){
+									%>
+									<img src="<%=data[i].face%>" class="uc-a w35e h35e marr05">
+									<%
+									}else{
+									%>
+									<img src="../image/icon/no-answer.png" class="uc-a w35e h35e marr05">
+									<%
+									}
+									%>
+								</div>
+								<p class="ftz095 mart05 umh15 txo"><%=data[i].nakename%></p>
+								<p class="txo umh15 ftz07 t-999"><%=data[i].signature%></p>
+							</div>	
+							<div class="w60e h15e umh15 pstna abst20 ftz09 absr10 c-ff7b00 border-radius-ff7b00">
+								<div class="fll w5 tx-c umh15 t-wh ubr ub-wh yes" id="reduce<%=data[i].uid%>" onclick="change_attention(this,'0',<%=data[i].friend_uid%>);event.preventDefault();event.stopPropagation();">
+									<div class="t-wh c-c0c0c0" style="border-radius: 0.3em 0 0 0.2em;"><font class="ftz085">已关注</font></div>
+								</div>
+							<span class="fll w5 tx-c umh15 t-wh" onclick="open_w('put_questions_to','put_questions_to.html',{targetuid:<%=data[i].friend_uid%>,uid:get_local('uid'),tagetNakename:'<%=data[i].nakename%>'});event.preventDefault();event.stopPropagation();">@TA</span>
+						</div>
+						</div>
+				    </div>
+				</li>
+				<%
+				}
+				%>
+			</script>
+	    </div>
+		<!--推荐答主-->
+		<ul id="album_answer"></ul>
+		<script type="text/html" id="album_answer_list">
+			<div class="box ubb w10 ub-e4e4e4 c-ebf2fc" tapmode="c-e0e0e0" onclick="open_w('hot_answer','../html/hot_answer.html')">
+				<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393">
+					<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+					<span class="sl"><font class="t-666 ftz10">推荐答主</span>
+					<span class="sr tx-r umh1"><img src="../image/icon/right_gra.png" class="w10e h10e pdt09"></span>
+					<span class="sr tx-r"><font class="ftz075 t-999 pdr03">更多答主</font></span>
+				</p>
+			</div>
+			<%
+			for(var i=0;i<data.length;i++){
+			if(!is_define(data[i].focus)){
+			%>
+			<li class="ubb ub-e0e0e0">
+				<div tapmode="c-e0e0e0">
+					<div class=" w95 pdt07 pdb07 area_auto pstnr ovd">
+						<div class="w6 ovd">
+							<div class="fll dsplb">
+								<img src="<%=data[i].face%>" class="uc-a w35e h35e marr05 pdl02" onclick="open_w('teacher_info','teacher_info.html',{targetuid:<%=data[i].uid%>,uid:get_local('uid'),name:api.winName,frameName:api.frameName});event.preventDefault();event.stopPropagation();">
+							</div>
+							<p class="ftz10 mart03 umh15 txo"><%=data[i].nakename%></p>
+							<%
+							if(is_define(data[i].label)){
+							%>
+							<p class="txo umh15 ftz075 mart04 t-999 txo"><%=data[i].label%></p>
+							<%
+							}
+							%>
+						</div>
+						<div class="w60e h15e umh15 pstna abst15 ftz09 absr10 c-ff7b00 border-radius-ff7b00">
+							<%
+							if(data[i].focus){
+							%>
+							<div class="fll w5 tx-c umh15 t-wh ubr ub-wh yes" id="reduce<%=data[i].uid%>" onclick="change_attention(this,'0',<%=data[i].uid%>);event.preventDefault();event.stopPropagation();">
+								<div class="t-wh c-c0c0c0" style="border-radius: 0.3em 0 0 0.2em;"><font class="ftz085">已关注</font></div>
+							</div>
+							<div class="fll w5 tx-c umh15 t-wh ovd no dspn" id="add<%=data[i].uid%>" onclick="change_attention(this,'1',<%=data[i].uid%>);event.preventDefault();event.stopPropagation();">
+								<div class="c-wh t-ff7b00" style="border-radius: 0.3em 0 0 0.2em;">+关注</div>
+							</div>
+							<%
+							}else{
+							%>
+							<div class="fll w5 tx-c umh15 t-wh ubr ub-wh yes dspn" id="reduce<%=data[i].uid%>" onclick="change_attention(this,'0',<%=data[i].uid%>);event.preventDefault();event.stopPropagation();">
+								<div class="t-wh c-c0c0c0" style="border-radius: 0.3em 0 0 0.2em;"><font class="ftz085">已关注</font></div>
+							</div>
+							<div class="fll w5 tx-c umh15 t-wh ovd no" id="add<%=data[i].uid%>" onclick="change_attention(this,'1',<%=data[i].uid%>);event.preventDefault();event.stopPropagation();">
+								<div class="c-wh t-ff7b00" style="border-radius: 0.3em 0 0 0.2em;">+关注</div>
+							</div>
+							<%
+							}
+							if(is_define(get_local('uid'))){
+							%>
+							<span class="fll w5 tx-c umh15 t-wh" onclick="open_w('put_questions_to','put_questions_to.html',{targetuid:<%=data[i].uid%>,uid:get_local('uid'),tagetNakename:'<%=data[i].nakename%>'});event.preventDefault();event.stopPropagation();">@TA</span>
+							<%
+							}else{
+							%>
+							<span class="fll w5 tx-c umh15 t-wh" onclick="$toast('您还没有登录，请先登录',1000);setTimeout(function(){open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});event.preventDefault();event.stopPropagation();},1000)">@TA</span>
+							<%
+							}
+							%>
+						</div>
+					</div>
+				</div>
+				<div class="pstnr">
+					<img src="../image/icon/up-border.png" class="w10e pstna zindex3" style="top: -7px;left: 2em;"/>
+					<div class="clo_four ubt mart05 ub-e0e0e0 ftz08">
+						<div class="col_list mart05 marb05 tx-c ubr ub-e0e0e0" tapmode="op8" onclick="open_w('his_answers','his_answers.html',{uid:'<%=data[i].uid%>'})">
+							<p class="umh15 h15e t-999">问答<font><%=parseInt(data[i].question_count)+parseInt(data[i].answer_count)%></font></p>
+						</div>
+						<div class="col_list mart05 marb05 tx-c ubr ub-e0e0e0" tapmode="op8" onclick="open_w('his_talk_stocks','his_talk_stocks.html',{uid:'<%=data[i].uid%>'})">
+							<p class="umh15 h15e t-999">谈股<font><%=data[i].tangu_count%></font></p>
+						</div>
+						<div class="col_list mart05 marb05 tx-c ubr ub-e0e0e0" tapmode="op8" onclick="open_w('his_class','his_class.html',{uid:'<%=data[i].uid%>'})">
+							<p class="umh15 h15e t-999">课程<font><%=data[i].course_count%></font></p>
+						</div>
+						<div class="col_list mart05 marb05 tx-c" tapmode="op8" onclick="open_w('his_broadcast_live','his_broadcast_live.html',{uid:'<%=data[i].uid%>'})">
+							<p class="umh15 h15e t-999">直播<font><%=data[i].live_count%></font></p>
+						</div>
+					</div>
+				</div>
+				<div class="h03e c-ebf2fc"></div>
+			</li>
+			<%
+			}
+			}
+			%>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var lastPage = true,firstPageHaveData = true;
+		apiready = function() {
+			get_my_answer();
+			album_answer();
+			push_down(function(){
+				if(firstPageHaveData){
+					get_my_answer();
+					album_answer();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+						$('#getMore').removeClass('dspn');
+					},500);
+				}
+			});
+		};
+		function get_my_answer(type){
+			var uid = get_local('uid');
+			var pagesize= 10;
+			var URL = serverURL + 'app_interface/user/my_follow_list/';
+			if(type=="next"){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			URL+='?secret='+appSecret+'&uid='+uid+'&page='+page+'&pagesize='+pagesize;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					if(ret.data.length>0){
+						if(type=='next'){
+							$('#my_answer').append(bt('my_answer_list',ret));
+						}else{
+							$('#my_answer').html(bt('my_answer_list',ret));
+							$("#getMore").remove();
+							editMore();
+						}
+					}else{
+						if(page==1){
+							firstPageHaveData = false;
+							$('#my_answer').html('');
+						}
+						lastPage =false;
+						$('#getMore').addClass('dspn');
+						no_data_more('my_answer');
+					}
+					push_down_over();
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		} 
+		
+		function album_answer(){
+			var page =1;
+			var pagesize= 5;
+			var UID = get_local('uid');
+			var URL = serverURL + 'app_interface/main/get_jiangshi_list/';
+			if(is_define(UID)){
+				URL+='?secret='+appSecret+'&uid='+UID+'&type=0&page='+page+'&pagesize='+pagesize;
+			}else{
+				URL+='?secret='+appSecret+'&type=0&page='+page+'&pagesize='+pagesize;
+			}
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					if(ret.data.data.length>0){
+						$('#album_answer').html(bt('album_answer_list',ret.data));
+						push_down_over();
+					}else{
+						lastPage =false;
+						no_data_more('album_answer');
+					}
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		function change_attention(el,type,tagetUid){
+			var URL = serverURL + 'app_interface/main/follow_user/';
+			var UID = get_local('uid');
+			var reduceId = '#reduce'+tagetUid;
+			var addId = '#add'+tagetUid;
+			if(is_define(UID)){
+				var data = {
+					values: {
+					secret:appSecret,
+					uid:tagetUid,
+					login_uid:UID
+					}
+				};
+				r_ajax(URL,data,function(ret){
+					if(ret.errCode == 0){
+						if(type == 0){
+							$(reduceId).addClass('dspn');
+							$(addId).removeClass('dspn');
+							$toast('关注已取消',500);
+						}
+						if(type == 1){
+							$(addId).addClass('dspn');
+							$(reduceId).removeClass('dspn');
+							$toast('关注成功',500);
+						}
+						api.execScript({
+							name:'root',
+							frameName:'home',
+							script : 'getHomeData()'
+						})
+						get_my_answer();
+					}else{
+						$toast(ret.errMsg,1500);
+					}
+				})
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				},1000);
+			}
+			api.parseTapmode();
+		}
+		function getMore(){
+			if(lastPage){
+				get_my_answer('next');
+			}
+		}
+		function editMore(){
+			var html = '<div class="h25e umh25 tx-c c-wh ubtb ub-e0e0e0" id="getMore" tapmode="c-e0e0e0" onclick="getMore();">';
+			html+= '<img class="w15e pd05" src="../image/icon/down_gra.png"/>';
+			html+= '</div>'
+			$('#answer').append(html);
+		}
+		function change_attention0(tagetUid){
+			var URL = serverURL + 'app_interface/main/follow_user/';
+			var UID = get_local('uid');
+			var reduceId = '#reduce'+tagetUid;
+			var addId = '#add'+tagetUid;
+			if(is_define(UID)){
+				var data = {
+					values: {
+						secret:appSecret,
+						uid:tagetUid,
+						login_uid:UID
+					}
+				};
+				r_ajax(URL,data,function(ret){
+					if(ret.errCode == 0){
+						$toast('关注已取消',500);
+						$(reduceId).addClass('dspn');
+						$(addId).removeClass('dspn');
+						get_my_answer();
+					}else{
+						$toast(ret.errMsg,1500);
+					}
+				})
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				},1000);
+			}
+			api.parseTapmode();
+		}
+	</script>
+</html>

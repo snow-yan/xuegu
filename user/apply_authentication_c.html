@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>申请认证</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+	     	.pre{color:#666; background:#ffffff;border-top:1px solid #DFDFDF;border-left:1px solid #DFDFDF; }
+         	.pre_after{color:#333;background:#EBECED; border:1px solid #DFDFDF;}
+         	.wborder48{border-bottom:1px solid #DFDFDF;width: 48%}
+         	.t-666{color:#666;}
+         	::-webkit-input-placeholder {
+				color: #999;
+				font-size: 12px;
+			}
+			.uba_uc{border:1px solid #DFDFDF;border-radius: 3px}
+			.absr-per-05{right:15%}
+			.t-red{ color:red}
+			.uba_uc2{border:1px solid #6C96B2;border-radius: 2px}
+			.box-shadow02{box-shadow: 0 0 2px #6C96B2;}
+			.wm_per{width: 92%;margin-left:5%}
+			.c-dd5432{ background: #dd5432}
+			.marl-per-30{margin-left:30%;}
+        </style>
+	</head> 
+	<body class=" c-wh ftz09">
+		<input value="0" id="year_times"  type="hidden"/>
+		<input value="0" id="switch_type"  type="hidden"/>
+		<div class="w10 mart01 h25e umh25  fll">
+			<span class="fll w25 tx-c pre marl01" id="set_bg1" onclick="randomSwitchBtn('0')">达人认证</span>
+			<span class="fll w25 tx-c pre_after" id="set_bg2" onclick="randomSwitchBtn('1')">投顾认证</span>
+			<span class="fll wborder48">　</span>
+		</div>
+		<div class="w10 fll h05e"></div>
+		<div class="w10 fll h10 ovd t-666" id="authentication0">
+			<div class="w10  fll umh25">
+				<div class="w3 fll tx-c ">当前状态：</div>
+				<div class="w7 fll">未认证</div>
+			</div>
+			<div class="w10  fll umh25">
+				<div class="w3  tx-c fll">认证类型：</div>
+				<div class="w7 fll">达人认证</div>
+			</div>
+			<div class="w10 fll umh25 h25e ovd">
+				<div class="w3  tx-c fll">真实姓名：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="real_name" class="uba_uc pdl02 w95 umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e ovd ">
+				<div class="w3  tx-c fll">身份证号码：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="id_card" class="uba_uc pdl02 w95 umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e ovd ">
+				<div class="w3  tx-c fll">联系方式：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="tel" value="" id="contact" class="uba_uc pdl02 w95 umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e ovd">
+				<div class="w3  tx-c fll">QQ号码：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="tel" value="" maxlength="11" id="qq" class="uba_uc pdl02 w95 umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e">
+				<div class="w3  tx-c fll">职业：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="work" class="uba_uc pdl02 w95 umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10 fll umh25 h25e ovd pdt025 ">
+				<div class="w3  tx-c fll">投资年限：</div>
+				<div class="w7 fll pstnr">
+					<div class="w85 fll pdl05 h20e umh2 uba_uc " id="choose_content" onclick="choose_time()">3年以下</div>
+					<span class="pstna abst09 absr-per-05" style=""><img src="../image/icon/xiala.png" class=" w05e " /></span>
+					<div class="fll pdl025"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e ">
+				<div class="w3  tx-c fll">常用邮箱：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="email" class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e">
+				<div class="w3  tx-c fll">所在公司：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="Company_sity" class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e">
+				<div class="w3  tx-c fll">个人优势：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="Personal_adt" class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+				</div>
+			</div>
+			<div class="w10 fll umh25 pdt025 ">
+				<div class="w3 tx-c fll">上传附件：</div>
+				<div class="w7 fll pstnr">
+					<div class="w2 fll umh15 mart075 uba_uc ftz08 tx-c ">附件</div>
+					<div class=" fll pdl025 t-red umh25">详见温馨提示</div>
+					<div class="fll pdl025"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+				<div class="w10 fll umh25 pdt025 ">
+					<div class="w7 flr">
+						<div class="w85 fll pdl05 h25e umh25 uba_uc ftz08 ">
+							<div onclick="add_file(0)" class="uba_uc2 fll w3 umh15 t-333 mart04 tx-c box-shadow02" >选择文件</div>
+							<div class="fll w6 umh10 pdl025" id="change_text0">未选择任何文件</div>
+						</div>
+					</div>
+				</div>
+				<img class="w45e h45e dspn marl-per-30" onclick="selecet_img(0)" id="add_pic" src="../image/icon/update-pic.png" />
+			</div>
+			<div class="w10 fll umh25 pdt025 ">
+				<div class="w3 tx-c fll">上传附件2：</div>
+				<div class="w7 fll pstnr">
+					<div class="w2 fll umh15 mart075 uba_uc ftz08 tx-c ">附件</div>
+					<div class=" fll pdl025 t-red umh25">详见温馨提示</div>
+					<div class="fll pdl025"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+				<div class="w10 fll umh25 pdt025 ">
+					<div class="w7 flr">
+						<div class="w85 fll pdl05 h25e umh25 uba_uc ftz08 ">
+							<div  onclick="add_file(1)" class="uba_uc2 fll w3 umh15 t-333 mart04 tx-c box-shadow02" >选择文件</div>
+							<div class="fll w6 umh10 pdl025" id="change_text1">未选择任何文件</div>
+						</div>
+					</div>
+				</div>
+				<img class="w45e h45e dspn marl-per-30" onclick="selecet_img(1)" id="add_pic1" src="../image/icon/update-pic.png" />
+			</div>
+			<div class="w10 fll umh25 pdt025 ">
+				<div class="w3 tx-c fll">上传附件3：</div>
+				<div class="w7 fll pstnr">
+					<div class="w2 fll umh15 mart075 uba_uc ftz08 tx-c ">附件</div>
+					<div class=" fll pdl025 t-red umh25">详见温馨提示</div>
+					<div class="fll pdl025"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+				<div class="w10 fll umh25 pdt025 ">
+					<div class="w7 flr">
+						<div class="w85 fll pdl05 h25e umh25 uba_uc ftz08 ">
+							<div  onclick="add_file(2)" class="uba_uc2 fll w3 umh15 t-333 mart04 tx-c box-shadow02" >选择文件</div>
+							<div class="fll w6 umh10 pdl025" id="change_text2">未选择任何文件</div>
+						</div>
+					</div>
+				</div>
+				<img class="w45e h45e dspn marl-per-30" onclick="selecet_img(2)" id="add_pic2" src="../image/icon/update-pic.png" />
+			</div>
+			<div class="w10 fll ovd mart10">
+				<img src="../image/icon/notice.png" class="w10e marl05 pd025 h10e" />
+				<font class="t-red">[温馨提示]</font>
+			</div>
+			<div class="w9 area_auto mart05 box pstnr tx-l umh2 t-999 ftz09 ovd">
+				<p class="sl wm_per  ovd ">
+					<span class="sl"><font class="t-red"></font>附件上传包括但不限于（任选其中三种，且附件不能重复上传）</span>
+				</p>
+				<p class="sl wm_per  ovd ">
+					<span class="sl">1）个人投资经历文档截图/照片</span>
+				</p>
+				<p class="sl wm_per ovd ">
+					<span class="sl">2）个人实盘战绩截图</span>
+				</p>
+				<p class="sl wm_per  ovd ">
+					<span class="sl">3）个人博客截图</span>
+				</p>
+				<p class="sl wm_per  ovd ">
+					<span class="sl">4）微博个人主页（包含粉丝截图更佳）</span>
+				</p>
+				<p class="sl wm_per  ovd ">
+					<span class="sl">5）获奖证明图片/扫描件</span>
+				</p>
+				<p class="sl wm_per  ovd ">
+					<span class="sl">注：如有疑问可以联系学股网客服QQ：3437446078</span>
+				</p>
+			</div>
+			<div class="w65 tx-c area_auto pdt05 ftz08 ovd" onclick="open_w('service','service.html')">
+				<img src="../image/icon/select.png" class="w10e pdt025 pdr025"><font class=" t-999">提交即表示已阅读并同意遵守</font><font class=" t-4371bc">《学股网服务条款》</font>
+			</div>
+			<div class="w10 sl ovd" onclick="submit_info()" tapmode="">
+	            <p class="w8  area_auto mart10 pdt02 pdb02 c-dd5432  tx-c uc-a02 ftz10" >
+	                <span class="w10 tx-c t-wh umh25 tx-c">提交</span>
+	            </p>
+	        </div>
+		</div>
+		<div class="w10 fll h10 ovd t-666" id="authentication1" style="display: none">
+			<div class="w10  fll umh25">
+				<div class="w3 fll tx-c ">当前状态：</div>
+				<div class="w7 fll">未认证</div>
+			</div>
+			<div class="w10  fll umh25">
+				<div class="w3  tx-c fll">认证类型：</div>
+				<div class="w7 fll">投顾认证</div>
+			</div>
+			<div class="w10  fll umh25 h25e">
+				<div class="w3  tx-c fll">真实姓名：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="real_name2" class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e">
+				<div class="w3  tx-c fll">身份证号码：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="id_card2" class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e">
+				<div class="w3  tx-c fll">联系方式：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="tel" maxlength="11" value="" id="contact2" class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e">
+				<div class="w3  tx-c fll">QQ号码：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="tel" maxlength="11" value="" id="qq2" class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e">
+				<div class="w3  tx-c fll">所在公司：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="Company_sity2"  class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e">
+				<div class="w3  tx-c fll">岗位：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="gangwei2" class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e">
+				<div class="w3  tx-c fll">资格证号：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="zigezhenghao2" class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+					<div class="fll"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10 fll umh25 h25e ovd pdt025 ">
+				<div class="w3  tx-c fll">从业年限：</div>
+				<div class="w7 fll pstnr">
+					<div class="w85 fll pdl05 h20e umh2 uba_uc " id="choose_content" onclick="choose_time()">3年以下</div>
+					<span class="pstna abst10 absr-per-05" style=""><img src="../image/icon/xiala.png" class=" w05e pdt01 " /></span>
+					<div class="fll pdl025"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+			</div>
+			<div class="w10  fll umh25 h25e ">
+				<div class="w3  tx-c fll">常用邮箱：</div>
+				<div class="w7 fll">
+					<div class="w9 fll">
+						<input type="text" value="" id="email2" class="uba_uc pdl02 w95  umh20 h20e" placeholder="" />
+					</div>
+				</div>
+			</div>
+			<div class="w10 fll umh25 pdt025 ">
+				<div class="w3 tx-c fll">上传附件：</div>
+				<div class="w7 fll pstnr">
+					<div class="w2 fll umh15 mart075 uba_uc ftz08 tx-c ">附件</div>
+					<div class=" fll pdl025 t-red umh25">详见温馨提示</div>
+					<div class="fll pdl025"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+				<div class="w10 fll umh25 pdt025 ">
+					<div class="w7 flr">
+						<div class="w85 fll pdl05 h25e umh25 uba_uc ftz08 ">
+							<div onclick="add_file(3)" class="uba_uc2 fll w3 umh15 t-333 mart04 tx-c box-shadow02" >选择文件</div>
+							<div class="fll w6 umh10 pdl025" id="change_text3">未选择任何文件</div>
+						</div>
+					</div>
+				</div>
+				<img class="w45e h45e dspn marl-per-30" onclick="selecet_img(3)" id="add_pic3" src="../image/icon/update-pic.png" />
+			</div>
+			<div class="w10 fll umh25 pdt025 ">
+				<div class="w3 tx-c fll">上传附件2：</div>
+				<div class="w7 fll pstnr">
+					<div class="w2 fll umh15 mart075 uba_uc ftz08 tx-c ">附件</div>
+					<div class=" fll pdl025 t-red umh25">详见温馨提示</div>
+					<div class="fll pdl025"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+				<div class="w10 fll umh25 pdt025 ">
+					<div class="w7 flr">
+						<div class="w85 fll pdl05 h25e umh25 uba_uc ftz08 ">
+							<div  onclick="add_file(4)" class="uba_uc2 fll w3 umh15 t-333 mart04 tx-c box-shadow02" >选择文件</div>
+							<div class="fll w6 umh10 pdl025" id="change_text4">未选择任何文件</div>
+						</div>
+					</div>
+				</div>
+				<img class="w45e h45e dspn marl-per-30" onclick="selecet_img(4)" id="add_pic4" src="../image/icon/update-pic.png" />
+			</div>
+			<div class="w10 fll umh25 pdt025 ">
+				<div class="w3 tx-c fll">上传附件3：</div>
+				<div class="w7 fll pstnr">
+					<div class="w2 fll umh15 mart075 uba_uc ftz08 tx-c ">附件</div>
+					<div class=" fll pdl025 t-red umh25">详见温馨提示</div>
+					<div class="fll pdl025"><img src="../image/icon/rz_xh.png" class="w05e h05e pdt10" /></div>
+				</div>
+				<div class="w10 fll umh25 pdt025 ">
+					<div class="w7 flr">
+						<div class="w85 fll pdl05 h25e umh25 uba_uc ftz08 ">
+							<div  onclick="add_file(5)" class="uba_uc2 fll w3 umh15 t-333 mart04 tx-c box-shadow02" >选择文件</div>
+							<div class="fll w6 umh10 pdl025" id="change_text5">未选择任何文件</div>
+						</div>
+					</div>
+				</div>
+				<img class="w45e h45e dspn marl-per-30" onclick="selecet_img(5)" id="add_pic5" src="../image/icon/update-pic.png" />
+			</div>
+			<div class="w10 fll ovd mart10">
+				<img src="../image/icon/notice.png" class="w10e marl05 pd025 h10e" />
+				<font class="t-red">[温馨提示]</font>
+			</div>
+			<div class="w9 area_auto mart05 box pstnr tx-l umh2 t-999 ftz09 ovd">
+				<p class="sl wm_per ">
+					<span class="sl">1.<font class="t-red">附件一</font>：必须上传本人身份证，保证头像清晰可辨认，保证身份证信息清晰可见</span>
+				</p>
+				<p class="sl wm_per ">
+					<span class="sl">2.<font class="t-red">附件二</font>：上传证券业务资格考试成绩合格证</span>
+				</p>
+				<p class="sl wm_per ">
+					<span class="sl">3.<font class="t-red">附件三</font>：上传包括但不限于（任选其一）</span>
+				</p>
+				<p class="sl wm_per ovd">
+					<span class="sl">1）投资经历扫描件/照片</span>
+				</p>
+				<p class="sl wm_per ovd ">
+					<span class="sl">2）个人实盘战绩截图</span>
+				</p>
+				<p class="sl wm_per ovd ">
+					<span class="sl">3）个人博客截图</span>
+				</p>
+				<p class="sl wm_per ovd ">
+					<span class="sl">4）微博个人主页（包含粉丝截图更佳）</span>
+				</p>
+				<p class="sl wm_per ovd ">
+					<span class="sl">5）获奖证明图片/扫描件</span>
+				</p>
+				<p class="sl wm_per ovd ">
+					<span class="sl">注：如有疑问可以联系学股网客服QQ：3437446078</span>
+				</p>
+				<p class="sl wm_per ovd ">
+					<span class="sl">如资料符合投资顾问认证要求学股网将会有专职人员和您联系，请耐心等待。</span>
+				</p>
+			</div>
+			<div class="w65 tx-c area_auto pdt05 ftz08 ovd">
+				<img src="../image/icon/select.png" class="w10e pdt025 pdr025"><font class=" t-999">提交即表示已阅读并同意遵守</font><span class=" t-4371bc" onclick="open_w('service','service.html')">《学股网服务条款》</span>
+			</div>
+			<div class="w10 sl ovd" onclick="submit_info2()" tapmode="">
+	            <p class="w8  area_auto mart10 pdt02 pdb02 c-dd5432  tx-c uc-a02 ftz10" >
+	                <span class="w10 tx-c t-wh umh25 tx-c">提交</span>
+	            </p>
+	        </div>
+		</div>
+		<div class="w10 fll ovd h15e"></div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript">
+		var img_data,img_data2,img_data3,img_data4,img_data5,img_data6;
+		apiready = function(){
+			setTimeout(function(){
+				close_win_name("apply_result");
+			},300);
+		
+		};
+		function submit_info(){
+			var URL = serverURL + "app_interface/user/verify/";
+			var uid=get_local('uid');
+			var real_name=$("#real_name").val();
+			var id_card=$('#id_card').val();
+			var contact=$('#contact').val();
+			var qq=$('#qq').val();
+			var work=$('#work').val();
+			var year_times=$("#year_times").val();
+			var email=$('#email').val();
+			var Company_sity=$('#Company_sity').val();
+			var Personal_adt=$('#Personal_adt').val();
+			var phone_reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+			var IdCardNum = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+			var email_reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+			if (!is_define(real_name)){
+				$toast("请输入真实姓名", 1500);
+				return false;
+			}
+			if (!is_define(id_card)){
+				$toast("请输入身份证号", 1500);
+				return false;
+			}
+			if (IdCardNum.test(id_card) == 'false' || IdCardNum.test(id_card) == false) {
+				$toast('身份证格式错误', 1000);
+				return false;
+			}
+			if (!is_define(contact)){
+				$toast("请输入联系方式", 1500);
+				return false;
+			}
+			if (!phone_reg.test(contact)){
+				$toast("手机号格式错误！", 1000);
+				return false;
+			}
+			if (!is_define(qq)){
+				$toast("请输入qq号码", 1500);
+				return false;
+			}
+			if (!is_define(work)){
+				$toast("请输入职业", 1500);
+				return false;
+			}
+			if (!is_define(img_data)){
+				$toast("请选择文件", 1500);
+				return false;
+			}
+			if (!is_define(img_data2)){
+				$toast("请选择文件2", 1500);
+				return false;
+			}
+			if (!is_define(img_data3)){
+				$toast("请选择文件3", 1500);
+				return false;
+			}
+				var data = {
+		 		values :{
+		 			uid:uid,
+		 			name:real_name,
+		 			id_code:id_card,
+		 			contact:contact,
+		 			type:"personal",
+		 			qq:qq,
+		 			zhiye:work,
+		 			touzinianxian:year_times,
+		 			changyongyouxiang:email,
+		 			gerenyoushi:Personal_adt,
+		 			suozaigongsi:Company_sity,
+		 			imgdata:img_data,
+		 			imgtype:1,
+		 			imgdata2:img_data2,
+		 			imgtype2:1,
+		 			imgdata3:img_data3,
+		 			imgtype3:1,
+		 			secret:appSecret
+		 		}
+		 	};
+		 	r_ajax(URL,data,function(ret){
+		 		log(json2str(ret));
+		 		if(ret.errCode==0){
+					$toast("已提交申请", 1500);
+					setTimeout(function(){
+						open_w('apply_result','apply_result.html',{status_info:"正在审核！"});
+					},1500);
+		 		}else{
+		 			$toast("提交失败", 1500);
+		 		}
+		 	})
+		}
+		function submit_info2(){
+			var URL = serverURL + "app_interface/user/verify/";
+			var uid=get_local('uid');
+			var real_name2=$("#real_name2").val();
+			var id_card2=$('#id_card2').val();
+			var contact2=$('#contact2').val();
+			var qq2=$('#qq2').val();
+			var gangwei2=$('#gangwei2').val();
+			var zigezhenghao2=$('#zigezhenghao2').val();
+			var year_times=$("#year_times").val();
+			var email2=$('#email2').val();
+			var Company_sity2=$('#Company_sity2').val();
+			var Personal_adt2=$('#Personal_adt2').val();
+			var phone_reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+			var IdCardNum = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+			var email_reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+			if (!is_define(real_name2)){
+				$toast("请输入真实姓名", 1500);
+				return false;
+			}
+			if (!is_define(id_card2)){
+				$toast("请输入身份证号", 1500);
+				return false;
+			}
+			if (IdCardNum.test(id_card2) == 'false' || IdCardNum.test(id_card2) == false) {
+				$toast('身份证格式错误', 1000);
+				return false;
+			}
+			if (!is_define(contact2)){
+				$toast("请输入联系方式", 1500);
+				return false;
+			}
+			if (!phone_reg.test(contact2)){
+				$toast("手机号格式错误！", 1000);
+				return false;
+			}
+			if (!is_define(qq2)){
+				$toast("请输入qq号码", 1500);
+				return false;
+			}
+			if (!is_define(Company_sity2)){
+				$toast("请输入所在公司", 1500);
+				return false;
+			}
+			if (!is_define(gangwei2)){
+				$toast("请输入岗位", 1500);
+				return false;
+			}
+			if (!is_define(zigezhenghao2)){
+				$toast("请输入资格证号", 1500);
+				return false;
+			}
+			if (!is_define(img_data4)){
+				$toast("请选择文件", 1500);
+				return false;
+			}
+			if (!is_define(img_data5)){
+				$toast("请选择文件2", 1500);
+				return false;
+			}
+			if (!is_define(img_data6)){
+				$toast("请选择文件3", 1500);
+				return false;
+			}
+			var data = {
+		 		values :{
+		 			uid:uid,
+		 			name:real_name2,
+		 			id_code:id_card2,
+		 			contact:contact2,
+		 			type:"enterprise",
+		 			qq:qq2,
+		 			touzinianxian:year_times,
+		 			changyongyouxiang:email2,
+		 			gangwei:gangwei2,
+		 			zigezhenghao:zigezhenghao2,
+		 			gerenyoushi:Personal_adt2,
+		 			suozaigongsi:Company_sity2,
+		 			imgdata:img_data4,
+		 			imgtype:1,
+		 			imgdata2:img_data5,
+		 			imgtype2:1,
+		 			imgdata3:img_data6,
+		 			imgtype3:1,
+		 			secret:appSecret
+		 		}
+		 	};
+		 	r_ajax(URL,data,function(ret){
+		 		log(json2str(ret));
+		 		if(ret.errCode==0){
+					$toast("已提交申请", 1500);
+					setTimeout(function(){
+						open_w('apply_result','apply_result.html',{status_info:"正在审核！"});
+					},1500);
+		 		}else{
+		 			$toast("提交失败", 1500);
+		 		}
+		 	})
+		}
+		function selecet_img(num){
+			if(num==0){
+				var imgs=$("#add_pic").attr("src");
+			}
+			if(num==1){
+				var imgs=$("#add_pic1").attr("src");
+			}
+			if(num==2){
+				var imgs=$("#add_pic2").attr("src");
+			}
+			if(num==3){
+				var imgs=$("#add_pic3").attr("src");
+			}
+			if(num==4){
+				var imgs=$("#add_pic4").attr("src");
+			}
+			if(num==5){
+				var imgs=$("#add_pic5").attr("src");
+			}
+			viewImg(imgs);
+		}
+		function add_file(numbers){
+			api.actionSheet({
+				title : '上传附件',
+				cancelTitle : '关闭',
+				buttons : ['打开相机', '本地图库']
+			}, function(ret, err){
+				if (ret.buttonIndex == 1) {
+					openPicCard('camera',numbers);
+				}
+				if (ret.buttonIndex == 2) {
+					openPicCard('library',numbers);
+				}
+			});
+		}
+		function openPicCard(type,numbers){
+			api.getPicture({
+				sourceType : type,
+				encodingType : 'jpg',
+				mediaValue : 'pic',
+				destinationType : 'base64',
+				allowEdit : true,
+				quality : 60,//图片质量
+				saveToPhotoAlbum : false
+			}, function(ret, err) {
+				if (ret) {
+					//开始上传图片
+					if (!is_define(ret.data)) {
+						$toast('未上传图片', 1000)
+						return false;
+					}
+					if (!is_define(ret.data)) {
+						$toast('未上传图片', 1000)
+						return false;
+					}
+					var str=ret.base64Data.split(",");
+					if(numbers==0){
+						img_data=str[1];
+						$('#add_pic').css('display',"block");
+						$('#add_pic').attr('src',ret.data);
+						$('#change_text0').text('已选择');
+					}
+					if(numbers==1){
+						img_data2=str[1];
+						$('#add_pic1').css('display',"block");
+						$('#add_pic1').attr('src',ret.data);
+						$('#change_text1').text('已选择');
+					}
+					if(numbers==2){
+						img_data3=str[1];
+						$('#add_pic2').css('display',"block");
+						$('#add_pic2').attr('src',ret.data);
+						$('#change_text2').text('已选择');
+					}
+					if(numbers==3){
+						img_data4=str[1];
+						$('#add_pic3').css('display',"block");
+						$('#add_pic3').attr('src',ret.data);
+						$('#change_text3').text('已选择');
+					}
+					if(numbers==4){
+						img_data5=str[1];
+						$('#add_pic4').css('display',"block");
+						$('#add_pic4').attr('src',ret.data);
+						$('#change_text4').text('已选择');
+					}
+					if(numbers==5){
+						img_data6=str[1];
+						$('#add_pic5').css('display',"block");
+						$('#add_pic5').attr('src',ret.data);
+						$('#change_text5').text('已选择');
+					}
+				} else {
+					$toast('未上传图片', 1000)
+				}
+			});
+		}
+		function randomSwitchBtn(index){
+			$api.addCls($api.byId('set_bg1'), "pre_after");
+			$api.addCls($api.byId('set_bg2'), "pre_after");
+			if (index == 0) {
+				$("#switch_type").val(0);
+				$api.addCls($api.byId('set_bg1'), "pre");
+				$api.removeCls($api.byId('set_bg1'), 'pre_after');
+				$("#set_bg1").css("border-right","1px solid #DFDFDF");
+				$("#authentication0").show();
+				$("#authentication1").hide();
+			}
+			if (index == 1) {
+				$("#switch_type").val(1);
+				$api.removeCls($api.byId('set_bg2'), 'pre_after');
+				$api.addCls($api.byId('set_bg2'), "pre");
+				$("#set_bg2").css("border-right","1px solid #DFDFDF");
+				$("#set_bg2").css("border-left","none");
+				$("#authentication1").show();
+				$("#authentication0").hide();
+			}
+		}
+		function choose_time(){
+			api.actionSheet({
+					//title : '开始分享',
+					cancelTitle : '默认',
+					style:{
+						itemPressColor:'#ccc',     //选项按钮按下时背景颜色，支持#000、#000000、rgb、rgba，默认值：#E6E6E6
+					    fontNormalColor:'#666666', 
+					    fontPressColor:'#666666',     //选项按钮按下时文字颜色，支持#000、#000000、rgb、rgba，默认值：#0060F0
+					},
+					buttons : ['3年以下','3-5年','5-10年','10年以上']
+				}, function(ret, err){
+						if(ret.buttonIndex==1){
+							$("#choose_content").text("3年以下");
+							$("#year_times").val("0");
+						}
+						if(ret.buttonIndex==2){
+							$("#choose_content").text("3-5年");
+							$("#year_times").val("1");
+						}
+						if(ret.buttonIndex==3){
+							$("#choose_content").text("5-10年");
+							$("#year_times").val("2");
+						}
+						if(ret.buttonIndex==4){
+							$("#choose_content").text("10年以上");
+							$("#year_times").val("3");
+						}
+				});
+		}
+	</script>
+</html>

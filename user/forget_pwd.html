@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>忘记密码</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+
+</head>
+<body class="aui-bg-white">
+    <header class="aui-bar aui-bar-nav aui-bg-blue" id="header">
+        <a class="aui-pull-left aui-btn" ontouchstart="close_w();">
+           <img src="../img/back.png" alt="" style="height:23px;">
+        </a>
+        <div class="aui-title">忘记密码</div>
+    </header>                       
+    <div class="forget">
+        <form>
+            <div class="control" >
+                <div class="control-lable" ><img src="../img/password1.png" alt="" ></div>
+                <input type="tel" oninput="myFunction()" id="mobile" placeholder="请输入手机号" class="aui-text-gray8">
+            </div>
+            <div class="control">
+                <div class="control-lable" ><img src="../img/password2.png" alt="" ></div>
+                <input type="password" oninput="myFunction()" id="password"  placeholder="请输入6-16位密码，限英文+数字" class="aui-text-gray8">
+            </div>
+            <div class="control">
+                <div class="control-lable" ><img src="../img/password2.png" alt="" ></div>
+                <input type="password" oninput="myFunction()" id="password2"  placeholder="请重新输入密码" class="aui-text-gray8">
+            </div>                           
+            <div class="aui-padded-0-15 border_10">
+                <div class="control_btn control_btn_active" id="can_pwd" onclick="reset_password()" style="display: none;">下一步</div>
+            	<div class="control_btn" id="no_can_pwd">下一步</div>  
+            </div>                                
+        </form>            
+    </div>
+   
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/self.js"></script>
+<script>
+   apiready = function(){
+		var $header = $api.dom('#header');
+		$api.fixIos7Bar($header);
+		$api.fixStatusBar($header);
+	};
+	function myFunction(){
+		$('#can_pwd').hide();
+		$('#no_can_pwd').show();
+		var mobile = $("#mobile").val();
+		var password = $("#password").val();
+		var password2 = $("#password2").val();
+		if (is_define(mobile)&&is_define(password)&&is_define(password2)) {
+			$('#can_pwd').show();
+			$('#no_can_pwd').hide();
+		}
+	}
+	function reset_password(){
+		var phone_reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+		var login_pwd = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
+		var mobile = $("#mobile").val();
+		var password = $("#password").val();
+		var password2 = $("#password2").val();
+		if (!is_define(mobile)) {
+			$toast("请输入手机号", 1000);	
+			return false;
+		}
+		if (!phone_reg.test(mobile)) {
+			$toast("手机号格式错误！", 1500);
+			return false;
+		}
+		if (!is_define(password)) {
+			$toast("请输入密码", 1000);
+			return false;
+		}
+		if (!login_pwd.test(password)) {
+			$toast("密码格式错误！", 1500);
+			return false;
+		}
+		if (password!=password2) {
+			$toast("两次密码输入不一致", 1500);
+			return false;
+		}
+		var pageParam  = {
+ 			mobile:mobile,
+ 			password:password,
+ 			frame:2,
+	 	};
+	 	open_w('register2','register2.html',pageParam)
+	}
+</script>
+</html>

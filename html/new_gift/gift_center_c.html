@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>学股网礼包中心</title>
+		<link type="text/css" href="../../css/xslb.css" rel="stylesheet">
+	</head>
+	<body style="background:#fff;">
+		<div class="cardcontent">
+			<div class="cardlist" >
+				<img src="../../img/k1.png">
+				<span class="redbtn"></span>
+			</div>
+			<div class="cardlist" id="new">
+				<img src="../../img/k2.png">
+				<span class="bluebtn" onclick="open_w('gift_list','gift_list.html',{'gift_id':5})">点击查看</span>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../script/api.js"></script>
+	<script type="text/javascript" src="../../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../../script/init.js"></script>
+	<script type="text/javascript" src="../../script/app.js"></script>
+	<script type="text/javascript" src="../../script/self.js"></script>
+	<script type="text/javascript" src="../../script/template.js"></script>
+	<script type="text/javascript" src="../../script/echo.min.js"></script>
+	<script type="text/javascript">
+	apiready = function() {
+		var uid = get_local('uid');
+		var URL1 = serverURL + 'app_interface/activityManage/is_get_activity_course/';
+			URL1+='?secret='+appSecret+'&uid='+uid;
+			g_ajax(URL1,function(ret)
+			{	
+				if(ret.errCode==200){
+				//活动开启
+					$('#new').show();
+				}else{
+					$('#new').hide();
+				}
+			})
+		 libao();
+		$(".newlibao_pop").css("marginTop", -$(".newlibao_pop img").height() / 2)
+		$(".xlbmask").css("height", $(window).height())
+	};
+	
+	function libao(){
+		var uid = get_local('uid');
+		var URL = serverURL + 'app_interface/dalibao/is_dalibao/';
+		var data = {
+			values:{
+				secret : appSecret,
+				uid : uid,
+			}
+		};
+		r_ajax(URL,data, function(ret) {
+			if(ret.errCode==0){
+				if(ret.data==1){
+					$('.redbtn').text('点击查看');
+					$('.redbtn').click(function(){
+						open_w('index1','../../libao/index1.html');
+					})
+				}else{
+					$('.redbtn').text('立即领取');
+					$('.redbtn').click(function(){
+						open_w('indexa','../../libao/indexa.html');
+					})
+				}
+			}else{
+				$toast(ret.errMsg, 1500);
+			}
+		})
+	}
+	</script>
+</html>

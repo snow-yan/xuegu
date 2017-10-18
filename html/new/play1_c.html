@@ -1,0 +1,442 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>战法课程播放</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <style>
+        .tab{
+            height:2.75rem;
+            line-height: 2.75rem;
+            color:#000;
+            
+        }
+        .tab div{
+            width:50%;
+            float:left;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+            border-bottom:0.5rem solid #dcdcdc;
+        }
+        .tab-active{
+            background: #f39800;
+            color:#fff;
+        }
+        .content{
+           
+        }
+        .describe{
+            font-size: 0.7rem;
+            color:#333333;
+            line-height: 1.2rem;
+            padding:1rem 0.75rem 0.5rem 0.75rem;
+        }
+        .catalog .head{
+            line-height: 2rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color:#000;
+            padding:0 0.4rem;
+           border-bottom:1px solid #dcdcdc;
+        }
+        .catalog ul{
+            padding:0 0.75rem;
+            position: relative;
+            z-index:1px;
+        }
+        .catalog ul li{
+            line-height: 2rem;
+            font-size: 0.6rem;
+            width:100%;
+            display:-moz-box;
+            display:-webkit-box;
+            display:box;
+            position: relative;
+        }
+        .catalog ul li div{
+            -moz-box-flex:1;
+            -webkit-box-flex:1;
+            box-flex:1;
+            border-bottom:1px solid #dcdcdc;
+            
+        }
+         .catalog ul li img{
+            display: inline-block;
+            height:0.8rem;
+            vertical-align: middle; 
+            margin-right:0.5rem;
+         }
+         .catalog ul li p{
+           
+            height:0.7rem;
+            width:1px;
+            background: #f39800;
+            position: absolute;
+            left:0.35rem;
+            top:1.7rem;
+         }
+         .catalog ul li:last-child p{
+			display:none; 
+			}
+         .end{color:#000;}
+         .star{color:#000; font-weight: bold;}
+         .no{color:#898989;}
+         .chuang{
+            width:4rem;
+            border-radius:30px;
+            background: #eeba6e;
+            position:fixed; 
+            right:-3rem;
+            bottom:10%;
+            z-index: 101;
+         }
+         .chuang img{
+            height:2rem;
+         }
+         .chuang2{
+		    width:2rem;
+		    height:2rem;
+		    border-radius:50%;
+		    background: #fff;
+		    opacity: 0;
+		    position:fixed; 
+		    right:-1rem;
+		    bottom:10%;
+		    z-index:102; 
+		
+		}
+		.bg{
+		    width:100%;
+		    height:100%;
+		    background: #000;
+		    opacity:0;
+		    position:fixed; 
+		    top:0; 
+		    z-index:99;
+		    display: none;   
+		}
+		.mask {
+		    width: 100%;
+		    position: absolute;
+		   	top:25%;
+		   	left:25%;
+		    text-align: center;
+		    z-index: 1000;
+		}
+		.mask img {
+			width:50%;
+		}
+		.mask b {
+		    color: #f39800;
+		    font-size:0.8rem;
+		    position: absolute;
+		    bottom:-1%;
+		    left: 12%;
+		}
+		.maska{
+			position: absolute;
+			width:100%;
+			height:100%;
+			background: #000000;
+			opacity: 0.5;
+			top:0;
+			left:0;
+			z-index:10; 
+		}
+		#img_h{
+			position:absolute;
+			top:50%;
+			left:50%;
+			width:3em;
+			margin-left:-1.5em;
+			margin-top:-1.5em;
+			z-index:11;			
+		}
+    </style>
+</head>
+<body class="aui-bg-white">
+	
+    <div id="course_play"> </div>
+   	<script id="course_play_tpl" type="text/html">
+    	<input type="hidden" id="video_unique" value="" />
+    	<div id="player" class="pstnr" style="position:relative;">
+			<img src="../../image/icon/echo_bg.jpg"  alt="" width="100%;" id="ls_pic">
+			<div class="maska"></div>
+			<%if(course_find.cor_is_charge==1&&course_find.is_buy==0){%>
+    		<div class="mask" >
+                <img src="../../img/buya.png" alt="" onclick="open_w('sure_order','../sure_order.html',{uid:get_local('uid'),'cor_id':'<%=course_find.course_id%>','cor_name':'<%=course_find.cor_name%>','cor_charge_money':'<%=course_find.cor_charge_money%>'})">
+                <b id="price"><%=course_find.cor_charge_money%></b>
+            </div>
+            <%}else{%>
+            	<div id="img_h"><img src="../../image/icon/bofang.png" style="width:100%;" /></div>
+            <%}%>
+		</div>
+    	<div id="video_info" style="position: relative;">
+    		
+    	</div>
+    </script> 
+    	<div class="tab">
+            <div class="tab-active">课程简介</div>
+            <div>闯关目录</div>
+        </div>
+        <div class="content">
+            <div class="describe" id="cor_info"> </div>
+            <div class="catalog" style="display:none;">
+                <div class="head" id="cor_name"></div>
+                <div class="chuang2"></div>
+                <div class="chuang" onclick="chuang();event.preventDefault();event.stopPropagation();" id="chuang">
+                    <img src="../../img/chuang.png" alt="">
+                </div>
+                <div class="chuang"  id="tong" style="background: #afa9a0;display: none;">
+                    <img src="../../img/tongguan.png" alt="">
+                </div>
+                <div class="bg"></div>   
+                <ul class="" id="course_list"></ul>
+                <script id="course_list_tpl" type="text/html">
+                <%for(var i=0;i< data.length; i++ ){
+                	 if(i != 0 && data[i].study_status == 0 && data[i-1].study_status != 2){%>
+                       <li class="end" onclick="$toast('您的上一节课还没看完，不能观看本节课',1000);event.preventDefault();event.stopPropagation();">
+                    <%}else{%>
+                       <li class="end" onclick="extraCourse('<%=data[i].course_id%>');event.preventDefault();event.stopPropagation();">
+                    <%}%>
+                	
+                	<% if(data[i].study_status == 2){%>
+                        <img src="../../img/playback2.png" alt="">
+                    <%}else if(data[i].study_status == 1){%>
+                     	<img src="../../img/chain1.png" alt="">  
+                    <%}else if(data[i].study_status == 0){%>
+                    	<img src="../../img/chain2.png" alt="">
+                    <%}%>
+                     <div>
+                     	<% if(data[i].cor_is_charge == 1){%>
+                     		<b style="color:#f39800" style="margin-left:-5px;">【精品】</b>
+                     	<%}%>
+                     	<span id="name_list"><%=data[i].cor_name%></span>
+                     </div>
+	                    <%  if(i<data.length-1){%>
+	                        <p></p>
+	                    <%}%>  
+                    </li>
+                <%}%>
+                </script>               
+                             
+            </div> 
+        </div>          
+   
+</body>
+<script type="text/javascript" src="../../script/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script>
+var playModule,UID,player,corName,leHeight,next_course,course_id;
+ apiready = function(){
+ 	playModule = api.require('playModule');
+ 	 //tab切换
+    $(".tab div").click(function(){
+        $(this).addClass('tab-active').siblings().removeClass('tab-active');
+        var index=$(this).index();
+        $('.content div:eq("'+index+'")').css('display','block').siblings().css('display','none');
+    }) 
+    //闯按钮事件
+    $('.chuang2').click(function(){
+    	$('.chuang').css('right','0.75rem');
+    	$(this).hide();
+    	$('.bg').show();
+    })
+     $('.bg').click(function(){
+    	$('.chuang').css('right','-3rem');
+    	$(this).hide();
+    	$('.chuang2').show();
+    })
+ 	var tollgate_id=api.pageParam.tollgate_id;
+ 	var tollgate_course_id=api.pageParam.cor_id;
+ 	if(!is_define(tollgate_course_id)){
+ 		tollgate_course_id="";
+ 	}
+ 	//设置占位图片的高
+	leHeight = Math.round(api.winWidth*19/34);
+	$('#ls_pic').css('height',leHeight);
+
+ 	//alert(tollgate_id+'----'+tollgate_course_id);
+	course_play(tollgate_id,tollgate_course_id);
+	api.addEventListener({
+	    name:'pause'
+	}, function(ret, err){        
+	   	playModule.pause(function(ret, err) {
+			    //alert(JSON.stringify(ret));
+			});
+	});
+	
+};
+	function back(){
+		close_w();
+	}
+//课程播放
+function course_play(tollgate_id,tollgate_course_id){
+		var uid=get_local('uid');
+		var URL = serverURL + 'app_interface/newCourse/tollgate_course_play/';
+		URL+='?secret='+appSecret+'&uid='+uid+'&tollgate_id='+tollgate_id+'&tollgate_course_id='+tollgate_course_id;
+		//log(URL);
+		g_ajax(URL,function(ret)
+		{	//alert(JSON.stringify(ret))
+			if(ret.errCode==200){
+				next_course=ret.next_course;
+				course_id=ret.course_id;
+				$('#course_play').html(bt('course_play_tpl',ret));
+				$('#cor_info').text(ret.course_find.cor_info);
+				$('#cor_name').text(ret.course_find.cor_name);
+				//是否通关
+				if(ret.tollgate_find.number==ret.tollgate_user_find.tollgate_num&&ret.tollgate_user_find.tollgate_is_pass == 0){
+					$('#chuang').show();
+					$('#tong').hide();
+				}else{
+					$('#chuang').hide();
+					$('#tong').show();
+				}
+				course_list(tollgate_id,ret.course_find.cor_id);
+		    	var video_info=ret.course_find.video_info;
+				var video_url=ret.course_find.video_info.origUrl;
+				$('#player').show();
+				$('#ls_pic').attr('src',ret.course_find.cor_pic);
+				$('#img_h').click(function(){
+					openplay(video_url);
+				});
+		    	api.execScript({
+				    name: 'training_camp',
+				    frameName: 'training_camp_c',
+				    script: "reload1()"
+				});
+	    		
+			}else{
+				$toast(ret.errMsg,1500);		
+			}
+			Echo.init();
+			api.parseTapmode();
+		})
+} 
+		function openplay(video_url){
+			
+			playModule.init({
+			    isImmerse : true
+			});
+			playModule.play({
+			    rect:
+			    {   x: 0,
+			        y :0,
+			        w :api.frameWidth,
+			        h: leHeight+5,
+			    },
+			    fixedOn: api.frameName,
+			    url: video_url,
+			    defaultBtn: true,
+			    isFullBtn:true,
+			    isBackBtn:true,
+			    isReplayView:true,
+			    enableFull : false,
+			    isTopView :false ,
+			}, function(ret, err) {
+				//console.log(JSON.stringify(ret));
+			});
+			playModule.addEventListener({
+			    name: 'playEnd'
+			}, function(ret, err) {
+				playModule.unfull(function(ret, err) {});
+				 playModule.stop(function(ret, err) {
+				    play_status();
+				});
+			});
+			playModule.addEventListener({
+			    name: 'backBtn'
+			}, function(ret, err) {
+			   close_w();
+			});
+		}
+		function unfull(){
+			if(ret.status==true){
+		    	playModule.unfull(function(ret, err) {});
+		    }else{
+		    	api.closeWin();
+		    }
+		
+		}
+		function pause(){
+		 	playModule.stop(function(ret, err) {
+			    //alert(JSON.stringify(ret));
+			});
+		}
+//闯按钮事件
+function chuang (){
+	close_win_name('answer');
+	$('.chuang').css('right','-3rem');
+	$('.bg').hide();
+	$('.chuang2').show();
+	open_w('answer','answer.html',{'train_id':api.pageParam.tollgate_id});
+} 
+//闯关课程列表
+function course_list(tollgate_id,tollgate_course_id){
+		var uid=get_local('uid');
+		var URL = serverURL + 'app_interface/newCourse/tollgate_course_list/';
+		URL+='?secret='+appSecret+'&uid='+uid+'&tollgate_id='+tollgate_id;
+		g_ajax(URL,function(ret)
+		{	
+			if(ret.errCode==200){
+				$('#course_list').html(bt('course_list_tpl',ret));
+				for(var i=0;i<ret.data.length;i++){
+					if(tollgate_course_id == ret.data[i].course_id){
+						$('#name_list').css({'font-weight':'bold','color':'#000'});
+					}else if(ret.data[i].study_status == 0){
+						$('#name_list').css({'font-weight':'normal','color':'#898989;'});
+					}else{
+						$('#name_list').css({'font-weight':'normal','color':'#000;'});
+					}
+				}
+			}else{
+				$toast(ret.errMsg,1500);		
+			}
+			Echo.init();
+			api.parseTapmode();
+		})
+} 
+	function extraCourse(tollgate_course_id){
+		 playModule.stop(function(ret, err) {
+		   
+		});
+		var tollgate_id=api.pageParam.tollgate_id;
+		course_play(tollgate_id,tollgate_course_id);
+	}
+	function play_status(){
+		if(course_id!=null){
+			var uid=get_local('uid');
+			var tollgate_id=api.pageParam.tollgate_id;
+			var URL = serverURL + 'app_interface/newCourse/tollgate_course_play_status/';
+			var data = {
+				values: {
+						secret:appSecret,
+						tollgate_id:tollgate_id,
+						course_id:course_id,
+						uid:uid,
+						study_status:2
+					}
+			};
+			r_ajax(URL,data,function(ret){
+				if(ret.errCode == 200){
+					if(next_course!=null){
+						course_list(tollgate_id,next_course);
+						course_play(tollgate_id,next_course);
+					}
+				}else{
+				
+				}
+			})
+		}
+  } 
+</script>
+</html>

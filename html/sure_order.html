@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>确认订单</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">	
+		<div class="w10 h30e c-4371bc" id="header">
+			<div class="box w95 area_auto pstnr h30e t-wh">
+				<p class="pstna absl0 abst0 pdt05 pdb05 h20e" ontouchstart="close_w();">
+					<img src="../image/icon/left.png" class="w20e h20e">
+				</p>
+				<p class="ovd tx-c umh3 ftz12">确认订单</p>
+			</div>
+		</div>
+		
+		<!--<div class="ovd umh3 c-wh ubt ub-e0e0e0" id="footer">
+			<div class="w5 fll ftz09 ubr ub-e0e0e0">
+				<span class="pdl10">应付：</span>
+				<span class="t-ff7b00">900谷子</span>
+			</div>
+			<div class="w5 fll ftz09 tx-c ubr ub-e0e0e0" tapmode="c-e0e0e0" onclick="surePay()">
+				<span class="t-ff7b00">立即支付</span>
+			</div>
+		</div>-->
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			open_f('sure_order_c','sure_order_c.html','false',api.pageParam);
+		};
+	</script>
+</html>

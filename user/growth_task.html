@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>成长任务</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">
+		<div class="w10 h30e c-4371bc" id="header">
+			<div class="box w95 area_auto pstnr h30e t-wh">
+				<p class="pstna absl0 abst0 pdt05 pdb05 h20e" ontouchstart="close_w();">
+					<img src="../image/icon/left.png" class="w20e h20e">
+				</p>
+				<p class="ovd tx-c umh25 ftz12" id="text_id">成长任务</p>
+				<span id="close_help" class="pstna absr0 abst0 pdt05 pdb05 umh0" tapmode onclick="open_w('growth_system_description','growth_system_description.html')">
+					<img src="../image/icon/system-description.png" class="w20e h20e">
+				</span>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			open_f('growth_task_c','growth_task_c.html','false',api.pageParam);
+		};
+		function switch_text(){
+			$('#text_id').text('签到成长');
+			$('#close_help').css("display","none");
+		}
+		function switch_show(){
+			$('#text_id').text('成长任务');
+			$('#close_help').css("display","block");
+		}
+	</script>
+</html>

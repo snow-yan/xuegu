@@ -1,0 +1,292 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>全部课程</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+   	<link rel="stylesheet" type="text/css" href="../../css/course-list.css" />
+   	<link rel="stylesheet" type="text/css" href="../../cool_css/cool.css" />
+</head>
+<body>
+      <div class="aui-mask"></div>
+      <div class="aui-tab aui-bg-white aui-border-b" id="tab">
+        <div class="aui-tab-item aui-border-r">
+          <span><span class="txt" id="course_category">课程分类</span><img src="../../img/left.png" alt=""></span> 
+          <ul class="content" id="course_tab"></ul>              
+         <script id="course_tab_tpl" type="text/html">
+	       	<li class="tab_active aa">
+	           <div data-id="0">全部课程</div>             
+	        </li>
+	   		<%for(var i=0;i< data.length;i++){	%>
+	    	<li>
+	            <div data-id="<%=data[i].id%>"><%=data[i].title%></div>
+	            <ul class="tab_a third" >
+	            <%for(var j=0;j< data[i].hot_label_arr.length;j++){	%>
+	              <li><%=data[i].hot_label_arr[j]%></li>
+	             <%}%>
+	            </ul>              
+	        </li>
+	    	<%}%>             
+		  </script>          
+        </div>
+        <div class="aui-tab-item aui-border-r">
+          <span><span>播放量</span><img src="../../img/left.png" alt=""></span>
+          <ul class="content" id="play">
+            <li class="aa" data-rank="desc">从高到低</li>
+            <li class="aa" data-rank="asc">从低到高</li>
+          </ul>
+        </div>
+        <div class="aui-tab-item">
+          <span><span>时长</span><img src="../../img/left.png" alt=""></span>
+          <ul class="content" id="timeL">
+            <li class="aa"  data-time="desc">由长到短</li>
+            <li class="aa" data-time="asc">由短到长</li>
+          </ul>        
+        </div>
+      </div>      
+    </div>    
+    <div class="aui-content aui-margin-b-15">
+       <ul class="aui-list aui-media-list" id="course_list"> </ul>
+       <script id="course_list_tpl" type="text/html">
+   		<%for(var i=0;i< data.length;i++){	%>
+    	<li class="aui-list-item"  onclick="open_w('class_details','../class_details.html',{'cor_id':'<%=data[i].cor_id%>'});event.preventDefault();event.stopPropagation();">
+              <div class="aui-media-list-item-inner" >
+                  <div class="aui-list-item-media" style="width:7rem;">
+                      <img src="../../image/icon/echo_bg.jpg" data-echo="<%=data[i].cor_pic%>" style="border-radius:5px;">
+                  </div>
+                  <div class="aui-list-item-inner aui-margin-t-10">
+                      <div class="aui-list-item-text">
+                          <div class="aui-list-item-title aui-font-size-16 aui-ellipsis-1">
+                          <strong><%=data[i].cor_name%></strong>
+                          </div>
+                      </div>
+                      <div class="aui-list-item-text aui-margin-t-5"  style="height:1rem;"></div>
+                      <div class="aui-list-item-text">
+                          <span style="color:#8d8d8d;">
+			               	<img src="../../img/eye.png" alt="" style="float:left;width:15px;margin:3px 5px 0 0;"><%=data[i].cor_view%>
+			              </span>
+                          <%if(data[i].is_study==0){%>
+                          <span class="lable_course" onclick="add_plan('<%=data[i].cor_id%>',this);event.preventDefault();event.stopPropagation();">添加课程</span>
+                          <%}else{%>
+                          <span class="lable_course1">已添加</span>
+                          <%}%>
+                      </div>                      
+                  </div>
+              </div>
+          </li> 
+    	<%}%>             
+		</script>
+	</div>
+</body>
+<script type="text/javascript" src="../../script/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script>
+	var lastPage = true,firstPageHaveData =true;
+	var page = 0;
+    var category = 0;
+    var label = 0;
+    var rank = '';
+    var time = '';
+	apiready = function() {
+		
+		course_list();
+		push_down(function(){
+			if(firstPageHaveData){
+				course_list();
+			}else{
+				setTimeout(function(){
+					push_down_over();
+				},500);
+			}
+		});
+		scrollBottom(function(){
+			if(lastPage){
+				course_list(1)
+			}
+		});
+		course_tab();
+		
+	};
+	function shuaXin(){
+		location.reload();
+	}
+	function tab(){
+    // 第一级
+    $('.aui-tab-item span').click(function(){
+      if($(this).siblings('ul').is(":hidden")){
+        $('.aui-mask').addClass('aui-mask-in');
+        $(this).children('img').attr('src','../../img/down.png').css('width','10px');
+        $(this).siblings('ul').show(); 
+        $(this).parent().siblings().children('ul').hide();      
+      }else{
+        $('.aui-mask').removeClass('aui-mask-in');
+        $(this).children('img').attr('src','../../img/left.png').css('width','5px');
+        $(this).siblings('ul').hide();         
+      } 
+    });
+    // 第二级
+    $('#course_tab >li div').click(function(){
+
+      $(this).parent().addClass('tab_active').siblings().removeClass('tab_active');
+      $(this).siblings('ul').show();
+      $(this).parent().siblings().find('ul').hide();
+      //alert($(this).siblings('ul').html())
+      $(this).siblings().siblings('ul').hide();
+      $('#course_category').text($(this).text());
+      category = $(this).attr('data-id');
+      label=0;
+      rank = '';
+      time = '';
+      course_list();
+    });
+    // 第三级
+    $('.third>li').click(function(){
+      $('#course_category').text($(this).text());
+      $('#course_tab').hide();
+      $('#tab span img').attr('src','../../img/left.png').css('width','5px');
+      $('.aui-mask').removeClass('aui-mask-in');
+      label = $(this).text();
+     
+      course_list();
+    });
+    $('.aa').click(function(){
+     
+      $(this).parent().hide();
+      $('#tab span img').attr('src','../../img/left.png').css('width','5px');
+      $('.aui-mask').removeClass('aui-mask-in');
+
+    })
+      // 浏览量点击事件
+    $('#play >li').click(function(){
+    	
+    	 $(this).addClass('tab_active').siblings().removeClass('tab_active');
+    	  $('#timeL >li').removeClass('tab_active');
+         rank = $(this).attr('data-rank');
+         time = '';
+         course_list();
+    });
+    // 播放时长点击事件
+     $('#timeL >li').click(function(){
+    	
+    	 $(this).addClass('tab_active').siblings().removeClass('tab_active');
+    	 $('#play >li').removeClass('tab_active');
+    	 rank ='';
+         time = $(this).attr('data-time');
+         course_list();
+    });
+    
+    $('.aui-mask').click(function(){
+    	$('#course_tab,#play,#timeL').hide();
+    	 $(this).removeClass('aui-mask-in');
+    })
+  }
+	// 课程分类
+    function course_tab(){
+			var URL = serverURL + 'app_interface/newCourse/course_category/';
+			URL+='?secret='+appSecret;
+			g_ajax(URL,function(ret)
+			{	//alert(JSON.stringify(ret.data))
+				if(ret.errCode==200){
+					$('#course_tab').html(bt('course_tab_tpl',ret));
+					tab();
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+				
+				api.parseTapmode();
+			})
+	} 
+	
+	function course_list(type){
+
+		if(type==1){
+			page = parseInt(page)+1;
+			$('#page').val(page);
+		}else{
+			page =1;
+			$('#page').val(page);
+			lastPage =true;	
+		}
+		var uid = get_local('uid');	
+		if(!is_define(uid)){
+	        uid="";
+        }
+		var URL = serverURL + 'app_interface/newCourse/course_free_list/';
+		URL+='?secret='+appSecret+'&uid='+uid+'&page='+page+'&category='+category+'&label='+label+'&rank='+rank+'&time='+time;
+		g_ajax(URL,function(ret)
+		{
+			
+			if(ret.errCode ==200||ret.errCode ==101){
+				if(ret.errCode ==200){
+					if( type == 1){
+						$('#course_list').append(bt('course_list_tpl',ret));
+					}else{
+						$('#course_list').html(bt('course_list_tpl',ret));
+					}
+				}else{
+					if(page==1){
+						firstPageHaveData = false;
+						lastPage = false;
+						$('#course_list').html('');
+						firstPage_no_data('course_list');
+						
+					}else{
+						lastPage = false;
+						no_data_more('course_list');
+					}
+				}
+				Echo.init();
+				push_down_over();
+				api.parseTapmode();
+			}else{
+				$toast(errMsg,1500);
+			}
+		})
+	}
+	//添加课程
+	function add_plan(cor_id,obj){
+		var uid = get_local('uid');
+		if(!is_define(uid)){
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+
+           }else{
+           		var URL = serverURL + 'app_interface/newCourse/add_my_study/';
+				var data = {
+				values: {
+					secret:appSecret,
+					uid:uid,
+					cor_id:cor_id
+					}
+				};
+				r_ajax(URL,data,function(ret){
+					if(ret.errCode == 200){
+						
+						$(obj).addClass('lable_course1').text('已添加');
+						$(obj).attr('onclick','');
+
+					}else{
+						$toast(ret.errMsg,1500);
+					}
+				})
+				api.parseTapmode();	
+           }
+		
+	}
+</script>
+</html>

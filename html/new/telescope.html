@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>题材望远镜</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+   	<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/telescope.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css"> 
+</head>
+<body>
+	<div id="header" class="aui-bg-blue">
+		<header class="aui-bar aui-bar-nav" >
+	        <a class="aui-pull-left aui-btn" ontouchstart="close_w();">
+	           <img src="../../img/back.png" alt="" style="width:27px;">
+	        </a>
+	        <div class="aui-title aui-font-size-20">题材望远镜</div>
+	    </header>
+	    <div class="tab">
+	        <div>
+	           <div id="tab1" class="tab-active" onclick="setFrameGroupIndex(0);">大盘异动</div>
+	           <div id="tab2" onclick="setFrameGroupIndex(1);">市场热点</div>  
+	        </div>        
+	    </div> 
+	</div>
+              
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script>
+  	apiready = function() {
+		var $header = $api.dom('#header');
+		$api.fixIos7Bar($header);
+		$api.fixStatusBar($header);
+		var $body = $api.dom('body');
+		var header_h = $api.offset($header).h;
+		api.openFrameGroup({
+	    name: 'group1',
+	    index:api.pageParam.index,
+	    preload:0,
+	    rect: {
+	        x: 0,
+	        y: header_h,
+	        w: 'auto',
+	        h: 'auto'
+	    },
+	    frames: [{
+	        name: 'telescope_c1',
+	        url: 'telescope_c1.html',
+	        bgColor: '#fff',
+	       
+	    }, {
+	        name: 'telescope_c2',
+	        url: 'telescope_c2.html',
+	        bgColor: '#000',
+	      
+	    }]
+		}, function(ret, err) {
+	    	setFrameGroupStatus(ret.index); 
+	    
+		});
+		api.setFrameGroupAttr({
+		    name: 'group1',
+		   scrollEnabled:false
+		});
+	};
+	function setFrameGroupIndex(frameIndex) {   
+        api.setFrameGroupIndex({name:'group1',index:frameIndex,scroll:false});  
+    	}   
+    function setFrameGroupStatus(frameIndex) {  
+        tab1 = $api.byId('tab1'), 
+        tab2= $api.byId('tab2')     
+        switch (frameIndex) {   
+            case 0: {     
+               	tab1.className = "tab-active"; 
+                tab2.className = "";   
+                break;  
+            }   
+            case 1: {   
+              	tab1.className = ""; 
+                tab2.className = "tab-active"; 
+                
+                break;  
+            }   
+                
+            default:    
+            break;  
+        }   
+    }   
+</script>
+</html>

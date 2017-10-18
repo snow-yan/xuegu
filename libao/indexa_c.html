@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>大礼包</title>
+	<link rel="stylesheet" href="../css/libao.css">
+</head>
+<body>
+	<!--<div class="libaopop">
+		<a class="libaoback" ontouchstart="close_w();"></a>
+		<a class="libaologin" onclick="login();"></a>
+		<img src="../img/libaopop.png">
+	</div>-->
+	<div class="libaomask"></div>
+	<div class="libaocontent">
+		<div class="lqlist">
+			<!--滚动-->
+			<div class="scrollbox">
+		    	<div id="scrollDiv">
+		        	<ul>
+		            	<li>13896****19<span>用户：领取了</span>学股网高级会员卡</li>
+		            	<li>18829****11<span>用户：领取了</span>学股网高级会员卡</li>
+		            	<li>18602****90<span>用户：领取了</span>学股网高级会员卡</li>
+		            	<li>18292****32<span>用户：领取了</span>学股网高级会员卡</li>
+		            	<li>18236****66<span>用户：领取了</span>学股网高级会员卡</li>
+		            	<li>13636****79<span>用户：领取了</span>学股网高级会员卡</li>
+		            	<li>13066****52<span>用户：领取了</span>学股网高级会员卡</li>
+		            	<li>13636****19<span>用户：领取了</span>学股网高级会员卡</li>
+		        	</ul>
+		    	</div>
+			</div>
+			<!--/滚动-->
+			<img src="../img/lqlist.png">
+		</div>
+		<div class="libaoinput">
+			<form>
+				<input name="" type="number" class="cardnum" id="cardnum" placeholder="请输入卡号">
+				<input name="" type="password" class="cardkey" id="cardkey" placeholder="请输入密码">
+				<input name="" type="button" class="cardsum" onclick="get_submit();">
+			</form>
+			<img src="../img/dhinput.png">
+		</div>
+		<div class="libaobg"><img src="../img/libaobg.jpg"></div>
+		<div class="lbbottom"><img src="../img/lbbottom.png"></div>
+	</div>
+</body>
+<script type="text/javascript" src="../script/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../script/jq_scroll.js" ></script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/self.js"></script>
+<script type="text/javascript" src="../script/template.js"></script>
+<script type="text/javascript">
+$(function(){
+	var docheight=$(document).height();
+	$(".libaocontent").css("height",docheight);
+	$(".lqlist").css("height",$(".lqlist img").height())
+	$("#scrollDiv").Scroll({line:1,speed:500,timer:1000,up:"but_up",down:"but_down"});
+	$(".libaomask").css("height",docheight);
+
+//	setTimeout(function(){
+//		//未登录弹出
+//		$(".libaopop,.libaomask").show();
+//		$("body").css({overflow:"hidden"});
+//		$(".libaopop").css("height",$(".libaopop img").height());
+//	},2000);	
+//		
+ })
+function get_submit(){
+		var uid= get_local('uid');
+		var URL = serverURL + "app_interface/dalibao/libao_lingqu/";
+		var cardnum = $("#cardnum").val();
+		var cardkey= $("#cardkey").val();
+		//alert(cardnum +'---'+cardkey)
+		if (!is_define(cardnum)) {
+			$toast("请输入卡号", 1000);
+			return false;
+		}
+		if (!is_define(cardkey)) {
+			$toast("请输入密码", 1000);                     
+			return false;
+		}
+		var data = {
+	 		values :{
+	 			uid:uid,
+	 			secret:appSecret,
+	 			key:cardnum,
+	 			pwd:cardkey	
+	 		}
+	 	};
+	 	r_ajax(URL,data,function(ret){
+	 		if(ret.errCode==0){
+	 			$toast('领取成功',1500);
+ 				open_w('index1','index1.html');
+	 		}else{
+	 			$toast(ret.errMsg, 1500);
+	 		}
+	 	})
+	}	
+
+</script>
+</html>

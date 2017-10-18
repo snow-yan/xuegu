@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+</head>
+<body>
+    <div class="login">
+        <img src="../img/login_bg.png" alt="">
+        <div id="header">
+            <img src="../img/login_back.png" alt="" class="top" ontouchstart="close_w();">
+        </div>
+        <form class="form-list">
+            <div class="control">
+                <div class="control-lable"><img src="../img/login1.png" alt=""></div>
+                <input type="tel" id="mobile" oninput="myFunction()" placeholder="手机号">
+            </div>
+            <div class="control">
+                <div class="control-lable"><img src="../img/login2.png" alt=""></div>
+                <input type="password" id="pwd" oninput="myFunction()" placeholder="密码" style="width:80%;">
+                <div class="control-lable"><img src="../img/login33.png" alt="" onclick="psd(this)"></div>
+              
+            </div>
+            <div class="control_btn control_btn_active" id="sureLogin"  style="letter-spacing: 1rem;padding-left:0.5rem;display:none;" onclick="go_login()">登录</div>
+            <div class="control_btn" id="login"  style="letter-spacing: 1rem;padding-left:0.5rem;">登录</div>
+            <div class="aui-font-size-12 aui-margin-0-10">
+                <span>
+                    <img src="../img/login_r.png" alt="" class="right">
+                  	  同意<span class="aui-text-blue"  onclick="open_w('service','service.html')">学股网服务协议</span>
+                </span>
+                <span class="aui-pull-right" id="res" style='display: none;'>
+	                <span onclick="open_w('forget_pwd','forget_pwd.html')" class="aui-text-blue aui-margin-r-5">忘记密码</span>|
+	                <span onclick="open_w('register','register.html')"class="aui-text-blue  aui-margin-l-5"  >立即注册</span>
+                </span>
+                 <span class="aui-pull-right" id="res1" >
+	                <span onclick="open_w('forget_pwd','forget_pwd.html')" class="aui-text-blue">忘记密码</span>
+	               
+                </span>
+            </div>                           
+        </form>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/self.js"></script> 
+<script type="text/javascript" src="../script/sdk_wx.js"></script>
+<script type="text/javascript" src="../script/sdk_qq.js"></script>
+<script type="text/javascript" src="../script/sdk_wb.js"></script>
+<script>
+	apiready = function()
+	{
+		wx = api.require('wx');
+		var h=$(window).height();
+		$('.login>img').height(h);
+		if(api.systemType=='ios'){
+			$('#res').hide();
+			$('#res1').show();
+		}else{
+			$('#res1').hide();
+			$('#res').show();
+		}
+	};
+	
+	
+	//	密码显示/不显示
+	function psd(obj){
+		var type=$('#pwd').attr('type');
+		if(type=='password'){
+			$(obj).attr('src','../img/login3.png');
+			$('#pwd').attr('type','text');
+		}else{
+			$(obj).attr('src','../img/login33.png');
+			$('#pwd').attr('type','password');
+		}
+	}
+	function myFunction(){
+		$('#sureLogin').hide();
+		$('#login').show();
+		var mobile = $("#mobile").val();
+		var password = $("#pwd").val();
+		if (is_define(mobile)&&is_define(password)) {
+			$('#sureLogin').show();
+			$('#login').hide();
+		}
+	}
+   function go_login(){
+		var URL = serverURL + "app_interface/user/user_login2/";
+		var phone_reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+		var mobile = $("#mobile").val();
+		var pwd = $("#pwd").val();
+		var deviceId = api.deviceId.replace(/\-/g, "");
+		if (!is_define(mobile)) {
+			$toast("请输入手机号", 1000);
+			return false;
+		}
+		if (!phone_reg.test(mobile)) {
+			$toast("手机号格式错误！", 1000);
+			return false;
+		}
+		if (!is_define(pwd)) {
+			$toast("请输入密码", 1000);                     
+			return false;
+		}
+		var data = {
+	 		values :{
+	 			user_name:mobile,
+	 			password:pwd,
+	 			secret:appSecret,
+	 			dev_label_id:deviceId
+	 		}
+	 	};
+	 	r_ajax(URL,data,function(ret){
+	 		//alert(JSON.stringify(ret))
+	 		if(ret.errCode==0){
+	 			set_local('is_youke',ret.data.is_youke);
+	 			set_local('uid',ret.data.uid);
+				set_local('user_name',ret.data.user_name);
+				ue_script("root","set_local('uid','"+ret.data.uid+"');rong_start()");
+	 			$toast('登录成功',1000);
+				back(ret.data.uid,ret.data.face,ret.data.nakename);
+	 		}else{
+	 			$toast(ret.errMsg, 1500);
+	 		}
+	 	})
+	}
+	function back(uid,face,nakename){
+		refreshNews();
+		set_local('allow_no_wifi_play','yes');
+		set_local('face',face);
+		set_local('nakename',nakename);
+		var pars = api.pageParam;
+		switch (pars.frameName)
+		{
+		case 'hot_answer_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "getAnswerList();"
+			});
+			close();
+		  	break;
+		case 'hot_lecturer_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "getHotLecturer();"
+			});
+			close();
+		  	break;
+		case 'video_pause':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.winName+'_c',
+			    script: "Video_details();"
+			});
+			close();
+		  	break;
+	  	case 'class_details_c':
+			api.execScript({
+			    name: pars.winName,
+			    script: "setUID("+uid+","+pars.cor_id+");"
+			});
+			close();
+		  	break;
+		case 'course_list_c':
+			api.execScript({
+			    name: pars.winName,
+			     frameName: pars.frameName,
+			    script: "shuaXin();"
+			});
+			close();
+		  	break;
+	  	case 'bull_talk_stocks_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "setUID("+uid+");"
+			});
+			close();
+		  	break;
+	  	case 'choice_details_c':
+			api.execScript({
+			    name: pars.winName,
+			    script: "getAnswerDetails();"
+			});
+			close();
+		  	break;
+	  	case 'choice_details_self_c':
+			api.execScript({
+			    name: pars.winName,
+			    script: "getAnswerDetails();"
+			});
+			close();
+		  	break;
+	  	case 'training_camp_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "reload1();"
+		});
+		close();
+	  	break;
+	  	case 'recharge_ios_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "reload1();"
+		});
+		close();
+	  	break;
+	  	case 'sure_order_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "reload2();"
+		});
+		api.execScript({
+		    name: 'album_details',
+		    frameName: 'album_details_c',
+		    script: "reload5();"
+		});
+		close();
+	  	break;
+	  	case 'ask_questions_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "reload3();"
+		});
+		close();
+	  	break;
+	  	case 'put_questions_to_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "reload4();"
+		});
+		api.execScript({
+		    name: 'my_attention_persons',
+		    frameName:'my_attention_persons_c',
+		    script: "get_my_attention();"
+		});
+		close();
+	  	break;
+	  	case 'get_gift_c':
+		api.execScript({
+		    name: pars.winName,
+		    frameName: pars.frameName,
+		    script: "is_getlibao();"
+		});
+			close();
+		break;
+		case 'album_details_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "reload5();"
+			});
+			close();
+		break;
+		default:
+			close();
+		}
+		
+	}
+	function close(){
+			setTimeout(function() {
+				close_w();
+			}, 1000);
+		}
+</script>
+</html>

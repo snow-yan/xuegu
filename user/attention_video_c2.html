@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>关注的视频</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style>
+			.uc-a04{border-radius: 4px}
+			.grayBagCircle{
+				width: 14px;
+				height: 14px;
+				border: 2px solid #bbbbbb;
+				border-radius: 9px;
+			}
+			.whiteCircle{
+				width: 8px;
+				height: 8px;
+				border: 3px solid #ffffff;
+				border-radius: 9px;
+			}
+			.c-fd0000{
+				background: #fd0000;
+			}
+			.t-fd0000{
+				color: #fd0000;
+			}  	
+			.h18{
+				height: 18px;
+			}
+			.ellipsis-3 {
+				
+				display: -webkit-box;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				word-wrap: break-word;
+				word-break: break-all;
+				white-space: normal !important;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+			}
+		</style>
+	</head>
+	<body class="c-wh">
+		<input type="hidden" id="page" value="1"/>
+		<div id="attention_video"></div>
+		<script type="text/html" id="attention_video_list">
+			<div class=" h10p w10 c-edf0f5"></div>
+			<%
+		    for(var i=0;i< data.length;i++){
+		    %>
+			   <li class="pstnr ubb ub-e4e4e4" onclick="open_w('zhanfa_course','../html/course_order/zhanfa_course.html',{'aid':'<%=data[i].special_id%>','special_price':'<%=data[i].special_price%>'})">
+			   		<div class="w1 h18 fll tx-c circle dspn" onclick="changeStatus(this);">
+						<div class="grayBagCircle dsplb">
+							<div class="whiteCircle"></div>
+						</div>
+					</div>
+					<div class="clo_two pstnr textPic">
+					    <div class=" w95 area_auto">
+							<div class="col_list">
+								<div class="pdt07 pdb07 pdl02 pdr05 pstnr">
+									<img src="../image/icon/echo_bg.jpg" style=" height:<%=api.frameWidth/3.4-15%>px;" data-echo="<%=data[i].course_img%>" class="w10 uc-a02 ovd" alt="" />
+								</div>
+							</div>
+							<div class="col_list">
+								<div class="pdr02 pdt07">
+									<p class="umh125 pdb025 ftz085 txo"><%=data[i].title%></p>
+									<p class="t-c0c0c0 ftz075 w10 ellipsis-3">
+										<%=data[i].info%>
+									</p>
+								</div>
+							</div>
+							<p class="pstna absl50p absb05 ovd t-ff7b00 umh15 ftz075">￥<%=data[i].special_price%></p>
+							
+						</div>
+					</div>
+				</li>
+			<%
+			}
+			%>
+		</script>
+		<footer class="pstnf absb0 w10 c-wh zindex1 dspn ubt ub-e0e0e0">
+			<div class="umh3 pdl05 pdr05">
+				<div class="fll w5">
+					<div class="grayBagCircle dsplb" onclick="selectAll(this)">
+						<div class="whiteCircle"></div>
+					</div>
+					<span class="pdl05 all">全选</span>
+				</div>
+				<div class="flr w5 tx-r cancel">
+					<font class="t-fd0000">删除</font>
+				</div>
+			</div>
+		</footer>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var lastPage = true,firstPageHaveData = true,edit=false;
+		apiready = function() 
+		{
+			get_attention_video();
+			push_down(function(){
+				if(firstPageHaveData){
+					get_attention_video();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					get_attention_video('next');
+				}
+			});
+		};
+		function changeStatus(el){
+			var that = $(el).children().children();
+			if( $(that[0]).hasClass('c-fd0000') )
+			{
+				$(that[0]).removeClass('c-fd0000');
+			}
+			else
+			{
+				$(that[0]).addClass('c-fd0000');
+			}
+		}
+//		编辑关注列表
+		function editAttentionList()
+		{
+			edit = true;
+			$('.circle').removeClass('dspn');
+			$('.textPic').addClass('w9');
+			$('footer').removeClass('dspn');
+			$('ul').css('padding-bottom','3em');
+		}
+//		取消编辑关注列表
+		function cancelEdit()
+		{
+			edit = false;
+			$('.circle').addClass('dspn');
+			$('.textPic').removeClass('w9');
+			$('footer').addClass('dspn');
+			$('ul').css('padding-bottom','0');
+		}
+		function selectAll(el){
+			var that = $(el).children();
+			if( $(that[0]).hasClass('c-fd0000') )
+			{
+				$('.whiteCircle').removeClass('c-fd0000');
+				$('.all').text('全选');
+				$('.all').removeClass('t-999');
+				$('.cancel').addClass('dspn');
+			}
+			else
+			{
+				$('.whiteCircle').addClass('c-fd0000');
+				$('.all').text('取消全选');
+				$('.all').addClass('t-999');
+				$('.cancel').removeClass('dspn');
+			}
+		}
+		function get_attention_video(type){
+			var uid = get_local('uid');
+			if(type=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			var pagesize = 1;
+			var URL = serverURL + 'app_interface/coursePack/coursePack_order_pay_success/';
+			URL+='?secret='+appSecret+'&uid='+uid+'&page='+page;
+			g_ajax(URL,function(ret)
+			{	
+				if(ret.errCode==0 || ret.errCode==101){
+					if(ret.errCode==0){
+						if(type==='next'){
+							$('#attention_video').append(bt('attention_video_list',ret));
+						}else{
+							$('#attention_video').html(bt('attention_video_list',ret));
+						}
+						var h = $(".textPic").height();
+						$('.circle').css('padding-top',h/2-18+'px;');
+						if(edit){
+							editAttentionList();
+						}
+					}else{
+						if( page==1 ){
+							firstPageHaveData = false;
+							lastPage =false;
+							firstPage_no_data('attention_video');
+						}else{
+						lastPage =false;
+						no_data_more('attention_video');
+						}
+					}
+					push_down_over();
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+				Echo.init({offset: 0,throttle:0});
+			})
+		}
+ 	</script>
+</html>

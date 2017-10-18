@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>图片裁剪</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-edf0f5">
+		<div class="pstnf ovd absb0 w10">
+			<div class="w5 fll tx-c c-wh umh3" tapmode="bg-e5e6e7" onclick="closeClip()">
+				取消
+			</div>
+			<div class="w5 fll tx-c c-4371bc umh3" tapmode="bg-e5e6e7" onclick="imageSave()">
+				确定
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript">
+		var pras,FNImageClip;
+		apiready = function() {
+			pras = api.pageParam;
+			FNImageClip = api.require('FNImageClip');
+			imageClip();
+		};
+		//图像剪裁
+		function imageClip() {
+			FNImageClip.open({
+				rect : {
+					x : pras.x1,
+					y : pras.y1,
+					w : pras.w1,
+					h : pras.h1
+				},
+				srcPath : pras.srcPath,
+				style : {
+					mask : 'rgba(0,0,0,.5)',
+					clip : {
+						w : pras.w2,
+						h : pras.h2,
+						x : pras.x2,
+						y : pras.y2,
+						borderColor : '#0f0',
+						borderWidth : 1,
+						appearance : 'rectangle'
+					}
+				},
+				mode : 'image',
+				fixedOn : api.frameName
+			}, function(ret, err) {
+				if (ret) {
+//					console.log(json2str(ret));
+				} else {
+//					console.log(json2str(err));
+				}
+			});
+		}
+
+		function imageSave() {
+			FNImageClip.save({
+				destPath : pras.srcPath,
+				copyToAlbum : false,
+				quality : 1
+			}, function(ret, err) {
+				if (ret) {
+					//修改用户头像
+					if(pras.rank=='0'){
+						api.execScript({
+							name : 'user_info',
+							frameName : 'user_info_c',
+							script : 'savePic("'+ret.destPath+'");'
+						});
+					}else if(pras.rank=='set_live_frame'){
+						api.execScript({
+							name : 'liveKongWin',
+							frameName : 'set_live_frame',
+							script : 'savePic("'+ret.destPath+'");'
+						});
+					}else if(pras.rank=='set_live_frame'){
+						api.execScript({
+							name : 'liveKongWin',
+							frameName : 'end_live_frame',
+							script : 'savePic("'+ret.destPath+'");'
+						});
+					}
+					setTimeout(function() {
+						closeClip();
+					}, 200);
+				} else {
+					console.log(JSON.stringify(err));
+				}
+			});
+		}
+
+		function closeClip() {
+			FNImageClip.close();
+			setTimeout(function() {
+				close_f();
+			}, 300);
+		}
+	</script>
+</html>

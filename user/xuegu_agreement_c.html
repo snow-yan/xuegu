@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>学股网协议</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">
+	    <div class="box w95 area_auto" id="agreement">
+		  <script type="text/html" id="agreement_text">
+			<p class="ovd pdt05 pdb05 ftz095"><%:=data.detail%></p>
+		  </script>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			getAgreement();
+		};
+		function getAgreement(){
+			var URL = serverURL + 'app_interface/protocal/get_protocal/';
+			URL+='?secret='+appSecret+'&type=5';
+			g_ajax(URL,function(ret)
+			{
+			    if(ret.errCode ==0){
+					$('#agreement').html(bt('agreement_text',ret));
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+	</script>
+</html>
+	

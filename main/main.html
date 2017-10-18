@@ -1,0 +1,1204 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>首页</title>
+		<link rel="stylesheet" type="text/css" href="../css/aui.css" />
+		<link rel="stylesheet" type="text/css" href="../css/index.css" />
+		<link rel="stylesheet" type="text/css" href="../css/swiper.min.css">
+		<link rel="stylesheet" type="text/css" href="../cool_css/cool.css">
+		<style>
+			.swiper-container {
+				width: 95%;
+				padding: 10px 0;
+			}
+			.swiper-slide {
+				text-align: center;
+				font-size: 18px;
+				background: #fff;
+				/* Center slide text vertically */
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-box-pack: center;
+				-ms-flex-pack: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+				-webkit-box-align: center;
+				-ms-flex-align: center;
+				-webkit-align-items: center;
+				align-items: center;
+			}
+			.dot {
+				width: 5px;
+				height: 5px;
+				border-radius: 50%;
+				background: #d53c3e;
+				display: inline-block;
+				vertical-align: middle;
+				margin: -2px 5px 0 0;
+			}
+			.border-r {
+				border-right: 1px solid #d1d1d1
+			}
+			.dowebok {
+				overflow-y: hidden;
+				margin-top: -49px;
+				margin-left: 50px;
+			}
+			.dowebok li {
+				overflow: hidden;
+				zoom: 1;
+			}
+		</style>
+	</head>
+	<body>
+		<img src="../img/edit1.png" alt="" class="edita" onclick="open_w('release_btn','../html/new/release_btn.html')">
+		<div id="header_trend"></div>
+		<script type="text/html" id="header_trend_tpl">
+			<%
+			if(data.id==2){
+			%>
+			<!-- 谨慎头 -->
+			<header class="aui-bar aui-bar-nav sun" id="hhh" style="background: #0055aa;line-height:2.5rem;">
+			<a class="aui-pull-left">
+			<img src="../img/lizi.png" alt="" >
+			</a>
+			<div class="aui-title"><img src="../img/sunhead1.png" alt="" ></div>
+			<a class="aui-pull-right" >
+			<img src="../img/search.png" alt="" class="searcha">
+			</a>
+			</header>
+			<%
+			}else if(data.id==3){
+			%>
+			<!-- 乐观头 -->
+			<header class="aui-bar aui-bar-nav sun"  style="background:#d53c3e;line-height:2.5rem;">
+			<a class="aui-pull-left">
+			<img src="../img/lizi.png" alt="" >
+			</a>
+			<div class="aui-title"><img src="../img/sunhead.png" alt="" ></div>
+			<a class="aui-pull-right" >
+			<img src="../img/search.png" alt="" class="searcha">
+			</a>
+			</header>
+			<%
+			}else if(data.id==4){
+			%>
+			<!-- 悲观头 -->
+			<header class="aui-bar aui-bar-nav sun" style="background: #13ba8d;line-height:2.5rem;">
+			<a class="aui-pull-left">
+			<img src="../img/lizi.png" alt="" >
+			</a>
+			<div class="aui-title"><img src="../img/rainhead.png" alt="" ></div>
+			<a class="aui-pull-right" >
+			<img src="../img/search.png" alt="" class="searcha">
+			</a>
+			</header>
+			<%
+			}
+			%>
+		</script>
+		<!-- 搜索 -->
+		<header class="aui-bar aui-bar-nav" id="search" >
+			<div class="aui-pull-left name" style="font-size:1.2rem;">
+				学股网
+			</div>
+			<div class="aui-title search_animate" style="left:5rem;right:3.0rem;">
+				<div class="searchbar-input" tapmode onclick="open_w('search','../html/search.html')">
+					<i class="aui-iconfont aui-icon-search"></i>
+					<form action="javascript:search();" >
+						<input type="search" placeholder="搜索投顾/课程">
+					</form>
+				</div>
+			</div>
+			<div class="aui-pull-right" onclick="open_w('release_btn','../html/new/release_btn.html');" id="friste">
+				<img src="../img/edit.png" alt="" >
+			</div>
+		</header>
+		<div id='xiding'>
+			<div style="background:#0055aa;" id="ding"></div>
+			<!-- 新闻 -->
+			<div class="news aui-bg-white" onclick="open_w('telescope','../html/new/telescope.html',{index:1})">
+				<div class="news-content">
+					<div class="aui-padded-b-10" style="overflow:hidden;" id="telescope"></div>
+					<script type="text/html" id="telescope_tpl">
+						<div class="left border-r" style="width:30%;">
+						<img src="../img/telescope.png" alt="">
+						<div class="word world-red"><b class="aui-font-size-16">题材</b>望远镜</div>
+						</div>
+						<div class="right aui-col-xs-8">
+						<div class="aui-font-size-16 world-red"><b><%=data.title%></b><span><%=data.label%></span></div>
+						<div class="aui-ellipsis-1 world-gray title aui-font-size-12">
+						<div class="dot"></div>
+						<%=data.describe%>
+						</div>
+						<div class="world-red aui-font-size-12">
+						<%
+						for(var i=0;i< data.shares.length;i++){
+						if(i==1){
+						if(data.shares[i].rise_float>0){
+						%>
+						<span class="aui-margin-r-5"><%=data.shares[i].name%></span><span>+<%=data.shares[i].rise_float%>%</span>
+						<%
+						}else{
+						%>
+						<span class="aui-margin-r-5" style="color:green;"><%=data.shares[i].name%></span><span style="color:green;"><%=data.shares[i].rise_float%>%</span>
+						<%
+						}
+						%>
+						</br>
+						<%
+						}else{
+						if(data.shares[i].rise_float>0){
+						%>
+						<span class="aui-margin-r-5"><%=data.shares[i].name%></span><span class="aui-margin-r-15">+<%=data.shares[i].rise_float%>%</span>
+						<%
+						}else{
+						%>
+						<span class="aui-margin-r-5" style="color:green;"><%=data.shares[i].name%></span><span class="aui-margin-r-15" style="color:green;"><%=data.shares[i].rise_float%>%</span>
+						<%
+						}
+						}
+						}
+						%>
+						</div>
+						</div>
+					</script>
+					<div class="aui-border-t footer" id="telescope_lable"></div>
+					<script type="text/html" id="telescope_lable_tpl">
+						<%
+						for(var i=0;i< data.length;i++){
+						%>
+						<b class="aui-margin-r-5"><%=data[i].title%> </b>
+						<span class="aui-margin-r-20 aui-font-size-12"  style="padding:0.05rem 0.2rem 0 0.2rem;border: 1px solid #dfe1e3;color:#9a9a9a;"><%=data[i].label%></span>
+						<%
+						}
+						%>
+					</script>
+				</div>
+			</div>
+			<!-- 大盘 -->
+			<div class="dapan aui-bg-white" >
+				<div class="head " onclick="open_w('telescope','../html/new/telescope.html',{index:0})">
+					<b class="lable aui-margin-r-10">异动</b>
+					<div class="dowebok">
+						<ul id="dapan"></ul>
+					</div>
+				</div>
+				<script type="text/html" id="dapan_tpl">
+					<%
+					for(var i=0;i< data.length;i++){
+					%>
+					<li class="aui-ellipsis-1"><%=data[i].cTime%><span class="aui-margin-r-10"><%=data[i].abnormal_describe%></span></li>
+					<%
+					}
+					%>
+				</script>
+				<div class="swiper-container aui-border-b" id="swipe1">
+					<script id="banner_swiper" type="text/html">
+						<div class="swiper-wrapper">
+						<%
+						for(var i=0;i< data.length;i++){
+						if(!data[i].type){
+						%>
+						<div class="swiper-slide">
+						<img src="../image/icon/echo_bg.jpg" style=" height:<%=api.frameWidth/1.8-15%>px;" data-echo="<%=data[i].pic %>" alt="<%=data[i].alt %>" class="w10" onclick="open_url('<%=data[i].href %>')">
+						</div>
+						<%
+						}else{
+						switch(data[i].type)
+						{
+						case '0':
+						%>
+						<div class="swiper-slide">
+						<img src="../image/icon/echo_bg.jpg" style="height:<%=api.frameWidth/1.8-15%>px;" data-echo="<%=data[i].pic %>" alt="<%=data[i].alt %>" class="w10" onclick="open_url('<%=data[i].href %>')">
+						</div>
+						<%
+						break;
+						case "1":
+						%>
+						<div class="swiper-slide">
+						<img src="../image/icon/echo_bg.jpg" style="height:<%=api.frameWidth/1.8-15%>px;" data-echo="<%=data[i].pic %>" alt="<%=data[i].alt %>" class="w10" onclick="open_w('class_details','../html/class_details.html',{'cor_id':'<%=data[i].target_id%>',UID:get_local('uid')})">
+						</div>
+						<%
+						break;
+						case "2":
+						%>
+						<div class="swiper-slide">
+						<img src="../image/icon/echo_bg.jpg" style="height:<%=api.frameWidth/1.8-15%>px;" data-echo="<%=data[i].pic %>" alt="<%=data[i].alt %>" class="w10" onclick="open_w('choice_details','../html/choice_details.html',{'question_id':<%=data[i].target_id%>,'uid':get_local('uid')})">
+						</div>
+						<%
+						break;
+						case "3":
+						%>
+						<div class="swiper-slide">
+						<img src="../image/icon/echo_bg.jpg" style="height:<%=api.frameWidth/1.8-15%>px;" data-echo="<%=data[i].pic %>" alt="<%=data[i].alt %>" class="w10" onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=data[i].target_id%>,uid:get_local('uid'),name:api.winName,frameName:api.frameName});">
+						</div>
+						<%
+						break;
+						case "5":
+						%>
+						<div class="swiper-slide">
+						<img src="../image/icon/echo_bg.jpg" style="height:<%=api.frameWidth/1.8-15%>px;" data-echo="<%=data[i].pic %>" alt="<%=data[i].alt %>" class="w10" onclick="open_w('album_details','../html/album_details.html',{'aid':'<%=data[i].target_id%>'})">
+						</div>
+						<%
+						break;
+						case "6":
+						%>
+						<div class="swiper-slide">
+						<img src="../image/icon/echo_bg.jpg" style="height:<%=api.frameWidth/1.8-15%>px;" data-echo="<%=data[i].pic %>" alt="<%=data[i].alt %>" class="w10" onclick="open_w('his_broadcast_live','../html/his_broadcast_live.html',{uid:'<%=data[i].target_id%>'})">
+						</div>
+						<%
+						break;
+						case "7":
+						%>
+						<div class="swiper-slide">
+						<img src="../image/icon/echo_bg.jpg" style=" height:<%=api.frameWidth/1.8-15%>px;" data-echo="<%=data[i].pic %>" alt="<%=data[i].alt %>" class="w10" onclick="extra('<%=data[i].target_id%>')">
+						</div>
+						<%
+						break;
+						}
+						}
+						}
+						%>
+						</div>
+						<div class="swiper-pagination" id="swipe1_page"></div>
+					</script>
+				</div>
+				<div class="dapan_trend" id="dapan_trend"></div>
+				<script type="text/html" id="dapan_trend_tpl">
+					<%
+					if(data.id==2){
+					%>
+					<div style="overflow: hidden;height:6rem;margin-right: 1rem;">
+					<div class="left aui-col-xs-4 aui-text-center aui-margin-t-15">
+					<img src="../img/flag3.png" alt="" >
+					<div class="word" style="color:#085aad"><b class="aui-font-size-16">大盘</b>风向标</div>
+					</div>
+					<div class="right aui-col-xs-8" style="height:6rem;position: relative;">
+					<div id="container2" style="z-index:4;width:100%;height:10rem;position: absolute;bottom:-3.5rem;"></div>
+					<div class="a a0 ab"></div>
+					<div class="a a1 ab"></div>
+					<div class="a a2 ab"></div>
+					<div class="a a3 ab"></div>
+					<div class="b" style="border-right:1px solid #78a5d2;"></div>
+					<div class="sun1"><img src="../img/sun1.png" alt="" style="height:2.5rem;"></div>
+					</div>
+					</div>
+					<div class="bottom" style="background:#085aad;">
+					<b><%=data.direction_describe%></b>
+					</div>
+					<%
+					}else if(data.id==3){
+					%>
+					<div style="overflow: hidden;height:6rem;margin-right: 1rem;">
+					<div class="left aui-col-xs-4 aui-text-center aui-margin-t-15">
+					<img src="../img/flag.png" alt="" >
+					<div class="word world-red"><b class="aui-font-size-16">大盘</b>风向标</div>
+					</div>
+					<div class="right aui-col-xs-8" style="height:6rem;position: relative;">
+					<div id="container" style="z-index:4;width:100%;height:10rem;position: absolute;bottom:-3.5rem;"></div>
+					<div class="a a0"></div>
+					<div class="a a1"></div>
+					<div class="a a2"></div>
+					<div class="a a3"></div>
+					<div class="b"></div>
+					<div class="sun1"><img src="../img/sun.png" alt="" style="height:2.5rem;"></div>
+					</div>
+					</div>
+					<div class="bottom">
+					<b><%=data.direction_describe%></b>
+					</div>
+					<%
+					}else if(data.id==4){
+					%>
+					<div style="overflow: hidden;height:6rem;margin-right: 1rem;">
+					<div class="left aui-col-xs-4 aui-text-center aui-margin-t-15">
+					<img src="../img/flag1.png" alt="" >
+					<div class="word" style="color:#13ba8d"><b class="aui-font-size-16">大盘</b>风向标</div>
+					</div>
+					<div class="right aui-col-xs-8" style="height:6rem;position: relative;">
+					<div id="container1" style="z-index:4;width:100%;height:10rem;position: absolute;bottom:-3.5rem;"></div>
+					<div class="a a0 aa"></div>
+					<div class="a a1 aa"></div>
+					<div class="a a2 aa"></div>
+					<div class="a a3 aa"></div>
+					<div class="b" style="border-right:1px solid #13ba8d;"></div>
+					<div class="sun1"><img src="../img/rain.png" alt="" style="height:2.5rem;"></div>
+					</div>
+					</div>
+					<div class="bottom" style="background:#13ba8d;">
+					<b><%=data.direction_describe%></b>
+					</div>
+					<%
+					}
+					%>
+				</script>
+			</div>
+		</div>
+		<!-- 资讯 -->
+		<div class="zixun aui-bg-white">
+			<div class="head aui-bg-white" id="tab"></div>
+			<script type="text/html" id="tab_tpl">
+				<span class="tab tab-active aui-margin-l-10" data-id="0" data-label="0" onclick="tab_click(this)">全部</span>
+				<span class="tab" data-id="1" data-label="0" onclick="tab_click(this)">谈股</span>
+				<%
+				for(var i=0;i< data.length;i++){
+				%>
+				<span class="tab" data-id="3" data-label="<%=data[i].id%>" onclick="tab_click(this)"><%=data[i].label%></span>
+				<%
+				}
+				%>
+				<span class="tab" data-id="2" data-label="0" onclick="tab_click(this)">问股</span>
+			</script>
+			<input type="hidden" id="page" value="1"/>
+			<ul class="aui-list aui-media-list" id="message_list"></ul>
+			<script type="text/html" id="message_list_tpl">
+				<%
+				for(var i=0;i< data.length;i++){
+				if(data[i].article_type==1){
+				%>
+				<!--谈股-->
+				<li class="aui-list-item" onclick="open_w('talk_detail','../html/new/talk_detail.html',{'tg_id':'<%=data[i].type_id%>'})">
+				<div class="aui-media-list-item-inner" >
+				<div class="aui-list-item-inner">
+				<div class="aui-list-item-title aui-margin-t-10">
+				<b class="aui-font-size-18 aui-ellipsis-2"><%=data[i].recommend_title%></b>
+				</div>
+				<div class="aui-list-item-text aui-padded-t-5">
+				<div  class="aui-ellipsis-1"><%=data[i].content%></div>
+				</div>
+				</div>
+				</div>
+				<div class="aui-padded-b-15 aui-padded-t-10">
+				<b class="lable aui-margin-r-10">谈股</b><%=data[i].userName%>
+				<span class="aui-pull-right aui-margin-r-10"><img src="../img/eye.png" alt="" style="float:left;width:17px;margin:2px 5px 0 0;"><%=data[i].page_view%></span>
+				<span class="aui-pull-right aui-margin-r-10"><img src="../img/date.png" alt="" style="float:left;width:13px;margin:2px 5px 0 0;"><%=data[i].recommend_time%></span>
+				</div>
+				</li>
+				<%
+				}else if(data[i].article_type==2){
+				%>
+				<!--问股-->
+				<li class="aui-list-item aui-padded-b-10" onclick="open_w('choice_details','../html/choice_details.html',{'question_id':<%=data[i].type_id%>,'uid':get_local('uid')})">
+				<div class="aui-media-list-item-inner aui-padded-t-10">
+				<b class="aui-list-item-inner aui-font-size-18 word-black">
+				<span class="word-yellow">
+				<span class="aui-pull-left">【悬赏<%=data[i].question_reward%></span>
+				<img src="../img/guzi.png" alt="" style="width:13px;float:left;margin:6px 0 0 2px;">】
+				</span><%=data[i].content%>
+				</b>
+				</div>
+				<div class="aui-info">
+				<div class="aui-info-item aui-font-size-12">
+				<img src="../img/cup1.png" style="width:1rem"/>
+				<span class="aui-margin-l-5" style="color:#000;"><%=data[i].user_name%></span>
+				</div>
+				<div class="aui-info-item aui-font-size-12">
+				<img src="../img/date.png" style="height:13px;margin-top:-2px;" alt="">
+				<span class="aui-margin-l-5 aui-margin-r-5 aui-text-black" ><%=data[i].recommend_time%></span>
+				<img src="../img/comment.png" style="height:15px;" alt="">
+				<span class="aui-margin-l-5 aui-text-black"><%=data[i].answer_users%></span>
+				</div>
+				</div>
+				<div class="answer aui-font-size-12 aui-padded-10 aui-margin-r-10">
+				<%=data[i].question_best_answer%>
+				</div>
+				</li>
+				<%
+				}else if(data[i].article_type==3){
+				%>
+				<!--文章-->
+				<li class="aui-list-item" onclick="open_w('article_detail','../html/new/article_detail.html',{'article_id':'<%=data[i].type_id%>'})">
+				<div class="aui-media-list-item-inner" >
+				<div class="aui-list-item-inner">
+				<div class="aui-list-item-title aui-margin-t-15">
+				<b class="aui-font-size-18 aui-ellipsis-2" ><%=data[i].content%></b>
+				</div>
+				<div class="aui-list-item-text">
+				<div  class="aui-ellipsis-1 aui-margin-t-5"><%=data[i].message%></div>
+				</div>
+				</div>
+				<%
+				if(data[i].breviary_pic!=''){
+				%>
+				<div class="aui-list-item-media " style="width:7rem;">
+				<img src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].breviary_pic%>" height="75px" width="100%">
+				</div>
+				<%
+				}else{
+				%>
+				<div class="aui-list-item-media " style="display:none;">
+				</div>
+				<%
+				}
+				%>
+				</div>
+				<div class="aui-padded-b-15 aui-margin-t-5">
+				<b class="lable aui-margin-r-10" ><%=data[i].article_label%></b><%=data[i].user_name%>
+				<span class="aui-pull-right aui-margin-r-10"><img src="../img/eye.png" alt="" style="float:left;width:17px;margin:2px 5px 0 0;"><%=data[i].page_view%></span>
+				</div>
+				</li>
+				<%
+				}else if(data[i].article_type==4){
+				%>
+				<!--用户-->
+				<li class="aui-list-item aui-list-item-middle" onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=data[i].type_id%>,uid:get_local('uid'),name:api.winName,frameName:api.frameName})">
+				<a>
+				<div class="aui-media-list-item-inner">
+				<div class="aui-list-item-media" style="width:3rem;">
+				<img src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].headImgUrl%>" class="aui-img-round aui-list-img-sm" >
+				</div>
+				<div class="aui-list-item-inner aui-padded-t-10">
+				<div class="aui-list-item-text">
+				<b class="aui-list-item-title aui-font-size-18"><%=data[i].content%></b>
+				<%if(data[i].focus==1){ %>
+				<div class="focus1 a1" onclick="change_attention(this,'0',<%=data[i].type_id%>);event.preventDefault();event.stopPropagation();">已关注</div>
+				<div class="focus a0" 	onclick="change_attention(this,'1',<%=data[i].type_id%>);event.preventDefault();event.stopPropagation();" style="display: none;">+关注</div>
+				<%}else{%>
+				<div class="focus a0" 	onclick="change_attention(this,'1',<%=data[i].type_id%>);event.preventDefault();event.stopPropagation();">+关注</div>
+				<div class="focus1 a1" 	onclick="change_attention(this,'0',<%=data[i].type_id%>);event.preventDefault();event.stopPropagation();" style="display: none;">已关注</div>
+				<%}%>
+				</div>
+				<div class="aui-list-item-text">
+				<div class="aui-margin-t-5" style="color:#808080;">
+				<img src="../img/people.png" alt="" style="width:0.75rem;float:left;margin-top:3px;"><span class="aui-margin-l-5"><%=data[i].friend_count%>粉丝</span>
+				<span class="aui-margin-l-10"><%=data[i].signature%></span>
+				</div>
+				</div>
+				</div>
+				</div>
+				</a>
+				</li>
+				<%
+				}
+				}
+				%>
+			</script>
+			<!-- <div class="live">
+			<div class="aui-margin-10 img1">
+			<img src="../img/content4.png" alt="" style="width:100%;">
+			<div class="shade">
+			<img src="../img/live.png" alt="">
+			</div>
+			</div>
+			<div class="aui-padded-10">
+			<b class="lable aui-margin-r-10" >栏目</b>盘中说股
+			<span class="aui-pull-right aui-margin-r-10"><img src="../img/people.png" alt="" style="float:left;width:20px;margin:3px 5px 0 0;">5920观看</span>
+			</div>
+			</div>
+			<div class="head" style="padding:0 10px;">
+			<b class="aui-margin-r-5 aui-font-size-16">9:30</b>
+			<b class="aui-font-size-16">【今日大盘】</b>
+			<span class="aui-pull-right"><img src="../img/playback.png" alt="" style="height:1.2rem;margin-top:15px;"></span>
+			</div>		     -->
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+	<script type="text/javascript" src="../script/jquery.vticker-min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+	<script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script>
+	<script>
+		var is_scroll = true;
+		// 头部特效
+		var lastPage = true, firstPageHaveData = true, article_type = 0, article_label = 0, first;
+		apiready = function() {
+			var $header = $api.dom('#search');
+			$api.fixIos7Bar($header);
+			$api.fixStatusBar($header);
+			header_h = $api.offset($header).h;
+			$("body").css("padding-top", header_h + "px");
+			if (api.systemType == 'android') {
+				$('#ding').height(header_h - 40);
+			} else {
+				$('#ding').height(header_h - 10);
+			}
+			
+			telescope();
+			// 跑马灯
+			$('.dowebok').vTicker({
+				showItems : 5,
+				pause : 3000,
+				height : 40
+			});
+			// 页面加载完开始加载信息流部分
+			message_list('up');
+			//下拉刷新
+			push_down(function() {
+				if (firstPageHaveData) {
+					message_list('up')
+				} else {
+					setTimeout(function() {
+						push_down_over();
+					}, 500);
+				}
+			});
+//			scrollBottom(function() {
+//				if (lastPage && is_scroll) {
+//					message_list('next');
+//				}
+//			});
+			scrollBottom(function() {
+				if (lastPage) {
+					message_list('next');
+				}
+			});
+			if (api.systemType == 'android') {
+				new_gift();	
+			}
+		
+		};
+		function Dynamic(){
+	        location.reload();
+		}
+		function extra(target_id) {
+			if(api.systemType!='ios'){
+				var type=0;
+				var URL = serverURL + 'app_interface/html/get_html/';
+				URL += '?secret=' + appSecret + '&html_id=' + target_id+ '&type=' + type;
+				g_ajax(URL, function(ret) {
+					//alert(JSON.stringify(ret))
+					if (ret.errCode == 0) {
+						if (ret.data.status != -1) {
+							open_w('extra', '../html/extra.html', {
+								target_id : target_id
+							});
+						}
+					} else {
+						$toast(ret.errMsg, 1500);
+					}
+				})
+			}
+		}
+
+		function new_gift() {
+			//活动是否开启
+			var URL1 = serverURL + 'app_interface/activityManage/get_people_activity/';
+			URL1 += '?secret=' + appSecret;
+			g_ajax(URL1, function(ret) {
+				if (ret.errCode == 200) {
+					//活动开启
+					var gift_id = ret.data.id;
+					var body_h = api.winHeight;
+					var uid = get_local('uid');
+					if (is_define(uid)) {
+						var URL = serverURL + 'app_interface/activityManage/is_get_activity_course/';
+						URL += '?secret=' + appSecret + '&uid=' + uid;
+						g_ajax(URL, function(rett) {
+							if (rett.errCode == 200) {
+								if (rett.data.is_one_mark == 0) {
+									api.openFrame({
+										name : 'gift_alert1',
+										url : '../html/new_gift/gift_alert1.html',
+										rect : {
+											x : 0,
+											y : 0,
+											w : 'auto',
+											h : body_h
+										},
+										pageParam : {
+											gift_id : gift_id
+										}
+									});
+								}
+							} else if (rett.errCode == 101) {
+								if (rett.reg_time > ret.start_time && rett.reg_time < ret.end_time) {
+								}
+							} else {
+								$toast(rett.errMsg, 1500);
+							}
+						})
+					} else {
+						api.openFrame({
+							name : 'gift_alert',
+							url : '../html/new_gift/gift_alert.html',
+							rect : {
+								x : 0,
+								y : 0,
+								w : 'auto',
+								h : body_h
+							},
+							pageParam : {
+								gift_id : gift_id
+							}
+						});
+					}
+				} else {
+					//$toast(ret.errMsg,1500);
+				}
+			})
+		}
+
+		$(function() {		
+			var search_w = $('.search_animate').width();
+			var h = $('#xiding').height();
+			var header_h = $('#search').height();
+			var dapan_h = $('.dapan').height();
+			var perv_scroll_offset = 0;
+			//滚动条上一次位置
+			var hongsedonghua = 0;
+			$(window).scroll(function(event) {
+				xiding();
+				// 顶部动画
+				var is_direction = 0;
+				// 0 向下 0 向上
+				var hy = $(window).scrollTop();
+				var left_w = search_w / 16 + 0.8;
+				if (h < hy) {
+					$('.sun').addClass('toogle1');
+					$('.edita').css('display', 'block');
+					if ($(window).scrollTop() > perv_scroll_offset) {//向下滚动
+						is_direction = 0;
+						//$('.searcha').stop().animate({'margin-right':'0'}, 500);
+						$('.edita').stop().animate({
+							'top' : '70%'
+						}, 500);
+						if (!hongsedonghua) {
+							hongsedonghua = 1;
+							$('.search_animate').stop().animate({
+								left : left_w - 0.2 + 'rem'
+							}, 200);
+							$('.search_animate .searchbar-input').stop().animate({
+								'padding-left' : '0.45rem'
+							}, 200);
+							$('#search').stop().animate({
+								'opacity' : 0
+							}, 1000);
+							$('.sun').stop().animate({
+								'opacity' : 1
+							}, 1000);
+							$('#search .name').stop().animate({
+								'font-size' : '0.4rem'
+							}, 500);
+							$('#friste').attr('onclick', "open_w('search','../html/search.html')");
+						}
+					} else {//向上滚动
+						is_direction = 1;
+						//$('.searcha').stop().animate({'margin-right':'4rem'}, 500);
+					}
+					perv_scroll_offset = $(window).scrollTop();
+				} else {
+					if ($(window).scrollTop() > perv_scroll_offset && perv_scroll_offset > 0) {//向下滚动
+						is_direction = 0;
+						if (!hongsedonghua) {
+							hongsedonghua = 1;
+							$('.search_animate').stop().animate({
+								left : left_w - 0.2 + 'rem'
+							}, 200);
+							$('.search_animate .searchbar-input').stop().animate({
+								'padding-left' : '0.45rem'
+							}, 200);
+							$('#search').stop().animate({
+								'opacity' : 0
+							}, 1000);
+							$('.sun').stop().animate({
+								'opacity' : 1
+							}, 1000);
+							$('#search .name').stop().animate({
+								'font-size' : '0.4rem'
+							}, 500);
+							$('#friste').attr('onclick', "open_w('search','../html/search.html')");
+						}
+					} else {//向上滚动
+						hongsedonghua = 0;
+						is_direction = 1;
+						$('.edita').stop().animate({
+							'top' : '0'
+						}, 500);
+						$('.search_animate').stop().animate({
+							left : '5rem'
+						}, 500);
+						$('.search_animate .searchbar-input').stop().animate({
+							'padding-left' : '0.75rem'
+						}, 500);
+						$('.sun').stop().animate({
+							'opacity' : 0
+						}, 500);
+						$('#search').stop().animate({
+							'opacity' : 1
+						}, 1000);
+						$('#search .name').stop().animate({
+							'font-size' : '1.2rem'
+						}, 500);
+						$('#friste').attr('onclick', "open_w('release_btn','../html/new/release_btn.html')");
+					}
+					perv_scroll_offset = $(window).scrollTop();
+					$('.edita').css('display', 'none');
+					$('.sun').removeClass('toogle1');
+				}
+			});
+		});
+		function xiding() {
+			var hy = $(window).scrollTop();
+			var h = $('#xiding').height();
+			var $header = $api.dom('#search');
+			header_h = $api.offset($header).h;
+			if (h < hy) {
+				$("#tab").css({
+					'position' : 'fixed',
+					'z-index' : '9',
+					'top' : header_h - 5 + 'px'
+				});
+			} else {
+				$('#tab').css({
+					'position' : 'static',
+					'z-index' : '0',
+					'top' : '20'
+				});
+			}
+		}
+
+		// 获取题材望远镜内容
+		function telescope() {
+			var URL = serverURL + 'app_interface/newMobile/themeTelescope_top_one/';
+			URL += '?secret=' + appSecret;
+			g_ajax(URL, function(ret) {
+				if (ret.errCode == 200) {
+					$('#telescope').html(bt('telescope_tpl', ret));
+					telescope_lable()
+				} else {
+					$toast(ret.errMsg, 1500);
+				}
+			})
+		}
+
+		// 获取题材望远镜标签
+		function telescope_lable() {
+			var URL = serverURL + 'app_interface/newMobile/themeTelescope_top_two/';
+			URL += '?secret=' + appSecret;
+			g_ajax(URL, function(ret) {
+				if (ret.errCode == 200) {
+					//alert(JSON.stringify(ret))
+					$('#telescope_lable').html(bt('telescope_lable_tpl', ret));
+					dapan();
+				} else {
+					$toast(ret.errMsg, 1500);
+				}
+			})
+		}
+
+		// 获取大盘异动内容
+		function dapan() {
+			var URL = serverURL + 'app_interface/newMobile/grailAbnormal_list/';
+			URL += '?secret=' + appSecret;
+			g_ajax(URL, function(ret) {
+				if (ret.errCode == 200) {
+					$('#dapan').html(bt('dapan_tpl', ret));
+					getBanner()
+				} else {
+					$toast(ret.errMsg, 1500);
+				}
+			})
+		}
+
+		// 获取轮播图
+		function getBanner() {
+			var URL = serverURL + 'app_interface/main/get_banner_list/';
+			URL += '?secret=' + appSecret + '&type=0';
+			g_ajax(URL, function(ret) {
+				//alert(JSON.stringify(ret.data))
+				if (ret.errCode == 0) {
+					$("#swipe1").html(bt('banner_swiper', ret));
+					if (ret.data.length > 1) {
+						var my_swipe1 = new Swiper('#swipe1', {
+							autoplay : 5000, //可选选项，自动滑动
+							loop : true,
+							slidesPerView : 1,
+							autoplayDisableOnInteraction : false,
+							spaceBetween : 0,
+							pagination : '.swiper-pagination',
+							slideToClickedSlide : true
+						})
+					} else {
+						var my_swipe1 = new Swiper('#swipe1', {
+							loop : false,
+							slidesPerView : 1,
+							autoplayDisableOnInteraction : false,
+							spaceBetween : 0,
+							pagination : '.swiper-pagination',
+							slideToClickedSlide : true
+						})
+					}
+					dapan_trend();
+				}
+				Echo.init({
+					offset : 0,
+					throttle : 0
+				});
+			})
+		}
+
+		//	大盘风向标
+		function dapan_trend() {
+			var URL = serverURL + 'app_interface/newMobile/grailDirection_find/';
+			URL += '?secret=' + appSecret;
+			g_ajax(URL, function(ret) {
+				if (ret.errCode == 200) {
+					$('#header_trend').html(bt('header_trend_tpl', ret));
+					$('#dapan_trend').html(bt('dapan_trend_tpl', ret));
+					if (ret.data.id == 2) {
+						sun1();
+					} else if (ret.data.id == 3) {
+						sun0();
+					} else if (ret.data.id == 4) {
+						rain();
+					}
+					var $header1 = $api.dom('.sun');
+					$api.fixIos7Bar($header1);
+					$api.fixStatusBar($header1);
+					message_tab();
+				} else {
+					$toast(ret.errMsg, 1500);
+				}
+			})
+		}
+
+		function sun0() {
+			var w = $('#container').width();
+			var w1 = (w - 20) / 8;
+			var w2 = w - w1 - 13;
+			$('.a').width(w1);
+			$('.b').width(w1).css('left', w2);
+			for (var i = 0; i < 4; i++) {
+				var l = 12 + 2 * i * w1;
+				$('.a' + i).css('left', l);
+			}
+			Highcharts.chart('container', {
+				chart : {
+					type : 'areaspline'
+				},
+				title : {
+					text : ''
+				},
+				xAxis : {
+					labels : {
+						enabled : false
+					},
+					title : {
+						text : ''
+					},
+					gridLineWidth : '0',
+					tickWidth : '0',
+					plotLines : [{
+						color : '#d84827',
+						dashStyle : 'solid', //线的颜色，定义为红色
+						value : 0, //定义在哪个值上显示标示线，这里是在x轴上刻度为3的值处垂直化一条线
+						width : 1,
+						//标示线的宽度，2px
+					}]
+				},
+				yAxis : {
+					labels : {
+						enabled : false
+					},
+					title : {
+						text : ''
+					},
+					reversed : true,
+					gridLineWidth : '0',
+					plotLines : [{
+						color : '#fff',
+						fill : '#d84827',
+						dashStyle : 'none', //线的颜色，定义为红色
+						value : 0, //定义在哪个值上显示标示线，这里是在x轴上刻度为3的值处垂直化一条线
+						width : 2,
+						zIndex : 99 //标示线的宽度，2px
+					}]
+				},
+				credits : {
+					enabled : false
+				},
+				tooltip : {
+					enabled : false
+				},
+				plotOptions : {
+					allowPointSelect : false,
+					areaspline : {
+						fillColor : '#fff',
+						color : '#e68c8d',
+						fillOpacity : 1
+					}
+				},
+				series : [{
+					data : [4, 3, 4, 2]
+				}],
+			});
+		}
+
+		function sun1() {
+			var w = $('#container2').width();
+			var w1 = (w - 20) / 8;
+			var w2 = w - w1 - 13;
+			$('.a').width(w1);
+			$('.b').width(w1).css('left', w2);
+			for (var i = 0; i < 4; i++) {
+				var l = 12 + 2 * i * w1;
+				$('.a' + i).css('left', l);
+			}
+			Highcharts.chart('container2', {
+				chart : {
+					type : 'areaspline'
+				},
+				title : {
+					text : ''
+				},
+				xAxis : {
+					labels : {
+						enabled : false
+					},
+					title : {
+						text : ''
+					},
+					gridLineWidth : '0',
+					tickWidth : '0',
+					plotLines : [{
+						color : '#03407e',
+						dashStyle : 'solid', //线的颜色，定义为红色
+						value : 0, //定义在哪个值上显示标示线，这里是在x轴上刻度为3的值处垂直化一条线
+						width : 1,
+						//标示线的宽度，2px
+					}]
+				},
+				yAxis : {
+					labels : {
+						enabled : false
+					},
+					title : {
+						text : ''
+					},
+					reversed : true,
+					gridLineWidth : '0',
+					plotLines : [{
+						color : '#fff',
+						fill : '#085aad',
+						dashStyle : 'none', //线的颜色，定义为红色
+						value : 0, //定义在哪个值上显示标示线，这里是在x轴上刻度为3的值处垂直化一条线
+						width : 2,
+						zIndex : 99 //标示线的宽度，2px
+					}]
+				},
+				credits : {
+					enabled : false
+				},
+				tooltip : {
+					enabled : false
+				},
+				plotOptions : {
+					allowPointSelect : false,
+					areaspline : {
+						fillColor : '#fff',
+						color : '#085aad',
+						fillOpacity : 1
+					}
+				},
+				series : [{
+					data : [4, 2.7, 4, 2.7]
+				}],
+			});
+		}
+
+		function rain() {
+			var w = $('#container1').width();
+			var w1 = (w - 20) / 8;
+			var w2 = w - w1 - 13;
+			$('.a').width(w1);
+			$('.b').width(w1).css('left', w2);
+			for (var i = 0; i < 4; i++) {
+				var l = 12 + 2 * i * w1;
+				$('.a' + i).css('left', l);
+			}
+			Highcharts.chart('container1', {
+				chart : {
+					type : 'areaspline'
+				},
+				title : {
+					text : ''
+				},
+				xAxis : {
+					labels : {
+						enabled : false
+					},
+					title : {
+						text : ''
+					},
+					gridLineWidth : '0',
+					tickWidth : '0',
+					plotLines : [{
+						color : '#13ba8d',
+						dashStyle : 'solid', //线的颜色，定义为红色
+						value : 0, //定义在哪个值上显示标示线，这里是在x轴上刻度为3的值处垂直化一条线
+						width : 1,
+						//标示线的宽度，2px
+					}]
+				},
+				yAxis : {
+					labels : {
+						enabled : false
+					},
+					title : {
+						text : ''
+					},
+					reversed : true,
+					gridLineWidth : '0',
+					plotLines : [{
+						color : '#fff',
+						fill : '#13ba8d',
+						dashStyle : 'none', //线的颜色，定义为红色
+						value : 0, //定义在哪个值上显示标示线，这里是在x轴上刻度为3的值处垂直化一条线
+						width : 2,
+						zIndex : 99 //标示线的宽度，2px
+					}]
+				},
+				credits : {
+					enabled : false
+				},
+				tooltip : {
+					enabled : false
+				},
+				plotOptions : {
+					allowPointSelect : false,
+					areaspline : {
+						fillColor : '#fff',
+						color : '#13ba8d',
+						fillOpacity : 1
+					}
+				},
+				series : [{
+					data : [2.5, 4, 2.5, 4.2]
+				}],
+			});
+		}
+		
+		//	信息流的tab
+		function message_tab() {
+			var URL = serverURL + 'app_interface/newMobile/index_table/';
+			URL += '?secret=' + appSecret;
+			g_ajax(URL, function(ret) {
+				if (ret.errCode == 200) {
+					$('#tab').html(bt('tab_tpl', ret));
+				} else {
+					$toast(ret.errMsg, 1500);
+				}
+			})
+		}
+		
+		//	信息流的tab点击事件
+		function tab_click(obj) {
+			$(obj).addClass('tab-active').siblings().removeClass('tab-active');
+			article_type = $(obj).attr('data-id');
+			article_label = $(obj).attr('data-label');
+			
+			message_list('up');
+		}
+
+		//	信息流的列表
+		function message_list(type) {
+		
+			var uid = get_local('uid');
+			if (!is_define(uid)) {
+				 uid = '';
+			}
+			if (type == 'next') {
+			 	var page = $('#page').val();
+				page = parseInt(page) + 1;
+				$('#page').val(page);
+			} else if(type == 'up'){
+				var page = 1;
+				$('#page').val(page);
+				lastPage = true;
+			}
+			var URL = serverURL + 'app_interface/newMobile/recommend_list/';
+			URL += '?secret=' + appSecret + '&uid=' + uid + '&page=' + page + '&article_type=' + article_type + '&article_label=' + article_label;
+			g_ajax(URL, function(ret) {
+				if (ret.errCode == 200 || ret.errCode == 101) {
+					
+					if (ret.errCode == 200) {
+						//alert(JSON.stringify(ret))
+						if (type == 'next') {
+							$('#message_list').append(bt('message_list_tpl', ret));
+						} else {
+							$('#message_list').html(bt('message_list_tpl', ret));
+						}
+					} else {
+						if(page==1){
+							firstPageHaveData = false;
+							lastPage = false;
+							firstPage_no_data('message_list');
+						}else{
+							lastPage = false;
+							no_data_more('message_list');
+						}
+					}
+					Echo.init();
+					api.parseTapmode();
+					push_down_over();
+//					var f_h=$('#message_list li:first-child').height();	
+//					if(page == 1)
+//					{
+//						$(window).scrollTop($(window).scrollTop() - f_h);
+//					}
+				} else {
+					$toast(ret.errMsg, 1500);
+				}
+			})
+		}
+
+		//关注
+		function change_attention(el, type, tagetUid) {
+			var URL = serverURL + 'app_interface/main/follow_user/';
+			var UID = get_local('uid');
+			if (is_define(UID)) {
+				var data = {
+					values : {
+						secret : appSecret,
+						uid : tagetUid,
+						login_uid : UID
+					}
+				};
+				r_ajax(URL, data, function(ret) {
+					if (ret.errCode == 0) {
+						if (type == 0) {
+							$('.a1').hide();
+							$('.a0').show();
+							$toast('关注已取消', 500);
+						}
+						if (type == 1) {
+							$('.a0').hide();
+							$('.a1').show();
+							$toast('关注成功', 500);
+						}
+					} else {
+						$toast(ret.errMsg, 1500);
+					}
+				})
+			} else {
+				$toast('您还没有登录，请先登录', 1000);
+				setTimeout(function() {
+					if (api.systemType == 'ios') {
+						open_w('ios_login', '../user/ios_login.html', {
+							'winName' : api.winName,
+							'frameName' : api.frameName
+						});
+					} else {
+						open_w('login', '../user/login.html', {
+							'winName' : api.winName,
+							'frameName' : api.frameName
+						});
+					}
+				}, 1000);
+			}
+			api.parseTapmode();
+		}
+	</script>
+</html>

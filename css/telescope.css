@@ -1,0 +1,245 @@
+
+.telescope .list{
+    overflow: hidden;
+}
+.telescope .list li{
+    border-radius: 10px;
+    margin:20px 15px;   
+}
+.a1{
+    box-shadow:0 0 10px #f83c3f; 
+}
+.a2{
+    box-shadow:0 0 10px #f8643c; 
+}
+.a3{
+    box-shadow:0 0 10px #f8a63c; 
+} 
+.a4{
+    box-shadow:0 0 10px #409efc; 
+}         
+.a1 .title{
+   background:#f83c3f; 
+}
+.a2 .title{
+   background:#f8643c; 
+}          
+.a3 .title{
+   background:#f8a63c; 
+}
+.a4 .title{
+   background:#409efc; 
+}                          
+.telescope .list .title{
+    padding:15px 10px 20px 10px;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+    color:#fff;
+}
+.telescope .list .title .left{
+    width:40%;
+    float:left;
+    position: relative;
+    border-right:1px solid #fff;
+}
+.telescope .list .left img{
+    display: inline-block;
+    vertical-align: middle;
+    width:35px;
+    position: absolute;
+    left:0;
+}
+.telescope .list .left>div{
+    margin-left: 40px;
+}
+.a4 .left>div{
+    margin-left:0px !important;
+}
+.telescope .list  div .name{
+    font-size: 16px;
+    font-weight: 600;
+}
+.telescope .list  div .lable span{
+    font-size: 12px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    padding:0 5px;
+}        
+.telescope .list .title .right{
+    width:60%;
+    float:left;
+    padding-left:10px;
+}
+.telescope .center ,.head{
+    overflow: hidden;
+}
+.telescope .center .head div,.body div div{
+    width:21%;
+    float:left;
+    text-align: center;
+    line-height: 35px;
+    
+}
+.telescope .body>div{
+    overflow: hidden;
+}
+.telescope .center .first{
+    width:37% !important;
+    text-align:left !important;
+    padding-left:10px;
+    color:#000;
+}
+.telescope .center img{
+    margin:5px auto;
+    width:21px;
+   
+}
+.telescope .center .head span{
+    font-size: 12px;
+}
+.telescope .center .body{
+    color:#d64244;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+} 
+.down,.up{
+    color:#409efc;
+    text-align: center;
+    font-weight: 600;
+
+}
+.up{
+    color:#e7e7e7;
+    display: none;
+}
+.cc{
+    display: none;
+}  
+ .swiper-container{
+  width:100%;
+  background: #fff;
+  margin-bottom: 10px !important;
+  -webkit-perspective:1200px;
+  -moz-perspective:1200px;
+  -ms-perspective:1200px;
+  perspective:1200px
+}
+.swiper-wrapper{
+  margin:20px 0;
+}
+.swiper-slide{
+  width:65% !important;
+  border-radius: 10px;
+  padding:15px;
+  color:#fff;      
+  -webkit-transform-style:preserve-3d;
+  -moz-transform-style:preserve-3d;
+  -ms-transform-style:preserve-3d;
+  transform-style:preserve-3d
+}  
+.trend_up{
+   background: #f83c3f;
+} 
+.trend_down{
+   background: #00bf9d;
+} 
+.trend_up .data{
+  border-bottom: 1px solid #df3639;
+}
+.trend_down .data{
+  border-bottom: 1px solid #00b897;
+}    
+.swiper-slide .head{
+  font-size: 16px;
+  font-weight: 600;
+}
+.swiper-slide .data{
+  overflow: hidden;
+  height:50px;
+  margin-bottom:10px;
+}
+.swiper-slide .data .left{
+  width:60%;
+  float:left;
+  line-height: 42px;
+  font-size: 26px;
+}
+.swiper-slide .data .right{
+  width:30%;
+  float:left;
+  text-align: right;
+} 
+ .telescope .record .title{
+  font-size: 16px;
+  font-weight: bold;
+  padding:7px 15px;
+  border-bottom: 1px solid #dfe1e3;
+}
+.telescope .record img{
+  display: inline-block;
+  vertical-align: middle;
+}
+.timeline{
+        position: relative;
+        padding:10px 10px 25px 20px;
+    }
+.timeline .timeline-item{
+  position: relative;
+  padding-top:20px;
+}
+.timeline:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left:30px;
+    width:1px;
+    height:32px;
+    background: #dcdcdc;
+    z-index: 0;     
+}
+
+.timeline .timeline-item:after{
+    content: '';
+    position: absolute;
+    bottom:-25px;
+    left:10px;
+    width:1px;
+    height:25px;
+    background: #dcdcdc;
+    z-index: 0;             
+}
+.timeline .timeline-item-lable{
+    width:20px;
+    position: absolute;
+    left: 0px;
+    top: 21px;
+    z-index: 2;
+}
+
+.timeline .timeline-item-lable img{
+    width:20px;
+}
+.timeline .timeline-item-inner{
+    padding-left:25px;
+    margin-left:10px; 
+    margin-right:10px;
+    position: relative;
+    color:#0d5eae;
+    border-left:1px solid #dcdcdc;
+}
+
+.timeline .event{
+  background: #0d5eae;
+  margin-top:5px;
+  padding:5px 10px;
+  border-radius: 0 10px 10px 10px;
+  color:#fff;
+}
+.timeline .bb{
+  background: #fafafa;
+  border:1px solid #e7ebee;
+  color:#666666;
+}
+.gray_w1{
+   color:#666666;
+}    

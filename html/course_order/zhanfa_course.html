@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>战法课程</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/zhanfa.css" />
+</head>
+<body class="aui-bg-white">
+    <header class="aui-bar aui-bar-nav aui-bg-blue" id="header">
+        <a class="aui-pull-left aui-btn" ontouchstart="close_w();">
+           <img src="../../img/back.png" alt="" style="width:27px;">
+        </a>
+        <div class="aui-title">战法课程</div>
+    </header>
+     <footer id="footer">
+            <!-- 购买前 -->
+             <ul id="before">
+                <li class="left left_b">价格：<span class="aui-font-size-18" id="price">￥</span></li>
+                <li class="right right_b" onclick="buy()">立即购买</li>
+            </ul>
+            <!-- 购买后 -->
+           <ul id="after" style="display:none">
+                <li class="left left_s" onclick="open_chat()">私密讲堂</li>
+                <li class="right right_s" onclick="call_tel(4000296649)"><img src="../../img/earphone.png" alt="" style="height:1rem;margin-right:0.5rem;">联系助教</li>
+            </ul>   
+                    
+    </footer>  
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript">
+var aid,special_price;
+	apiready = function() {
+		special_price=api.pageParam.special_price;
+		comment_list()
+		$('#price').text('￥'+special_price);
+	};
+	function comment_list(){
+		var uid = get_local('uid');
+		aid=api.pageParam.aid;
+		var URL = serverURL + 'app_interface/coursePack/coursePack_order_find/';
+			URL+='?secret='+appSecret+'&aid='+aid+'&uid='+uid;
+			g_ajax(URL,function(ret)
+			{
+				if(ret){
+					if(ret.errCode==101){
+						$('#before').show();
+						$('#after').hide();		
+					}
+					if(ret.errCode==0){
+						$('#after').show();
+						$('#before').hide();
+							
+					}
+				}else{
+					$toast("操作失败",1500);		
+				}
+			open_f_f('zhanfa_course_c','zhanfa_course_c.html','false',{aid:aid,buy:ret.errCode,special_price:special_price});
+			})
+		
+	}
+	function buy(){
+		var URL = serverURL + 'app_interface/newMobile/coursePack_is_watch/';
+			URL+='?secret='+appSecret;
+			g_ajax(URL,function(ret)
+			{
+				
+				if(ret.errCode==200){
+					for(var i=0;i<ret.data.length;i++){
+						if(api.pageParam.aid!=ret.data[0]){
+							$toast('本课程只面向特定对象非公开发售，如有疑问请咨询400-029-6649，谢谢！')
+				 			
+				 		}else{
+				 			open_w('order_confirm','order_confirm.html',{'aid':aid,'special_price':special_price})
+				 		}
+					}
+				}else{
+					$toast("操作失败",1500);		
+				}
+			})
+	} 
+	function open_chat(){
+		api.execScript({
+			frameName:'zhanfa_course_c',
+            script: 'chat()'
+        });
+	}  
+</script>
+</html>

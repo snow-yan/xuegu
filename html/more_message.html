@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>TA的文章</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/message.css" />
+</head>
+<body>
+    <header class="aui-bar aui-bar-nav aui-bg-blue" id="header">
+        <a class="aui-pull-left aui-btn" ontouchstart="close_w();">
+           <img src="../img/back.png" alt="" style="width:27px;">
+        </a>
+        <div class="aui-title aui-font-size-20">TA的文章</div>
+    </header>
+ 	
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript">
+	apiready = function() {
+		open_f('more_message_c','more_message_c.html','true',{'uid':api.pageParam.uid});
+		
+	};
+	
+</script>
+</html>

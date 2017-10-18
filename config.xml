@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<widget id="A6924326945334" version="0.0.1"> 
+  <name>学股网</name>  
+  <description>APICLOUD封装二次开发框架</description>  
+  <author email="guojie@coolfull.net" href="http://www.coolfull.net">RAF</author>  
+  <content src="index.html"/>  
+  <preference name="pageBounce" value="false"/>  
+  <preference name="appBackground" value="rgba(0,0,0,0.0)"/>  
+  <preference name="windowBackground" value="rgba(0,0,0,0.0)"/>  
+  <preference name="frameBackgroundColor" value="rgba(0,0,0,0.0)"/>  
+  <preference name="hScrollBarEnabled" value="true"/>  
+  <preference name="vScrollBarEnabled" value="true"/>  
+  <preference name="softInputMode" value="resize"/>  
+  <preference name="autoLaunch" value="false"/>  
+  <preference name="fullScreen" value="false"/>  
+  <preference name="autoUpdate" value="false"/>  
+  <preference name="smartUpdate" value="false"/>  
+  <preference name="debug" value="false"/>  
+  <preference name="iOS7StatusBarAppearance" value="true"/>  
+  <preference name="statusBarAppearance" value="true"/> 
+  <preference name="urlScheme" value="myxueguwang"/> 
+  <permission name="readPhoneState"/>  
+  <permission name="call"/>  
+  <permission name="sms"/>  
+  <permission name="camera"/>  
+  <permission name="record"/>  
+  <permission name="fileSystem"/>  
+  <permission name="internet"/>  
+  <permission name="bootCompleted"/>  
+  <permission name="hardware"/>  
+  <permission name="contact"/>  
+  <access origin="*"/>  
+   <feature name="TalkingData">
+	    <param name="logEnable" value="false" />
+	    <param name="exceptionReportEnabled" value="true" />
+	    <param name="channel" value="AppStore" />
+	</feature>
+  <feature name="ajpush"> 
+    <param name="app_key" value="2b1bf17d2d98fea578f5bb59"/>  
+    <param name="channel" value="000"/> 
+  </feature>  
+  <feature name="qq"> 
+    <param name="urlScheme" value="tencent101374737"/>  
+    <param name="apiKey" value="101374737"/> 
+  </feature>  
+  <feature name="wx"> 
+    <param name="urlScheme" value="wx19ae01a02e09844d"/>  
+    <param name="apiKey" value="wx19ae01a02e09844d"/>  
+    <param name="apiSecret" value="a9a12255e0d85b7242c54bb30deabefb"/> 
+  </feature>  
+  <feature name="wxPay"> 
+    <param name="urlScheme" value="wx19ae01a02e09844d"/>  
+    <param name="apiKey" value="wx19ae01a02e09844d"/>  
+    <param name="apiSecret" value="a9a12255e0d85b7242c54bb30deabefb"/> 
+  </feature>  
+  <feature name="weibo"> 
+    <param name="urlScheme" value="wb2857521184"/>  
+    <param name="apiKey" value="2857521184"/>  
+    <param name="registUrl" value="http://www.xueguwang.cn"/> 
+  </feature>  
+  <feature name="aliPay"> 
+    <param name="urlScheme" value="AliPayA6971592675963"/> 
+  </feature>  
+  <feature name="qiyuSdk"> 
+    <param name="appKey" value="68d4ae0b29302e25a350aebdedfa9bed"/>  
+    <param name="appName" value="学股网"/> 
+  </feature>  
+  <feature name="rongCloud2"> 
+    <param name="appKey" value="e0x9wycfeagiq"/> 
+  </feature> 
+</widget>

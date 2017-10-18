@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>成长经验</title>
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+        	.progressGray{
+        		height: 4px; 
+        		margin-top: 4px;
+        		margin-bottom: 5px;
+        		background: #C0C0C0;
+        		border-radius: 2px;
+        	}
+        	.progress{
+        		height: 4px; 
+        		background: #ff7b00;
+        		border-radius: 4px 0px 0px 4px;
+        	}
+        	.h18e{
+        		height: 1.8em;
+        		line-height: 1.8em;
+        	}
+        	.ligthCircle{
+        		width: 10px;
+        		height: 10px;
+        		border:6px solid #ff7b00;
+        		border-radius:13px;
+        		margin-left: 2px;
+        	}
+        	.whiteCircle{
+        		width:10px;
+        		height: 10px;
+        		border-radius:6px;
+        		background:#fff;
+        	}
+        	.whiteCircle1{
+        		width: 8px;
+        		height: 8px;
+        		border-radius: 4px;
+        		background: #fff;
+        	}
+        	.grayCircle{
+        		width: 8px;
+        		height: 8px;
+        		border: 4px solid #C0C0C0;
+        		border-radius: 10px;
+        		margin-left: 4.5px;
+        	}
+        	.l-pre-40{
+        		left: 40%;
+        	}
+        	.gray-line{
+        		position:absolute;
+        		left: 40%;
+        		margin-left:11px; 
+        		width: 3px; 
+        		background:#C0C0C0;
+        	}
+        	.dot1{
+        		width: 8px;
+        		height: 8px;
+        		background: #C0C0C0;
+        		border-radius: 4px;
+        		display: inline-block;
+        	}
+        	.dot2{
+        		width: 6px;
+        		height: 6px;
+        		background: #C0C0C0;
+        		border-radius: 3px;
+        		display: inline-block;
+        	}
+        	.dot3{
+        		width: 4px;
+        		height: 4px;
+        		background: #C0C0C0;
+        		border-radius: 2px;
+        		display: inline-block;
+        	}
+        </style>
+	</head> 
+	<body class="c-wh">
+		<!--头部-->
+		<input type="hidden" id="page" value="1"/>
+		<div class="h05e c-edf0f5"></div>
+		<div class="ubb ub-e0e0e0 ovd">
+			<div class="pd05 pdr15 pstnr ovd">
+				<div class="ovd">
+					<div class="fll dsplb">
+						<img src="" class="uc-a w40e h40e marr05" id="face">
+					</div>
+					<div class="ftz10 umh15 pdt05 w95">
+						<div class="ovd">
+							<div class="fll" style="max-width: 75%;display: inline-block;">
+								<p class="txo" id="userName"></p>
+							</div>
+							<div class="pstnr dsplb">
+								<img src="../image/icon/level.png" class="h18e" alt="" />
+							<span class="pstna abst04 absr04 t-wh ftz065 h18e">LV<font id="level"></font></span>
+							</div>
+						</div>
+				    </div>
+					<div class="ovd progressGray">
+						<div class="progress"></div>
+					</div>
+					<p class="txo umh15 ftz075 t-999 ovd">
+						<span class="w75 fll txo">距离下个等级还有<font id="less"></font>点成长值</span>
+						<span class="flr w25 tx-r"><font class="t-ff7b00" id="current_experience"></font>/<font id="experienceTop"></font></span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="h05e c-edf0f5"></div>
+		<div id="experience"></div>
+		<script type="text/html" id="experienceList">
+			<ul class="pdl05 pdr05">
+				<%
+				for(var i=0;i<data.length;i++){
+				if(i==0){
+				%>
+				<li class="ovd tx-c ftz09 pdt10">
+					<div class="fll w1 umh3 pdt025 pdb025">
+						<span class="t-ff7b00 ftz13"><%=data[i].experience%></span>
+					</div>
+					<div class="fll w2 tx-c umh3 pdt05 ovd pstnr">
+						<div class="ligthCircle dsplb zindex3 pstna abst10 l-pre-40">
+							<div class="whiteCircle"></div>
+						</div>
+						<span class="gray-line abst16 h25e"></span>
+					</div>
+					<div class="fll w7 tx-c h35e">
+						<div class="umh3 c-ff7b00 uc-a02 t-wh w8 dsplb pstnr">
+							<p class="umh15 txo tx-l pdl05 pdr05 pdt01 pdt025 ftz09" id="experience<%=data[i].id%>"></p>
+							<p class="umh15 txo tx-l pdl05 pdr05 pdt01 pdb03 ftz09"><%=data[i].msg%></p>
+							<img src="../image/icon/grow-level.png" class="w15e h15e pstna abst10" style="left: -1em" alt="" />
+						</div>
+					</div>
+				</li>
+				<%
+				}else{
+				%>
+				<li class="ovd tx-c ftz09 t-999 mart" style=" margin-top: -2px;">
+					<div class="fll w1 umh3 pdt01 pdb025">
+						<span class=" ftz09"><%=data[i].experience%></span>
+					</div>
+					<div class="fll w2 tx-c umh3 pdt05 ovd pstnr">
+						<div class="grayCircle dsplb zindex3 pstna abst10 l-pre-40">
+							<div class="whiteCircle1"></div>
+						</div>
+						<span class="gray-line abst0 h35e"></span>
+					</div>
+					<div class="fll w7 tx-c h35e">
+						<div class="umh3 uc-a02 t-999 w8 dsplb">
+							<p class="umh15 txo tx-l pdr05 pdt10 pdb05 ftz09"><font id="experience<%=data[i].id%>"></font><%=data[i].msg%></p>
+						</div>
+					</div>
+				</li>
+				<%
+				}
+				}
+				%>
+				<li class="ovd tx-c ftz09 t-999 marb05" id="end">
+					<div class="fll w1 umh45 pdt025 pdb025">
+					<div class="tx-c">
+						<div class="tx-c h10e umh10">
+							<div class="dot1"></div>
+						</div>
+						<div class="tx-c h10e umh10">
+							<div class="dot2"></div>
+						</div>
+						<div class="tx-c h10e umh10">
+							<div class="dot3"></div>
+						</div>
+					</div>
+					</div>
+					<div class="fll w2 tx-c umh3 pdt05 ovd pstnr">
+						<span class="gray-line abst0 h35e"></span>
+					</div>
+					<div class="fll w7 tx-c h35e"></div>
+				</li>
+			</ul>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script>
+	var lastPage = true,firstPageHaveData = true;
+	apiready = function(){
+		setUserInfo();
+		get_user_experience_log();
+		push_down(function(){
+			if(firstPageHaveData){
+				get_user_experience_log();
+			}else{
+				setTimeout(function(){
+					get_user_experience_log();
+				},500);
+			}
+		});
+		scrollBottom(function(){
+			if(lastPage){
+				get_user_experience_log('next');
+			}
+		});
+	};
+	function get_user_experience_log(type){
+		if(type=='next'){
+			var page = $('#page').val();
+			page = parseInt(page)+1;
+			$('#page').val(page);
+		}else{
+			var page =1;
+			$('#page').val(page);
+			lastPage =true;
+		}
+		var uid = api.pageParam.uid;
+		var pagesize = 10;
+		var URL = serverURL + 'app_interface/user/get_user_experience_log/';
+		URL+='?secret='+appSecret+'&uid='+uid+'&page='+page+'&pagesize='+pagesize;
+		g_ajax(URL,function(ret)
+		{ 
+			if(ret.errCode ==0){
+				if(ret.data.length>0){
+					if(type=='next'){
+						for(var i=0;i<ret.data.length;i++){
+							var html = '<li class="ovd tx-c ftz09 t-999 mart" style=" margin-top: -2px;">';
+							html += '<div class="fll w1 umh3 pdt01 pdb025">';
+						    html += '<span class=" ftz09">'+ret.data[i].experience+'</span>';
+						    html += '</div>';
+							html += '<div class="fll w2 tx-c umh3 pdt05 ovd pstnr">';
+							html += '<div class="grayCircle dsplb zindex3 pstna abst10 l-pre-40">';
+							html += '<div class="whiteCircle1"></div>';
+							html += '</div>';
+							html += '<span class="gray-line abst0 h35e"></span>';
+							html += '</div>';
+							html += '<div class="fll w7 tx-c h35e">';
+							html += '<div class="umh3 uc-a02 t-999 w8 dsplb">';
+							html += '<p class="umh15 txo tx-l pdr05 pdt10 pdb05 ftz09"><font id="experience'+ret.data[i].id+'"></font>'+ret.data[i].msg+'</p>';
+							html += '</div>';
+							html += '</div>';
+							html += '</li>';
+							$('#end').before(html);
+						}
+					}else{
+						$('#experience').html(bt('experienceList',ret));
+					}
+				}else{
+					if(page==1){
+						firstPageHaveData = false;
+					}
+					lastPage = false;
+					no_data_more('experience');
+				}
+				for(var i=0;i<ret.data.length;i++){
+					var ID = '#experience'+ ret.data[i].id;
+					var t = timetostr(ret.data[i].date).split(' ');
+					$(ID).text(t[0]);
+				}
+				push_down_over();
+				api.parseTapmode();
+			}else{
+				$toast(ret.errMsg,1500);
+			}
+		})
+	}
+	function setUserInfo(){
+		var pras = api.pageParam;
+//		console.log(json2str(pras))
+		$('#face').attr('src',pras.face);
+		$('#userName').text(pras.userName);
+		if(pras.current_grade>0){
+			$('#level').text(pras.current_grade);
+		}else{
+			$('#level').text('0');
+		}
+		if(pras.experience){
+			$('#current_experience').text(pras.experience);
+		}else{
+			$('#current_experience').text('0');
+		}
+		if(pras.experience_top){
+			$('#experienceTop').text(pras.experience_top);
+		}else{
+			$('#experienceTop').text('0');
+		}
+		$('#less').text(pras.experience_top-pras.experience);
+		var W = pras.experience/pras.experience_top;
+		if(W){
+			$('.progress').css('width',(W*100).toFixed(2)+'%');
+		}else{
+			$('.progress').css('width','0%');
+		}
+	}
+	</script>
+</html>

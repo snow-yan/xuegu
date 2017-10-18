@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>讲师详情</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style type="text/css">
+			.abst-05{
+		 		top: -0.5em;
+		 	}
+		 	.list-pd{
+		 		padding: .8em .5em;
+		 	}
+		</style>
+	</head>
+	<body class="c-wh">
+		<input type="hidden" id="uid" value=""/>
+		<div id="userInfo">
+		<script type="text/html" id="infoDetails">
+			<div class="box c-4371bc">
+				<div class="ubb ub-e0e0e0 pstnr ovd">
+					<div class="w60e umh15 pstna abst05 ftz09 absr10 c-ff7b00 border-radius-ff7b00 zindex3 ovd">
+						<!--<span class="fll w5 tx-c umh15 t-wh c-4371bc" tapmode="" onclick="change_attention(this,'1',<%=data.uid%>)">+关注</span>
+						<span class="fll w5 tx-c umh15 t-ff7b00" tapmode="" onclick="open_w('put_questions_to','put_questions_to.html',{targetuid:<%=data.uid%>,uid:get_local('uid'),tagetNakename:'<%=data.nakename%>'})">@TA</span>-->
+						<%
+						if(data.focus){
+						%>
+						<div class="fll w5 tx-c umh15 t-wh ubr ub-wh yes" id="reduce<%=data.uid%>" tapmode="op8" onclick="change_attention(this,'0',<%=data.uid%>);event.preventDefault();event.stopPropagation();">
+							<div class="t-wh c-c0c0c0" style="border-radius: 0.3em 0 0 0.3em;"><font class="ftz085">已关注</font></div>
+						</div>
+						<div class="fll w5 tx-c umh15 t-wh ovd no dspn" id="add<%=data.uid%>" tapmode="op8" onclick="change_attention(this,'1',<%=data.uid%>);event.preventDefault();event.stopPropagation();">
+							<div class="c-wh t-ff7b00" style="border-radius: 0.3em 0 0 .3em;">+关注</div>
+						</div>
+						<%
+						}else{
+						%>
+						<div class="fll w5 tx-c umh15 t-wh ovd no" id="add<%=data.uid%>" tapmode="op8" onclick="change_attention(this,'1',<%=data.uid%>);event.preventDefault();event.stopPropagation();">
+							<div class="c-wh t-ff7b00" style="border-radius: .3em 0 0 .3em;">+关注</div>
+						</div>
+						<div class="fll w5 tx-c umh15 t-wh ubr ub-wh yes dspn" id="reduce<%=data.uid%>" tapmode="op8" onclick="change_attention(this,'0',<%=data.uid%>);event.preventDefault();event.stopPropagation();">
+							<div class="t-wh c-c0c0c0" style="border-radius: 0.3em 0 0 0.3em;"><font class="ftz085">已关注</font></div>
+						</div>
+						<%
+						}
+						if(is_define(get_local('uid'))){
+						%>
+						<div class="fll w5 tx-c umh15 c-ff7b00 t-wh ovd no" tapmode="op8" onclick="open_w('put_questions_to','put_questions_to.html',{targetuid:<%=data.uid%>,uid:get_local('uid'),tagetNakename:'<%=data.nakename%>'});event.preventDefault();event.stopPropagation();">
+							<div class="t-wh" style="border-radius:0 .3em .2em 0;">@TA</div>
+						</div>
+						<%
+						}else{
+						%>
+						<span class="fll w5 tx-c t-wh" style="line-height: 1.4em;height: 1.4em;" tapmode="op8" onclick="$toast('您还没有登录，请先登录',1000);setTimeout(function(){open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});event.preventDefault();event.stopPropagation();},1000)">@TA</span>
+						<%
+						}
+						%>
+					</div>
+					<div class="pd05 w8 pstnr ovd">
+						<div class="ovd">
+							<div class="fll dsplb pdb05">
+								<img src="<%=data.face%>" class="uc-a w40e h40e marr05 pdl02">
+							</div>
+							<div class="ftz10 umh15 t-wh pdt05 w8">
+								<div class="ovd">
+									<div class="fll" style="max-width: 60%;display: inline-block;">
+										<p class="txo"><%=data.nakename%></p>
+									</div>
+									<div class="pstnr dsplb">
+										<img src="../image/icon/level.png" class="h18e pdl02" alt="" />
+										<%
+										if(data.current_grade>0){
+										%>
+										<span style="left:2.7em" class="pstna abst04 ftz06 h18e zindex2">LV<%=data.current_grade%></span>
+										<%
+										}else{
+										%>
+										<span style="left:2.7em" class="pstna abst04 ftz06 h18e zindex2">LV0</span>
+										<%
+										}
+										%>
+									</div>
+								</div>
+								<div>
+									<%
+									if(is_define(data.signature)){
+									%>
+									<p class="ovd t-wh ftz08 umh15 txo"><%=data.signature%></p>
+									<%
+									}else{
+									%>
+									<p class="ovd t-wh ftz08 umh15"></p>
+									<%
+									}
+									%>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<p class="ovd h40e">
+		            <span class="h20e w10 c-4371bc ubt ub-gra t-wh pdt075 pdb075">
+		            	<span class="sl w25 tx-c h20e" tapmode="op7" onclick="open_w('his_class','his_class.html',{uid:'<%=data.uid%>'})">
+		            		<span class="ubr ub-wh">
+		            			<span class="umh1 t-fff888" id="favorite"><font class="ftz08" id="course_sum"></font></span>
+		            			<span class="umh1 pdt02"><font class="ftz08">课程</font></span>
+		            		</span>
+		            	</span>
+		            	<span class="sl w25 tx-c h20e" tapmode="op7" onclick="open_w('more_message','more_message.html',{uid:api.pageParam.targetuid})" >
+		            		<span class="ublr ub-wh">
+		            			<span class="umh1" id="amount"><font class="ftz08" id="article_sum"></font></span>
+		            			<span class="umh1 pdt02"><font class="ftz08">文章</font></span>
+		            		</span>
+		            	</span>
+		            	<span class="sl w25 tx-c h20e" tapmode="op7" onclick="open_w('his_answers','his_answers.html',{uid:'<%=data.uid%>'})" >
+		            		<span class="ubr ub-wh">
+		            			<span class="umh1 t-fff888" id="amount"><font class="ftz08"><%=data.answer_count%></font></span>
+		            			<span class="umh1 pdt02"><font class="ftz08">问答</font></span>
+		            		</span>
+		            	</span> 
+		            	<span class="sl w25 tx-c h20e" tapmode="op7" onclick="open_w('his_talk_stocks','his_talk_stocks.html',{uid:'<%=data.uid%>'})" >
+		            		<span class="umh1 t-fff888" id="point"><font class="ftz08"><%=data.tangu_count%></font></span>
+		            		<span class="umh1 pdt02"><font class="ftz08">谈股+</font></span>
+		            	</span>
+		            </span>
+		        </p>
+			</div>
+		
+		<!--基础课程-->
+		<div class="h05e c-edf0f5"></div>
+		<div class="box ubtb w10 ub-e4e4e4">
+			<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10 ovd">
+				<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+				<span class="sl"><font class="t-4371bc">基础课程</font><font class="t-c0c0c0 ftz085 pdl02"><%=data.course_count%></font></span>
+			</p>
+		</div>
+		<%
+		if(data.course_list && data.course_list.length>0){
+		%>
+		<div class="h03e c-edf0f5"></div>
+		<ul id="course_list" class="c-wh ovd pdb05">
+		   <%
+		   for(var i=0;i< data.course_list.length;i++){
+		   var le_msg = str2json(data.course_list[i].cor_letv_msg);
+		   var let_v=le_msg.data.video_unique;
+		   %>
+		   <li class="clo_two pstnr ubb ub-e4e4e4" tapmode="op8" onclick="open_w('class_details','class_details.html',{'cor_id':'<%=data.course_list[i].cor_id%>','UID':get_local('uid'),pic:'<%=data.course_list[i].cor_pic%>',video_unique:'<%=let_v%>'})">
+				    <div class=" w95 area_auto">
+						<div class="col_list">
+							<div class="pdt07 pdb07 pdl02 pdr05 pstnr">
+								<img src="../image/icon/echo_bg.jpg" data-echo="<%=data.course_list[i].cor_pic%>" class="w10 h10 uc-a02 ovd" alt="" tapmode="op8"/>
+								<span class=" pstna absb12 marb025 absr10 marr025 c-616161 uc-a10 t-wh ftz07 ovd pdr05  pdl05">
+									<img src="../image/icon/live_small.png" class="w15e h12e pdr02"/>
+									<font class=" umh15"><%=data.course_list[i].cor_view%></font>
+								</span>
+							</div>
+						</div>
+						<div class="col_list">
+							<div class="pdr02 pdt07">
+								<p class="umh125 pdb025 ftz085 txo"><%=data.course_list[i].cor_name%></p>
+								<p class="t-c0c0c0 ftz09 w10" style="max-height: 3.3em;overflow: hidden;">
+									<%
+									var lable = data.course_list[i].cor_label.split(' ');
+									for(var j=0;j<lable.length;j++){
+									if(is_define(lable[j])){
+									%>
+									<span class="fll pdt01 pdb01 pdl05 pdr05 marr03 mart025 umh1 border-radius-e0e0e0 dsplb"><font class="ftz07"><%=lable[j]%></font></span>
+									<%	
+									}
+									}
+									%>
+								</p>
+							</div>
+						</div>
+						<%
+						if(is_define(data.course_list[i].cor_charge_money)&& data.course_list[i].cor_charge_money != 0){
+						%>
+						<p class="pstna absl50p absb05 ovd t-ff7b00 umh15 ftz075"><img src="../image/icon/guzi.png" class="w10e pdt03 pdr01" alt="" /><%=data.course_list[i].cor_charge_money%></p>
+						<%}else{%>
+						<p class="t-ff7b00 pstna absl50p absb07 ftz075">限时免费</p>
+						<%
+						}
+						%>
+					</div>
+			</li>
+			<!--时间分割-->
+			<div class="pstnr">
+				<div class="pstna abst-05 absr0 t-4371bc c-wh pdl05 pdr10 umh1" style="margin-top:-3px;">
+					<img src="../image/icon/time-blue.png" class="w10e h10e pdt01"/>
+					<span class=" ftz07 pdl02"><%=getLocalTime(data.course_list[i].cor_date)%></span>
+				</div>
+			</div>
+			<%}%>
+		</ul>
+		<div class=" w10 tx-c umh25 c-wh ftz08" tapmode="c-e0e0e0" onclick="open_w('his_class','his_class.html',{uid:'<%=data.uid%>'})">
+			<img src="../image/icon/more.png" class="w15e h15e pd05"/>
+		</div>
+		<%
+		}else{
+		%>
+		<div class="t-c0c0c0 umh3 ftz08 pdl10">TA暂未发布课程</div>
+		<%
+		}
+		%>
+		
+		
+		<!--问答-->
+		<div class="h05e c-edf0f5"></div>
+		<div class="box ubtb w10 ub-e4e4e4">
+			<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10 ovd">
+				<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+				<span class="sl"><font class="t-4371bc">问答</font><font class="t-c0c0c0 pdl02 ftz085"><%=data.answer_count%></font></span>
+			</p>
+		</div>
+		<%
+		if(data.question_list && data.question_list.length>0){
+		%>
+		<div class="h03e c-edf0f5"></div>
+		<div class="c-wh ovd">
+		    <%
+			for(var i=0;i<data.question_list.length;i++){
+			%>
+			<div class="box w10 ovd ubb ub-e0e0e0" tapmode="c-e0e0e0" onclick="open_w('choice_details','../html/choice_details.html',{'question_id':<%=data.question_list[i].question_id%>,'uid':get_local('uid'),'tangu_id':<%=data.question_list[i].qiangda_user.uid%>})">
+				<p class="area_auto w95">
+					<span class="sl pdb05 pdt05 pdl02">
+						<span class="pdl05 pdr05 h10e umh1 c-wh ftz075 pdb03 pdt03 border-radius-ff7b00 tx-c t-ff7b00">
+						    <img src="../image/icon/guzi.png" class="w10e pdr01 " alt="" /><%=data.question_list[i].question_reward%>
+						</span>
+					</span>
+					<span class="sr umh2 t-c0c0c0 pdt08 pdb05 pdr02 ftz07" id="createTime<%=data.question_list[i].question_id%>"></span>
+				</p>
+				<p class="ovd w95 area_auto ftz085 t-545454 tx-lr">
+					<span class="pdl02 pdr02"><%=data.question_list[i].question_content%></span>
+				</p>
+				<div class="ovd w95 area_auto pdt05 pdb05">
+					<p class="w5 fll txo ftz075 umh2">
+						<span class="sl umh2 t-c0c0c0 w10 txo pdl02">
+						    <%
+							if(data.question_list[i].qiangda_user != 0){
+							%>
+							<img src="<%=data.question_list[i].qiangda_user.face%>" class="w20e h20e uc-a10">
+							<font class="pdl05 pdt01 t-999"><%=data.question_list[i].qiangda_user.nakename%></font>
+							<font class="pdl05 pdt01 t-999">已抢答</font>
+							<%
+							}else{
+							%>
+							<img src="../image/icon/no-answer.png" class="w20e h20e uc-a10">
+							<%
+							}
+							%>
+						</span>
+					</p>
+					<p class="w5 flr ftz075">
+						<span class="sl t-c0c0c0 umh2 pdr07 tx-r w10 txo">
+							<img src="../image/icon/dot-gray.png" class="w20e h20e">
+							<%=data.question_list[i].view_count%>人
+							<img src="../image/icon/biaoqian.png" class="w10e h10e mart04 pdl05 pdr02">
+							<font class=" pdr02"><%=data.question_list[i].question_label%></font>
+						</span>
+					</p>
+				</div>
+			</div>
+			<%
+			}
+			%>
+		</div>
+		<div class=" w10 tx-c umh25 c-wh ftz08" tapmode="c-e0e0e0" onclick="open_w('his_answers','his_answers.html',{uid:'<%=data.uid%>'})">
+			<img src="../image/icon/more.png" class="w15e h15e pd05"/>
+		</div>
+		<%
+		}else{
+		%>
+		<div class="t-c0c0c0 umh3 ftz08 pdl10"><font class="">TA暂未回答任何提问</font></div>
+		<%
+		}
+		%>
+		<!--谈股-->
+		<div class="h05e c-edf0f5"></div>
+		<div class="box ubtb w10 ub-e4e4e4">
+			<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10 ovd">
+				<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+				<span class="sl"><font class="t-4371bc">谈股<font class="t-c0c0c0 ftz085 pdl02"><%=data.tangu_count%></font></font></span>
+			</p>
+		</div>
+		<%
+		if(data.tangu_list && data.tangu_list.length>0){
+		%>
+		<div class="h03e c-edf0f5"></div>
+		<div class=" c-wh ovd">
+		    <%
+			for(var i=0;i< data.tangu_list.length;i++){
+			%>
+			<div class="box w10 ovd ubb ub-e0e0e0">
+				<div class=" pdl07 pdr07 pdt07 pdb05 pstnr">
+					<div class="w8 ovd">
+						<div class="fll dsplb">
+							<img src="<%=data.tangu_list[i].user_info.face%>" class="uc-a w25e h25e marr05">
+						</div>
+						<p class=" umh15 t-333 ftz095"><%=data.tangu_list[i].user_info.nakename%></p>
+						<p class="txo umh15 ftz075 mart01 t-999">
+							<img src="../image/icon/time_s.png" class="w10e pdt02 pdr03">
+							 <font class="" id="tangu<%=data.tangu_list[i].tg_id%>"></font>       
+						</p>
+					</div>	
+				</div>
+				<p class="ovd w95 area_auto ftz08 t-646464 tx-lr">
+					<span class=" pdl02 pdr02"><%=data.tangu_list[i].tg_content%></span>
+				</p>
+				<p class="ovd w95 area_auto pdt025 pdb025">
+					<span onclick="add_comment(<%=data.tangu_list[i].tg_id%>)">
+						<span class="sr t-c0c0c0 umh2"><font class="ftz08 pd02" id="pinglun<%=data.tangu_list[i].tg_id%>"><%=data.tangu_list[i].tg_com_count%></font></span>
+						<span class="sr pdt06 pdl03 pdr03"><img src="../image/icon/pinglun.png" class="w12e h10e"></span>
+					</span>
+					<span tapmode="op8" onclick="dianzan(<%=data.tangu_list[i].tg_id%>,<%=data.tangu_list[i].tg_uid%>)">
+						<span class="sr t-c0c0c0 umh2 pdr05"><font class="ftz08 pd02" id="zan<%=data.tangu_list[i].tg_id%>"><%=data.tangu_list[i].tg_zan_count%></font></span>
+						<span class="sr pdt06 pdr03"><img id="collection_mark<%=data.tangu_list[i].tg_id%>" src="../image/icon/zan.png" class="w12e h10e"></span>
+					</span>
+				</p>
+				<div class="ovd w95 area_auto ftz08">
+					<%
+					if(data.tangu_list[i].comment.length>0){
+					%>
+					<p class="marl02 marr02 c-f7f7f7 uc-a02 marb05">
+						<%
+						var comment = data.tangu_list[i].comment;
+						for(var j=0;j<comment.length;j++){
+						if(j<3){
+						%>
+						<span class="pdl08 pdr08 area_auto pdt025 ovd t-333">
+							<font class="t-4371bc umh15 "><%=comment[j].nakename%>：</font><%=comment[j].cm_content%>
+						</span>
+						<%
+						}
+						}
+						%>
+						<span style="display: none;">
+							<%
+							for(var n=3;n<comment.length;n++){
+							%>
+							<span class="pdl08 pdr08 area_auto pdt025 ovd t-333">
+								<font class="t-4371bc umh15 "><%=comment[n].nakename%>：</font><%=comment[n].cm_content%>
+							</span>
+							<%
+							}
+							%>
+						</span>
+						<%
+						if(comment.length>3){
+						%>
+						<span onclick="more_comment(this)" class=" w10 area_auto ubt ub-e0e0e0 mart05 tx-c ovd t-999 pdt025 pdb025">
+							<font class=" umh25">更多评论</font>
+							<img src="../image/icon/more.png" class="h15e pdt05 pdl05">
+						</span>
+						<%
+						}
+						%>
+					</p>
+					<%
+					}
+					%>
+				</div>
+			</div>
+			<%
+			}
+			%>
+		</div>
+		<div class=" w10 tx-c umh25 c-wh ftz08" tapmode="c-e0e0e0" onclick="open_w('his_talk_stocks','his_talk_stocks.html',{uid:'<%=data.uid%>'})">
+			<img src="../image/icon/more.png" class="h15e pd05"/>
+		</div>
+		<%
+		}else{
+		%>
+		<div class="t-c0c0c0 umh3 ftz08 pdl10"><font class="">TA暂未发布谈股</font></div>
+		<%
+		}
+		%>
+		<div class="h10e c-edf0f5"></div>
+		</script>
+	    </div>
+	    <!--战法课程-->
+		<div id="zhanfa_course">
+		<script id="zhanfa_course_tpl" type="text/html">
+			<%if(data.length>0){%>
+			<div class="h05e c-edf0f5"></div>
+			<div class="box ubtb w10 ub-e4e4e4">
+				<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10 ovd">
+					<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+					<span class="sl"><font class="t-4371bc">战法课程</font><font class="t-c0c0c0 ftz085 pdl02" ><%=total%></font></span>
+				</p>
+			</div>
+			<div class="h03e c-edf0f5"></div>
+			<ul class="c-wh ovd pdb05">
+				 <%
+				    for(var i=0;i< data.length;i++){
+				 %>
+			   <li class="clo_two pstnr ubb ub-e4e4e4" tapmode="op8" onclick="open_w('zhanfa_course','course_order/zhanfa_course.html',{'aid':'<%=data[i].aid%>','special_price':'<%=data[i].special_price%>'})">
+					    <div class=" w95 area_auto">
+							<div class="col_list">
+								<div class="pdt07 pdb07 pdl02 pdr05 pstnr">
+									<img src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].apic%>" class="w10 h10 uc-a02 ovd" alt="" tapmode="op8"/>
+								</div>
+							</div>
+							<div class="col_list">
+								<div class="pdr02 pdt07">
+									<p class="umh125 pdb025 ftz095 txo"><%=data[i].aname%></p>
+									<p class="t-c0c0c0 ftz08 w10 txo2" >
+										<%=data[i].intro%>
+									</p>
+								</div>
+							</div>
+							<p class="pstna absl50p absb05 ovd t-ff7b00 umh15 ftz075">￥<%=data[i].special_price%></p>
+						</div>
+				</li>
+				 <%
+				   }
+				  }
+				 %>
+			</ul>
+		</script>
+		</div>
+	    <!--文章-->
+	  <div id="article"></div>
+		
+		<script id="article_tpl" type="text/html">
+			<div class="h05e c-edf0f5"></div>
+			<div class="box ubtb w10 ub-e4e4e4">
+				<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10 ovd">
+					<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+					<span class="sl"><font class="t-4371bc">文章</font><font class="t-c0c0c0 ftz085 pdl02" id="total"><%=total%></font></span>
+				</p>
+			</div>
+			<div class="h03e c-edf0f5"></div>
+			<%if(0 < data.length){ %>
+			<ul class="c-wh ovd pdb05">
+				<%
+			   	for(var i=0;i< data.length;i++){
+			   		if(i<2){
+			   		if(data[i].breviary_pic!=""){
+			   	%>
+			   <li class="clo_two pstnr ubb ub-e4e4e4" tapmode="op8" onclick="open_w('article_detail','new/article_detail.html',{'article_id':'<%=data[i].id%>'})">
+				    <div class=" w95 area_auto">
+						<div class="col_list">
+							<div class="pdr02 pdt07 ">
+								<p class="ftz11 txo1 pdt25"><b><%=data[i].title%></b></p>
+								<p class="ftz095 pdt05 pdb05 txo"><%=data[i].message%></p>
+							</div>
+						</div>
+						<div class="col_list">
+							<div class="pdt07 pdb07 pdl02 pdr05 pstnr">
+								<img src="../image/icon/echo_bg.jpg"  data-echo="<%=data[i].breviary_pic%>" class="w10 h10 uc-a02 ovd" alt="" tapmode="op8"/>
+							</div>
+						</div>
+						
+					</div>
+				</li>
+				<%}else{%>
+				 <li class="clo_two pstnr ubb ub-e4e4e4" tapmode="op8" onclick="open_w('article_detail','new/article_detail.html',{'article_id':'<%=data[i].id%>'})">
+				    <div class=" w95 area_auto">
+						<div class="pdr02 pdt07 ">
+							<p class="ftz11 txo1 pdt25"><b><%=data[i].title%></b></p>
+							<p class="ftz095 pdt05 pdb05 txo"><%=data[i].message%></p>
+						</div>
+					</div>
+				</li>
+				<%
+						}
+					}else{
+				
+				%>	
+				<li style="display: none;"></li>
+				<%
+						}
+					}
+				if(data.length>2){
+				%>
+				<div class=" w10 tx-c umh25 c-wh ftz08" tapmode="c-e0e0e0" onclick="open_w('more_message','more_message.html',{uid:api.pageParam.targetuid})">
+					<img src="../image/icon/more.png" class="h15e pd05"/>
+				</div>
+				<%}%>	
+			</ul>
+		
+			<%}else{%>
+			<div class="t-c0c0c0 umh3 ftz08 pdl10"><font class="">TA暂未发布文章</font></div>
+			<%}%>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+	var course_count;
+	apiready = function() 
+	{
+		var pras = api.pageParam;
+		var target_uid = api.pageParam.targetuid;
+		getUserInfo(target_uid);
+		
+		$('#uid').val(pras.uid);
+		
+		
+		
+	};
+	function getUserInfo(target_uid){
+		var uid = get_local('uid');
+		if(!is_define(uid)){
+			uid = 0;
+		}
+		var URL = serverURL + 'app_interface/user/get_other_user_info/';
+		var data = {
+			values:{
+				targetuid:target_uid,
+				loginuid:uid,
+				secret:appSecret
+			}
+		}
+		r_ajax(URL,data,function(ret)
+		{
+			///alert(json2str(ret));
+			if(ret.errCode ==0){
+			    var tg_id_list='';
+				userInfo = ret;
+				course_count=ret.data.course_count;
+				zhanfa_course(target_uid,course_count);
+				article_list(target_uid);
+				$('#userInfo').html(bt('infoDetails',ret));
+				for(var i =0 ; i < ret.data.question_list.length;i++){
+					var idx = '#createTime'+ret.data.question_list[i].question_id;
+					var t = getTimeDifference(ret.data.question_list[i].add_time);
+					$(idx).text(t);
+			    }
+			    for(var i =0 ; i < ret.data.tangu_list.length;i++){
+					var idx = '#tangu'+ret.data.tangu_list[i].tg_id;
+					var t = getTime(ret.data.tangu_list[i].tg_date);
+					$(idx).text(t);
+			    }
+			    for(var i =0; i<ret.data.tangu_list.length;i++){
+					if(i==ret.data.tangu_list.length-1){
+						tg_id_list += ret.data.tangu_list[i].tg_id;
+					}else{
+						tg_id_list += ret.data.tangu_list[i].tg_id+',';
+					}
+				}
+			}else{
+				$toast(ret.errMsg,1500);
+			}
+			api.parseTapmode();
+			if(is_define(uid)){
+				whether_Praise(tg_id_list);
+			}
+			Echo.init({offset: 0,throttle:0});
+		})
+	}
+	//谈股是否点赞
+	function whether_Praise(tg_id){
+		var tg_ids = tg_id.split(',');
+		var uid = get_local('uid');
+		var data = {
+			values:{
+				secret : appSecret,
+				uid : uid,
+				tg_ids : tg_id
+			}
+		};
+		var URL = serverURL + 'app_interface/tangu/tangu_is_dianzan/';
+		r_ajax(URL,data,function(ret)
+		{
+			if(ret.errCode ==0){
+				for (var Key in ret.data){
+			      var TGID = '#collection_mark'+Key; 
+			      if(ret.data[Key]==1){
+			          $(TGID).attr('src', '../image/icon/zans.png');
+			      }else{
+			          $(TGID).attr('src', '../image/icon/zan.png');
+			      } 
+				}
+			}else{
+				$toast(ret.errMsg,1500)
+			}
+		})
+		api.parseTapmode();
+	}
+	//谈股点赞
+	function dianzan(tg_id,tg_uid){
+		var uid = get_local('uid');
+		var data = {
+			values:{
+				secret : appSecret,
+				uid : uid,
+				tg_id : tg_id
+			}
+		};
+		if(is_define(uid)){
+		    if(uid == tg_uid){
+		        $toast("自己不能给自己点赞",1500);
+		    }else{
+				var URL = serverURL + 'app_interface/tangu/tangu_dianzan/';
+				r_ajax(URL,data,function(ret)
+				{
+					if(ret.errCode ==0){
+						var zan_count = $('#zan'+tg_id).text();
+						$('#zan'+tg_id).text(parseInt(zan_count) + 1 );
+						$("#collection_mark"+tg_id).attr('src', '../image/icon/zans.png');
+					}else{
+						$toast(ret.errMsg,1500)	
+					}
+				})
+			}
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				open_w('login','../user/login.html');
+			},1000);
+		}
+	}
+	//评论
+	function add_comment(tg_id){
+		var uid = get_local('uid');
+		var targetuid = api.pageParam.targetuid;
+		if(is_define(uid)){
+			openFrameFull("../user/ui_comment",{frameName:api.frameName,tg_id:tg_id,uid:uid,targetuid:targetuid},'rgba(0,0,0,0)');
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				open_w('login','../user/login.html',{winName:api.winName,frameName:api.frameName});
+			},1000);
+		}
+	}
+		
+	function more_comment(el){
+		$(el).prev().toggle();
+		if($(el).children('img').attr('src') == '../image/icon/yincang.png'){
+			$(el).children('img').attr('src','../image/icon/more.png');
+		}else{
+			$(el).children('img').attr('src','../image/icon/yincang.png');
+		}
+	}
+	function change_attention(el,type,tagetUid){
+		var URL = serverURL + 'app_interface/main/follow_user/';
+		var UID = get_local('uid');
+		var reduceId = '#reduce'+tagetUid;
+		var addId = '#add'+tagetUid;
+		if(is_define(UID)){
+			var data = {
+				values: {
+				secret:appSecret,
+				uid:tagetUid,
+				login_uid:UID
+				}
+			};
+			r_ajax(URL,data,function(ret){
+				if(ret.errCode == 0){
+					if(type == 0){
+						$(reduceId).addClass('dspn');
+						$(addId).removeClass('dspn');
+						$toast('关注已取消',500);
+					}
+					if(type == 1){
+						$(addId).addClass('dspn');
+						$(reduceId).removeClass('dspn');
+						$toast('关注成功',500);
+					}
+					switch (api.pageParam.frameName){
+						case 'home':
+							api.execScript({
+								name:api.pageParam.name,
+								frameName:api.pageParam.frameName,
+								script : 'getHomeData()'
+							})
+							break;
+						case 'hot_lecturer_c':
+							api.execScript({
+								name:api.pageParam.name,
+								frameName:api.pageParam.frameName,
+								script : 'getHotLecturer()'
+							})
+							break;
+						case 'my_answer_c':
+							api.execScript({
+								name:api.pageParam.name,
+								frameName:api.pageParam.frameName,
+								script : 'my_Answer();'
+							})
+							break;
+						case 'hot_answer_c':
+							api.execScript({
+								name:api.pageParam.name,
+								frameName:api.pageParam.frameName,
+								script : 'getAnswerList();'
+							})
+							break;
+						default:
+							break;
+					}
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				open_w('login','../user/login.html');
+			},1000);
+		}
+		api.parseTapmode();
+	}
+	function playLive(nickname,url,face,group_id,live_status){
+		if(live_status>0){
+			ue_script('root','play_live("'+nickname+'","'+url+'","'+face+'","'+group_id+'")');
+			setTimeout(function(){
+				close_w();
+			},300);
+		}else{
+			$toast('主播在赶来的路上',1500);	
+		}
+	}
+	function article_list(target_uid){
+		  
+			var URL = serverURL + 'app_interface/newMobile/user_article_list/';
+				URL+='?secret='+appSecret+'&uid='+target_uid;
+		        g_ajax(URL,function(ret){
+		     	//alert(JSON.stringify(ret))
+		       
+				if(ret.errCode ==200 || ret.errCode ==101){
+					 $('#article').html(bt('article_tpl',ret));
+					if(ret.errCode ==200){
+					    $('#article_sum').text(ret.total);
+						Echo.init();
+					}else{
+					 $('#article_sum').text(0);
+					 $('#total').text(0);
+					}
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+	function zhanfa_course(target_uid,course_count){
+			var URL = serverURL + 'app_interface/newMobile/user_coursePack_list/';
+				URL+='?secret='+appSecret+'&uid='+target_uid;
+		        g_ajax(URL,function(ret){
+				if(ret.errCode ==200|| ret.errCode ==101){
+					//alert(JSON.stringify(ret))
+					if(ret.errCode ==200){
+						$('#course_sum').text(course_count+ret.total);
+					    $('#zhanfa_course').html(bt('zhanfa_course_tpl',ret));
+					    
+						Echo.init();
+					}else{
+						$('#course_sum').text(course_count);
+					}
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+	</script>
+</html>

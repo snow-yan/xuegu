@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>提到我的</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style type="text/css">
+        	.h26e{
+        		height: 2.625em;
+        	}
+        	.w26e{
+        		width: 2.625em;
+        	}
+        </style>
+	</head> 
+	<body class="c-edf0f5">
+		<input type="hidden" id="page" value="1"/>
+		<ul class="pdl05 pdr05 mart05 c-wh" id="mention"></ul>
+		<div class="h05e c-edf0f5"></div>
+		<script type="text/html" id="mentionList">
+			<%
+			for(var i=0;i<data.length;i++){
+			%>
+			<li class="ovd ubb ub-e0e0e0">
+				<img src="../image/icon/echo_bg.jpg" data-echo="<%=data[i].face%>" class="w26e h26e fll pd05"/>
+				<div class="ovd pdt05 ftz09">
+					<div class="ovd umh15 pdt01">
+						<div class="txo dsplb fll pdr025 t-4371bc" style="max-width: 35%;"><%=data[i].nakename%></div>
+						<div class="w25 txo fll">向你提问</div>
+						<div class="flr dsplb ftz08 t-999" id="date<%=data[i].add_time%>"></div>
+					</div>
+					<p class="umh15 pdt01 ftz09 txo"><%=data[i].question_info.question_content%></p>
+				</div>
+			</li>
+			<%
+			}
+			%>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script>
+		var lastPage = true,firstPageHaveData =true;
+		apiready = function(){
+			getMentionMeList();
+			push_down(function(){
+				if(firstPageHaveData){
+					getMentionMeList();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					getMentionMeList('next')
+				}
+			});
+		};
+		function getMentionMeList(type){
+			if(type=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;	
+			}
+			var uid = api.pageParam.uid;
+			var pagesize = 10;
+			var URL = serverURL + 'app_interface/user/atme_list/';
+			URL+='?secret='+appSecret+'&page='+page+'&pagesize='+pagesize+'&uid='+uid;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					if(ret.data && ret.data.length>0){
+						if( type == 'next'){
+							$('#mention').append(bt('mentionList',ret));
+						}else{
+							$('#mention').html(bt('mentionList',ret));
+						}
+						for(var i=0;i<ret.data.length;i++){
+							var ID = "#date"+ ret.data[i].add_time;
+							$(ID).text(getTime(ret.data[i].add_time));
+						}
+					}else{
+						if( page == 1 ){
+							firstPageHaveData = false;
+							lastPage = false;
+							firstPage_no_data('mention');
+						}else{
+							lastPage = false;
+							no_data_more('mention');
+						}
+					}
+					push_down_over();
+					api.parseTapmode();
+					Echo.init({offset: 0,throttle:0});
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+	</script>
+</html>

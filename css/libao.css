@@ -1,0 +1,27 @@
+body{font-size:62.5%;}
+body{ margin:0; padding:0; font-size:14px;}
+.libaocontent{ position:relative; width:100%; overflow:hidden;}
+.libaobg{ position:relative; z-index:1; width:100%;}
+.libaobg img{ width:100%; display:block;}
+.lqlist{position:absolute; width:84%; z-index:2; left:8%; top:20%;}
+.lqlist img{ width:100%; display:block; position:absolute; z-index:3;}
+.libaoinput{width:100%; position:absolute; z-index:4; top:46%;}
+.libaoinput img{width:100%; display:block; z-index:5;}
+.libaoinput input{ position:absolute; z-index:6; border:none;}
+.libaoinput .cardnum{ width:54%; height:4%; left:22%; top:19%;}
+.libaoinput .cardkey{ width:54%; height:4%; left:22%; top:27%;}
+.libaoinput .cardsum{ width:37%; height:6%; left:31%; top:34%; background:none;}
+.lbbottom{width:100%; position:absolute; z-index:6; bottom:0;}
+.lbbottom img{width:100%; display:block; z-index:6;}
+ul,li{margin:0;padding:0; list-style:none;}
+.scrollbox{ width: 88%; left:6%; height:62%; top:25%; overflow: hidden; position:absolute; z-index:7; }
+#scrollDiv{width:100%;height:100%; overflow:hidden;}
+#scrollDiv ul{height:100%;}
+#scrollDiv li{height:1.6rem; width:100%; color:#ad1900; font-size:0.7rem; overflow:hidden; vertical-align:bottom; zoom:1; text-align:center; }
+#scrollDiv li span{ color:#000; text-decoration:none}
+.libaomask{ width:100%; background:#000; opacity:.3; z-index:8; position:absolute; display:none;}
+.libaopop{ width:74%; position:fixed; z-index:9; left:13%; top:25%;  display:none;}
+.libaopop img{width:100%; display:block; z-index:10; position:absolute; z-index:1;}
+.libaopop a{ width:30%; height:20%; position:absolute; z-index:2; display:block; top:74%;}
+.libaopop .libaoback{ left:19%;}
+.libaopop .libaologin{ left:50%; }

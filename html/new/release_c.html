@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>发布</title>
+    <link rel="stylesheet" type="text/css" href="../../css/release.css" />
+
+</head>
+<body>
+     <div class="editor">
+        <div class="publish-article-title"  >
+            <input type="text" id="title"  placeholder="标题" value="" />
+        </div>
+      <div class="publish-article-content">
+        <input type="hidden" id="target"  value="" />
+        <div class="article-content" id="content"> 
+                <p>填写内容...</p>
+        </div>
+        <div class="footer-btn g-image-upload-box">
+          <div class="upload-button" style="position: relative;padding-top:9px;">
+            <span class="zishu"><img src="../../img/fabu2.png" alt=""><span id='number'>260</span>字</span>
+            <span class="upload"><i class="upload-img"><img src="../../img/img.png" alt="" id="imageUpload"></i></span>
+            <!--<input class="input-file"  type="file" name="fileInput"  accept="image/*"  style="position:absolute;right:0px;opacity:0;width:25px;">-->
+          </div>
+        </div>
+      </div>
+    </div> 
+     <!-- 弹窗 -->
+    <div class="mask" id="prompt_custom">
+        <div class="content">
+            <div class="title"><img src="../../img/fabu2.png" alt="">谈股字数不过瘾?添加标题，发文章随心谈</div>
+            <div>
+                <input type="text" id="title_article" placeholder="在这里编辑标题..." />
+            </div>
+            <div class="bottom">
+                <div id="cancel_add">返回编辑</div>
+                <div class="red-w border-l" id="affirm_add"><a>确认添加</a></div>
+            </div>
+        </div>
+    </div>  
+</body>
+
+<script type="text/javascript" src="../../script/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/artEditor.min.js"></script>
+<script type="text/javascript" src="../../script/hm.js"></script>
+<script>
+	var type;
+	apiready = function(){	
+		
+		type=api.pageParam.type;
+		if(type==2){
+		//谈股
+		$('.publish-article-title').hide();
+			var t_h=-15;
+		}else{
+		//文章
+			$('.publish-article-title').show();
+			var t_h=$('.publish-article-title').height();
+			$('.zishu').css('display','none');
+		}
+		var w_h=window.innerHeight;
+		var f_h=$('.footer-btn').height();
+		var h=w_h-f_h-t_h-api.pageParam.header_h;
+		$('#content').height(h);
+	  	$(window).resize(function(){
+			if(type==2){
+			//谈股
+				$('.publish-article-title').hide();
+				var t_h1=-15;
+			}else{
+			//文章
+				$('.publish-article-title').show();
+				var t_h1=$('.publish-article-title').height();
+			}
+	  		var w_h1=window.innerHeight;
+	  		var h=w_h1-f_h-t_h1-api.pageParam.header_h;
+	   		$('#content').height(h);
+	   	})
+   	}	 
+   	// 动态提示字数
+    $('#content').keyup(function(){
+        var num = 260;
+        var val1 = $(this).text();
+        var val = val1.replace(/<\/{0,}[a-z](.+?)>/gi,"");
+        var val_length = num - val.length;
+        $('#number').text(val_length);
+        if(val_length < 0){
+            $(".zishu").addClass('red-w');
+            var url = "../../img/fabu1.png";
+            $(".zishu").find('img').attr('src',url);
+        }else{
+            $(".zishu").removeClass('red-w');
+            var url = "../../img/fabu2.png";
+            $(".zishu").find('img').attr('src',url);
+        }
+        if(val1!=""){
+        	ue_script('release',"fabu_btn()");
+        }else{
+        	ue_script('release',"fabu_btn1()");
+        }
+      })
+	function release_article(){
+		var URL = serverURL + 'app_interface/newMobile/add_issue_article/';
+		var UID = get_local('uid');
+		var val=$("#target").val();
+		var valReg = val.replace(/<(?!img)\/?.+?>|&.+?;/gi,"");
+		var valReg2 = valReg.replace(/<\/{0,}[a-z](.+?)>/gi,"");
+		//alert(valReg)
+		if(is_define(UID)){
+			if(type==1){
+				type=1;
+				if ($("#title").val()=='') {
+						$toast("标题不能为空", 1500);
+					return false;
+				}
+				if (valReg2.length < 26) {
+						$toast("发布文章字数最少需要26个字", 1500);
+					return false;
+				}
+			}else{
+				type=2;
+				if (valReg2.length < 10) {
+						$toast("发布谈股字数最少需要10个字", 1500);
+					return false;
+				}
+				if (valReg2.length > 260) {
+					$('.mask').css('display','block');
+					$('#cancel_add').click(function(){
+						$('.mask').css('display','none');	
+					})
+					$('#affirm_add').click(function(){
+						if ($("#title_article").val()=='') {
+							$toast("标题不能为空", 1500);
+							return false;
+						}
+						type=1;
+						$('.zishu').css('display','none');
+						$('.mask').css('display','none');
+						$('.publish-article-title').show();
+						$('#title').val($("#title_article").val());	
+						ue_script('release',"title()");
+					})	
+					return false;
+				}
+			}	
+			var title=$("#title").val();
+			var data = {
+		 		values :{
+		 			secret:appSecret,
+		 			type:type,
+		 			title:title,
+		 			data :valReg,
+		 			uid:UID
+		 		}
+		 	};
+		 	r_ajax(URL,data,function(ret){
+		 	//alert(JSON.stringify(ret))
+		 		if(ret.errCode==200){
+		 			$toast('发布成功', 1500);
+		 			if(type==2){
+		 				open_w('my_talk_stocks','../../user/my_talk_stocks.html',{uid:get_local('uid')});
+		 			}else{
+		 				open_w('my_message','my_message.html');
+		 			}
+		 			setTimeout(function(){
+		 				api.closeWin();
+		 			},1000);
+		 		}else{
+		 			$toast(ret.errMsg, 1500);
+		 		}
+		 	})
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+				}else{
+					open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				}
+				
+			},1000);
+		}
+			
+
+	}
+</script>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>提问</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style type="text/css">
+        	::-webkit-input-placeholder {
+				color: #c1c1c1;
+				font-size : 12px;
+			}
+			#question::-webkit-input-placeholder{color:#ff7b00;font-size: 14px;}
+			.border-gray{
+				text-align: center;
+				padding-top: .3em;
+				padding-bottom: .3em;
+				margin: .5em;
+				color: #666;
+			}
+			.border-light{
+				text-align: center;
+				padding-top: .3em;
+				padding-bottom: .3em;
+				margin: .5em;
+				color: #ff7b00;
+			}
+			.mask-alert{
+		   		position:fixed;
+		   		top: 0;
+		   		left: 0;
+		   		height:100%;
+		   		width:100%;
+		   		background:#000;
+		   		opacity: 0.8;
+		   		z-index: 99;
+		   		display: none;
+		   	}
+		   	.alert1 {
+		   		position:fixed;
+		   		top:40%;
+		   		width: 80%;
+		   		margin:0 10%;
+		   		border-radius:10px;
+		   		background:#fff;
+		   		color:#000;
+		   		z-index: 100;
+		   		display: none;
+		   	}
+		   	.alert1 .aui-icon-close{
+		   		float:right;
+		   		padding:5px 5px;
+		   	}
+		   	.alert1 .titlea{
+		   		padding:1em;
+		   		font-size:1em;
+		   	}
+		   	.alert1 .bottom{
+		   		line-height: 2.2em;
+		   		overflow: hidden;
+		   		border-top:1px solid #dcdcdc;
+		   	}
+		   	.alert1 .bottom div{
+		   		width:49.5%;
+		   		float:left;
+		   		line-height:1.6em;
+		   		height:1.6em;
+		   		margin:0.6em 0;
+		   		text-align:center;
+		   		font-size:1.2em;
+		   	}
+        </style>
+	</head> 
+	<body class="c-wh">
+		<div class="c-edf0f5 pd05 pdt075">
+		    <p class=" w95 area_auto ftz10">
+			<img src="../image/icon/voice.png" class="w10e pdt02" alt="" />
+			<span class="w10 ftz075 umh1"><font class="t-ff7b00">【温馨提示】</font>你的问题将在3日后关闭，请及时关关注并进行处理。</span>
+			</p>
+		</div>
+		<div class="pdl10 pdr10">
+			<textarea id="question" placeholder="请编辑问题" name="content" class="pdt05 w10 ovd area_auto c-wh h65e ubnone ftz10"></textarea>
+		</div>
+		<!--<div class="ovd pdl10 pdr10 pdt05 pdb10">
+			<span class="flr t-c1c1c1 ftz085">匿名提问</span>
+			<span class="flr"><img src="../image/icon/select-gray.png"/ class="w10e pdr05 no" onclick="select_name(this);"></span>
+		</div>-->
+		<div class="pdl10 pdr10 pdt075 pdb075 ovd ubtb ub-e0e0e0 pstnr">
+			<img src="../image/icon/down-border.png" class="w10e pstna"/ style="top:-2px; left: 15%;">
+			<div class="w2 fll ftz10">悬赏：</div>
+			<div class="w75 fll">
+				<input type="number" class="w10 ftz09 t-545454" maxlength="500" placeholder="请输入悬赏金额" name="" id="money" value="" />
+			</div>
+		</div>
+		<div class="pdl05 pdr05">
+			<ul class="clo_four ovd mart05 ftz08">
+				<li class="fll col_list" ontouchend="choiceMoney(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">100</div>
+				</li>
+				<li class="fll col_list" ontouchend="choiceMoney(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">500</div>
+				</li>
+				<li class="fll col_list" ontouchend="choiceMoney(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">1000</div>
+				</li>
+				<li class="fll col_list" ontouchend="choiceMoney(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">2000</div>
+				</li>
+			</ul>
+		</div>
+		<div class="h05e"></div>
+		<div class="ovd pdb10">
+			<ul class="clo_two">
+				<li class="col_list tx-c ubr ub-e0e0e0">
+					<div class="pstnr dsplb">
+						<img src="../image/icon/user_img.png" class="h20e"/>
+						<div class="pstna t-ff7b00 umh2" style="left: 2.5em;top: 0;"><font class="ftz09">剩余 <font id="integral"></font></font></div>
+					</div>
+				</li>
+				<li class="col_list tx-c" tapmode='op8' onclick="openRecharge()">
+					<div class="dsplb">
+						<div class="w85e h20e umh2 uc-a10 tx-c t-wh c-ff7b00">充值</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="h05e c-ebf2fc"></div>
+		<div class="pdl10 pdr10 pdt075 pdb075 ovd ubb ub-e0e0e0">
+			<div class="w2 fll ftz10">标签：</div>
+			<div class="w75 fll">
+				<input type="text" class="w10 ftz09 c-wh t-545454" placeholder="请选择1~5个标签对您的问题进行归类" disabled="disabled" readonly="readonly" id="iptTap" value="" />
+			</div>
+		</div>
+		<div class="pdl05 pdr05 mart05">
+			<ul class="clo_four ovd ftz08">
+				<li class="fll col_list" ontouchend="choiceThis(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">大盘</div>
+				</li>
+				<li class="fll col_list" ontouchend="choiceThis(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">个股</div>
+				</li>
+				<li class="fll col_list" ontouchend="choiceThis(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">技巧</div>
+				</li>
+				<li class="fll col_list" ontouchend="choiceThis(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">知识</div>
+				</li>
+				<li class="fll col_list" ontouchend="choiceThis(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">板块</div>
+				</li>
+				<li class="fll col_list" onclick="choiceThis(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">K线</div>
+				</li>
+				<li class="fll col_list" onclick="choiceThis(this)">
+					<div class="border-gray border-radius-e0e0e0" tapmode="c-e0e0e0">买卖</div>
+				</li>
+			</ul>
+		</div>
+		<div class="mask-alert"></div>
+   		<div class="alert1">
+   			<span class="aui-icon-close"><img src="../image/icon/close_down.png" alt="" style="width:20px;"/></span>
+   			<div class="titlea">您现在处于游客模式,登录后多设备可同步学习。</div>
+	   		<div class="bottom">
+	   			<div id="youke" style="color:#0055aa;border-right:1px solid #dcdcdc;" >游客模式</div>
+	   			<div style="color:#ff2a2a;" onclick="user_buy()">登录模式</div>	
+	   		</div>
+   		</div>
+	   
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+	<script>
+	var question_content,question_label,question_reward,is_youke;
+	apiready = function(){
+		getGuziCount();
+		$('.alert1 .aui-icon-close').click(function(){
+			$('.mask-alert').hide();
+						$('.alert1').hide();
+		});
+		is_youke = get_local('is_youke');
+	};
+	function reload3(){
+	     location.reload();
+	}  
+	function choiceMoney(el){
+		$(el).prevAll('li').children('div').attr('class','border-gray border-radius-e0e0e0');
+		$(el).nextAll('li').children('div').attr('class','border-gray border-radius-e0e0e0');
+		if($(el).children('div').hasClass('border-radius-ff7b00')){
+			$(el).children('div').attr('class','border-gray border-radius-e0e0e0');
+			$('#money').val('');
+		}else{
+			$(el).children('div').attr('class','border-light border-radius-ff7b00');
+			var txt = $(el).first().text();
+			$('#money').val($.trim(txt));
+		}
+	}
+	function choiceThis(el){
+		if($api.hasCls($api.first(el,'div'), 'selected')){
+			$api.attr($api.first(el,'div'), 'class', 'border-gray border-radius-e0e0e0');
+			getTap(el);
+		}else{
+			changeTap(el);
+		}
+	}
+	function changeTap(el){
+		var tap = $api.domAll('.selected');
+		if(tap.length<5){
+			$api.attr($api.first(el,'div'), 'class', 'border-light border-radius-ff7b00 selected');
+			getTap(el);
+		}else{
+			$toast('最多添加只能5个标签',2000)
+		}
+	}
+	function getTap(el){
+		var txt = '';
+		var tap = $api.domAll('.selected');
+		for (var i = 0; i < tap.length; i++) {
+			if(i!=tap.length-1){
+				txt += $(tap[i]).html()+" ";
+			}else{
+				txt += $(tap[i]).html();
+			}
+		}
+		$('#iptTap').val(txt);
+	}
+	function submit_questions(){
+		
+		question_content = $('#question').val();
+		if( !is_define(question_content) ){
+			$toast('问题详情不能为空',1500);
+			return false;
+		}
+		 question_label = $('#iptTap').val();
+		if( !is_define(question_label) ){
+			$toast('问题标签不能为空',1500);
+			return false;
+		}
+		 question_reward = $('#money').val();
+		if( !is_define(question_reward) ){
+			$toast('问题赏金不能为空',1500);
+			return false;
+		}
+		if(api.systemType=='android'){
+			ask_answer();
+		}else{
+			if(is_youke==1){
+			//游客
+				 $('.mask-alert').show();
+						$('.alert1').show();
+				$('#youke').click(function(){
+					setTimeout(function(){
+						$('.mask-alert').hide();
+						$('.alert1').hide();
+					},100)
+					ask_answer();
+				})
+			}else{
+				//账号
+				ask_answer();
+			}
+		}
+		
+		
+	}
+	//登录购买
+	function user_buy(){
+		open_w('ios_login','../user/ios_login.html',{winName:api.winName,frameName:api.frameName});
+		setTimeout(function(){
+			$('.mask-alert').hide();
+			$('.alert1').hide();
+		},100)
+
+	}
+	function ask_answer(){
+		var uid = get_local('uid');
+		var URL = serverURL+'app_interface/question/publish_question/';
+		var data = {
+			values :{
+				uid:uid,
+				question_content : question_content,//内容
+				question_label : question_label,//标签
+				question_reward : question_reward,//金额
+				secret:appSecret
+			}
+		};
+		r_ajax(URL,data,function(ret){
+			if(ret.errCode == 0){
+				var pras = api.pageParam;
+				openFrameFull('submit_success',{winName:api.winNamme,frameName:api.frameName});
+
+			}else{
+				openFrameFull('submit_failed');
+			}
+		});
+	
+	}
+	function getGuziCount(){
+//		var uid = get_local("uid");
+		var uid = get_local('uid');
+		var URL = serverURL + 'app_interface/user/get_other_user_info/';
+		var data = {
+			values:{
+				targetuid  : uid,
+				loginuid : 0,
+				secret : appSecret
+			}
+		}
+		r_ajax(URL,data,function(ret)
+		{
+			if(ret.errCode ==0){
+				$('#integral').text(ret.data.integral);
+			}else{
+				$toast(ret.errMsg,1500);
+			}
+		})
+	}
+	function back0(){
+		close_w();
+	}
+	function openRecharge(){
+		var integral = $('#integral').text();
+		if(api.systemType=='android'){
+			open_w('recharge_andriod','new/recharge_andriod.html',{uid:get_local('uid'),integral:integral,winName:api.winName,frameName:api.frameName})
+		}else{
+			open_w('recharge_ios','new/recharge_ios.html',{uid:get_local('uid'),integral:integral,winName:api.winName,frameName:api.frameName})
+		}
+	}
+	function setIntegral(left){
+		$('#integral').text(left);	
+	}
+	</script>
+</html>

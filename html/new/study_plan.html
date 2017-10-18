@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>学习计划</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/study_plan.css" />
+    <style>
+    	.border-r{
+    		border-right:1px solid #dcdcdc;
+    	}
+    </style>
+</head>
+<body>
+	<div id="header" class="aui-bg-blue">
+	     <header class="aui-bar aui-bar-nav">
+        	<a class="aui-pull-left aui-btn" ontouchstart="close_w();">
+	            <img src="../../img/back.png" alt="" style="width:27px;">
+	        </a>
+	        <div class="aui-title">学习计划</div>
+	        <a class="ceditor" onclick="editor();">编辑</a>
+	        <a class="ceditoring" style="display:none;" onclick="editoring();">取消</a>
+	    </header>
+	    <div class="aui-tab aui-bg-white "id="tab_list" >
+	        <div class="aui-tab-item border-r active" id="plantab1"  onclick="setFrameGroupIndex(0);">
+	            <span class="txt"><strong>基础课程</strong></span>
+	        </div>
+	        <div class="aui-tab-item border-r " id="plantab2"  onclick="setFrameGroupIndex(1);">
+	            <span><strong>专辑</strong></span>
+	        </div>
+	        <div class="aui-tab-item" id="plantab3"  onclick="setFrameGroupIndex(2);">
+	            <span><strong>战法课程</strong></span>
+	        </div>
+	    </div>     
+	</div>
+     
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript">
+		apiready = function() {
+		var $header = $api.dom('#header');
+		$api.fixIos7Bar($header);
+		$api.fixStatusBar($header);
+		var $body = $api.dom('body');
+		var header_h = $api.offset($header).h;
+		api.openFrameGroup({
+	    name: 'group1',
+	    preload:0,
+	    rect: {
+	        x: 0,
+	        y: header_h,
+	        w: 'auto',
+	        h: 'auto'
+	    },
+	    frames: [{
+	        name: 'study_plan_c1',
+	        url: 'study_plan_c1.html',
+	        bgColor: '#fff',
+	       
+	    }, { 
+	        name: 'study_plan_c2',
+	        url: 'study_plan_c2.html',
+	        bgColor: '#fff',
+	       
+	    }, { 
+	        name: 'study_plan_c3',
+	        url: 'study_plan_c3.html',
+	        bgColor: '#fff',
+	      
+	    }]
+		}, function(ret, err) {
+	    	setFrameGroupStatus(ret.index); 
+	    	if(!ret.index==0){
+	    		$('.ceditor').css('display','none');
+	    	}else{
+	    		$('.ceditor').css('display','block');
+	    	}
+	    
+		});
+		api.setFrameGroupAttr({
+		    name: 'group1',
+		   scrollEnabled:false
+		});
+	};
+	function setFrameGroupIndex(frameIndex) {   
+        api.setFrameGroupIndex({name:'group1',index:frameIndex,scroll:false});  
+    	}   
+    function setFrameGroupStatus(frameIndex) {  
+        tab1 = $api.byId('plantab1'), 
+        tab2= $api.byId('plantab2'), 
+        tab3= $api.byId('plantab3')    
+        switch (frameIndex) {   
+            case 0: {     
+               	tab1.className = "aui-tab-item border-r active"; 
+                tab2.className = "aui-tab-item border-r"; 
+                tab3.className = "aui-tab-item";    
+                break;  
+            }   
+            case 1: {   
+              	tab1.className = "aui-tab-item border-r"; 
+                tab2.className = "aui-tab-item border-r active";
+                tab3.className = "aui-tab-item ";   
+                break;  
+            }   
+            case 2: {   
+              	tab1.className = "aui-tab-item border-r"; 
+                tab2.className = "aui-tab-item border-r";
+                tab3.className = "aui-tab-item  active";   
+                break;  
+            }       
+            default:    
+            break;  
+        }   
+    } 
+    function editor(obj){
+    	ue_script_f('study_plan','study_plan_c1','ceditor()');
+    	$('.ceditor').hide();
+    	$(".ceditoring").show();
+    }
+     function editoring(obj){
+    	ue_script_f('study_plan','study_plan_c1','ceditoring()');
+    	$('.ceditoring').hide();
+    	$(".ceditor").show();
+    }
+</script>
+</html>

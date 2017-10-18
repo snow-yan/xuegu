@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>问答详情页(用户自己)</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">
+		<div id="prompt"></div>
+		<script type="text/html" id="promptDetails">
+			<div class="c-edf0f5 pdt07 pdb07 pdl07 pdr07" id="prompt">
+				<div class="ovd pdt02 pdb02 uc-a02 c-wh pstnr">
+					<div class="w30 fll t-ff2f2d dsplb ftz09">【温馨提示】</div>
+					<p class="w6 dsplb ftz07 umh15"><%=data.data%></p>
+					<span class="pstna abst0 absr0 h15e pd05" tapmode="" onclick="colse_prompt();"><img src="../image/icon/delete.png" class="w15e h15e" alt="" /></span>
+				</div>
+			</div>
+		</script>
+		<div id="question_content"></div>
+		<script type="text/html" id="question_details">
+			<div class="ubb ub-e0e0e0">
+				<div class="pd07 pstnr ovd">
+					<div class="w6 ovd">
+						<div class="fll dsplb">
+							<img src="<%=data.user_info.face%>" class="uc-a w30e h30e marr05">
+						</div>
+						<p class="txo umh15 t-4371bc pdt02"><%=data.user_info.nakename%></p>
+						<p class="txo pdt03 umh15 ftz075 t-999" id="add_time<%=data.question_id%>"><%=data.add_time%></p>
+					</div>
+					<span class="pstna abst15 absr10 pdl05 pdr05 h10e umh1 c-wh ftz075 pdb03 pdt03 border-radius-ff7b00 tx-c t-ff7b00">
+					    <img src="../image/icon/guzi.png" class="w10e pdr01 " alt="" /><%=data.question_reward%>
+					</span>
+					<p class="ftz09 pdt05 umh15"><%=data.question_content%></p>
+				</div>
+			</div>
+			<div class="h05e c-edf0f5"></div>
+		<!--回复-->
+		<div class="box ubtb w10 ub-e4e4e4 ovd" >
+			<p class=" pdl05 pdr05 umh25 ftz10 tx-l t-939393">
+				<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+				<span class="sl">回复 <font class=" ftz09"><%=data.answer_users%></font></span>
+			</p>
+		</div>
+		<ul>
+			<%
+			var list = data.answer_list;
+			for(var i =0; i<list.length;i++){
+			%>
+			<li class="box c-wh ovd pdt05"  onclick="">
+				<!--top-->
+				<div class="">
+					<div class="ovd area_auto pstnr ftz10">
+				   		<div class="fll umh10 tx-c" style="width: 20%;">
+				   			<%
+				   			if(is_define(list[i].user_info)){
+				   			%>
+				   			<img src="<%=list[i].user_info.face%>" class="uc-a w30e h30e pdl07 pdr07 pdt02" tapmode='op8' onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=data.answer_list[i].uid%>,uid:get_local('uid'),name:api.winName,frameName:api.frameName});event.preventDefault();event.stopPropagation();">
+				   			<%	
+				   			}else{
+				   			%>
+				   			<img src="../image/icon/no-answer.png" class="uc-a w30e h30e pdl07 pdr07 pdt02" tapmode='op8' onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=data.answer_list[i].uid%>,uid:get_local('uid'),name:api.winName,frameName:api.frameName});event.preventDefault();event.stopPropagation();">
+				   			<%	
+				   			}
+				   			%>
+				   		</div>
+				   		<%
+				   		if(list[i].user_info && list[i].user_info.nakename){
+			   			%>
+				   		<p class="txo w65 mart05 umh15 t-333 ftz085"><%=list[i].user_info.nakename%></p>
+			   			<%
+				   		}else{
+				   		%>
+				   		<p class="txo w65 mart05 umh15 t-333 ftz085"></p>
+				   		<%
+				   		}
+				   		%>
+						<p class="txo w65 umh15 ftz07 t-999" id="answer<%=list[i].answer_id%>"></p>
+						<%
+						if(list[i].answer_id == data.best_answer){
+						%>
+						<div class="w35e h25e pstna abst05 absr10">
+							<div class="w35e t-wh tx-c h15e umh15 ftz09 mart05 c-ff7b00 uc-a02"><font class="ftz08">已采纳</font></div>
+						</div>
+						<%
+						}else{
+						%>
+						<!--<div class="w35e h25e pstna abst05 absr10">
+							<div class="w35e t-wh tx-c h15e umh15 ftz09 mart05 c-ff7b00 uc-a02"><font class="ftz08">已采纳</font></div>
+						</div>-->
+						<%
+						}
+						%>
+				   	</div>
+				</div>
+			   	<!--bottom-->
+			   	<div class="pstnr">
+			   		<div class="ovd area_auto ftz10">
+				   		<div class="fll umh15 tx-c pdt075 t-999" style="width: 20%;" tapmode='' onclick="dianzan(<%=list[i].answer_id%>);">
+				   			<img src="../image/icon/zan.png" class="w12e h12e pal02">
+				   			<span class="t-c0c0c0 pdr05"><font class="ftz08" id="agree_count<%=list[i].answer_id%>"><%=list[i].agree_count%></font></span>
+				   		</div>
+				   		<div class="fll umh10 ubb ub-e0e0e0" style="width: 80%;">
+				   			<div class="marr05 marb05 pd05 c-f7f7f7 uc-a02">
+				   				<p class="ftz08 t-898888"><%=list[i].answer_content%></p>
+				   			</div>
+				   		</div>
+				   	</div>
+				   	<img src="../image/icon/triangle-up.png" class="w12e h10e"style="position: absolute; top: -12px;right: 30px;z-index: 2222222;"/>
+			   	</div>
+			</li>
+			<%
+			}
+			%>
+		</ul>
+		</script>
+		<div class="h05e c-wh"></div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/sdk_qq.js"></script>
+	<script type="text/javascript" src="../script/sdk_wx.js"></script>
+	<script type="text/javascript" src="../script/sdk_wb.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			setFrame();
+			getPrompt();
+			getAnswerDetails();
+			push_down(getAnswerDetails);
+		};
+		function setFrame(){
+			ue_script(api.winName,"setFrame('"+api.frameName+"')");
+		}
+		function colse_prompt(){
+			$('#prompt').addClass('dspn');
+		}
+		function add_answer(){
+			var pram = api.pageParam;
+			var tangu_id = pram.tangu_id;
+			var uid=get_local('uid');
+           	if(!is_define(uid)){
+           		$toast("请先进行登录，再进行抢答",1500);
+	             setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+           	}else{
+           		if(uid == tangu_id){
+           			$toast("自己不能回答自己的问题",1500);
+           		}else{
+					var best_answer=$('#best_answer').val();
+					if(best_answer=="0"){
+						openFrameFull("../user/ui_comment",{frameName:api.frameName,uid:api.pageParam.uid,question_id:api.pageParam.question_id,tg_id:api.pageParam.tangu_id},'rgba(0,0,0,0)');
+					}else{
+						$toast("已抢答",1500);
+					}
+				}
+			}
+		}
+		function getAnswerDetails(){
+			var uid = get_local('uid');
+			var ret = api.pageParam.data;
+			if(ret.errCode ==0){
+				$('#close').val(ret.data.close);
+				if(ret.data.close != 0){
+					ue_script("choice_details","change_text()");
+				}
+			    var tg_id_list='';
+			    var answer_id_list='';
+				$('#question_content').html(bt('question_details',ret));
+				$('#add_time'+ret.data.question_id).text(timetostr(ret.data.add_time));
+				for(var i=0;i<ret.data.answer_list.length;i++){
+					var ID = '#answer'+ret.data.answer_list[i].answer_id;
+					$(ID).text(timetostr(ret.data.answer_list[i].add_time));
+				}
+				for(var i =0; i<ret.data.answer_list.length;i++){
+					if(i==ret.data.answer_list.length-1){
+						answer_id_list += ret.data.answer_list[i].answer_id;
+					}else{
+						answer_id_list += ret.data.answer_list[i].answer_id+',';
+					}
+				}
+			}else{
+				$toast(ret.errMsg,1500);
+			}
+			push_down_over();
+			if(is_define(uid)){
+				whether_Praise(answer_id_list);
+				is_follow();
+			}
+			api.parseTapmode();
+		}
+		
+		function answer_forward(){
+			var question_id = api.pageParam.question_id;
+			var URL = serverURL + 'app_interface/question/get_question_share_url/';
+			URL+='?secret='+appSecret+'&question_id='+question_id;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode==0){
+				alert(ret.data)
+					forward_info(ret.data);
+				}else{
+					$toast("操作失败",1500);		
+				}
+			})
+		}
+		
+		function is_follow(){
+			var question_id = api.pageParam.question_id;
+			var uid = get_local('uid');
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					question_id : question_id
+				}
+			};
+			var URL = serverURL + 'app_interface/question/question_is_focus/';
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode==0){
+					$('#is_follows').val(ret.data.focus);
+					if(ret.data.focus==false){
+						ue_script("choice_details","change_text2()");
+					}else if(ret.data.focus==true){
+						ue_script("choice_details","change_text3()");
+					}
+				}else{
+					$toast(ret.errMsg,1500)
+				}
+			})
+			api.parseTapmode();
+	    }
+	    function go_follow(){
+	    	var question_id = api.pageParam.question_id;
+	    	var status = $('#is_follows').val();
+			var uid = get_local('uid');
+			if (is_define(uid)) {
+				var data = {
+					values:{
+						secret : appSecret,
+						uid : uid,
+						question_id : question_id
+					}
+				};
+				var URL = serverURL + 'app_interface/question/question_focus/';
+				r_ajax(URL,data,function(ret)
+				{
+					if(ret.errCode ==0){
+						if(status=='false'){
+							$toast("关注成功",1500);
+						}else if(status=='true'){
+							$toast("已取消关注",1500);
+						}
+						is_follow();
+					}else{
+						$toast("操作失败",1500);
+					}
+				})
+				api.parseTapmode();
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				 setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);		
+			}
+	    }
+		
+		function getPrompt(){
+			var URL = serverURL + 'app_interface/main/daniu_tangu_prompt/';
+			URL+='?secret='+appSecret;
+			g_ajax(URL,function(ret)	
+			{
+				if(ret.errCode ==0){
+					$('#prompt').html(bt('promptDetails',ret));
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		//谈股是否点赞
+		function whether_Praise(answer_id){
+			var answer_ids = answer_id.split(',');
+			var uid = get_local('uid');
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					answer_ids : answer_id
+				}
+			};
+			var URL = serverURL + 'app_interface/question/answer_is_dianzan/';
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode ==0){
+					for (var Key in ret.data){
+				      var TGID = '#collection_mark'+Key; 
+				      if(ret.data[Key]==1){
+				          $(TGID).attr('src', '../image/icon/zans.png');
+				      }else{
+				          $(TGID).attr('src', '../image/icon/zan.png');
+				      } 
+					}
+				}else{
+					//$toast(ret.errMsg,1500)
+				}
+			})
+			api.parseTapmode();
+		}
+		//回答点赞
+		function dianzan(answer_id){
+			var uid = get_local('uid');
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					answer_id : answer_id
+				}
+			};
+			if(is_define(uid)){
+				var URL = serverURL + 'app_interface/question/answer_dianzan/';
+				r_ajax(URL,data,function(ret)
+				{
+					if(ret.errCode ==0){
+					    var agree_count = $('#agree_count'+answer_id).text();
+						$('#agree_count'+answer_id).text(parseInt(agree_count) + 1 );
+						$("#collection_mark"+answer_id).attr('src', '../image/icon/zans.png');
+					}else{
+						$toast(ret.errMsg,1500)	
+					}
+				})
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				  setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+			}
+		}
+		function open_self_frame(){
+			api.openFrame({
+		    name: 'add_answer',
+		    url: 'add_answer.html',
+		    rect: {
+		        x: api.frameWidth-50,
+		        y: api.winHeight-50,
+		        w: 50,
+		        h: 50
+		    },
+		    pageParam: {
+		       	frameName:api.frameName,
+		       	uid:api.pageParam.uid,
+		       	question_id:api.pageParam.question_id,
+		       	tg_id:api.pageParam.tangu_id
+		    },
+		    bounces: false,
+		    bgColor: 'rgba(0,0,0,0)',
+		    vScrollBarEnabled: true,
+		    hScrollBarEnabled: true
+		});
+		}
+		
+		function agreeThisCommen(answer_id){
+			var uid = get_local('uid');
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					answer_id : answer_id
+				}
+			};
+			if(is_define(uid)){
+				var URL = serverURL + 'app_interface/question/answer_best/';
+				r_ajax(URL,data,function(ret)
+				{
+					if(ret.errCode ==0){
+						getAnswerDetails();
+					}else{
+						$toast(ret.errMsg,1500)	
+					}
+				})
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				  setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+			}
+		}
+	</script>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>最新课程</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">
+	    <input type="hidden" id="page" value="1"/>
+		<ul id="album_content"></ul>
+		<script id="album_list" type="text/html">
+		   <%
+		   for(var i=0;i< data.cac_list.length;i++){
+		   var le_msg = str2json(data.cac_list[i].cor_letv_msg);
+		   var let_v=le_msg.data.video_unique;
+		   %>
+		   <li class="clo_two pstnr ubb ub-e4e4e4" tapmode="op8" onclick="open_w('class_details','class_details.html',{'cor_id':'<%=data.cac_list[i].cor_id%>','UID':get_local('uid'),pic:'<%=data.cac_list[i].cor_pic%>',video_unique:'<%=let_v%>'})">
+			    <div class=" w95 area_auto">
+					<div class="col_list">
+						<div class="pdt07 pdb07 pdl02 pdr05 pstnr">
+							<img src="../image/icon/echo_bg.jpg" style=" height:<%=api.frameWidth/3.4-15%>px;" data-echo="<%=data.cac_list[i].cor_pic%>" class="w10 uc-a02 ovd" alt="" />
+							<div class="pstna absb10 absr10 pdl025 pdr025 umh1 c-616161 uc-a10 t-wh">
+								<img src="../image/icon/dot-wh.png" class="w10e h10e"/>
+								<font class="ftz075"><%=data.cac_list[i].cor_view%></font>
+							</div>
+						</div>
+					</div>
+					<div class="col_list">
+						<div class="pdr02 pdt07">
+							<p class="umh125 pdb025 ftz085 txo"><%=data.cac_list[i].cor_name%></p>
+							<p class="t-c0c0c0 ftz09 w10" style="max-height: 3.3em;overflow: hidden;">
+								<%
+								var lable = data.cac_list[i].cor_label.split(' ');
+								for(var j=0;j<lable.length;j++){
+								if(is_define(lable[j])){
+								%>
+								<span class="fll pdt01 pdb01 pdl05 pdr05 marr03 mart025 umh1 border-radius-e0e0e0 dsplb"><font class="ftz07"><%=lable[j]%></font></span>
+								<%
+								}
+								}
+								%>
+							</p>
+						</div>
+					</div>
+					<%
+					if(is_define(data.cac_list[i].cor_charge_money) && data.cac_list[i].cor_charge_money != "0"){
+					%>
+					<p class="pstna absl50p absb05 ovd t-ff7b00 umh15 ftz075"><img src="../image/icon/guzi.png" class="w10e pdt03 pdr01" alt="" /><%=data.cac_list[i].cor_charge_money%></p>
+					<%}else{%>
+					<p class="t-ff7b00 pstna absl50p absb07 ftz075">限时免费</p>
+					<%
+					}
+					%>
+				</div>
+			</li>
+			<%
+			}
+			%>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var lastPage = true,firstPageHaveData = true;
+		apiready = function() {
+			getAlbumDetails();
+			push_down(function(){
+				if(firstPageHaveData){
+					getAlbumDetails();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					getAlbumDetails('next');
+				}
+			});
+		};
+		function getAlbumDetails(type){
+			if(type=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			var pagesize = 10;
+			var aid = api.pageParam.aid;
+			var URL = serverURL + 'app_interface/course/album_course_detail2/';
+			URL+='?secret='+appSecret+'&aid='+aid+'&page='+page+'&pagesize='+pagesize;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					if(ret.data.data.cac_list.length>0){
+						if(type=='next'){
+							
+							$('#album_content').append(bt('album_list',ret.data));
+						}else{
+							$('#album_title').html(bt('album_title_details',ret.data));
+							$('#album_content').html(bt('album_list',ret.data));
+						}
+					}else{
+						if(page==1){
+							firstPageHaveData = false;
+						}
+						log(firstPageHaveData);
+						lastPage =false;
+						no_data_more('album_content');
+					}
+					push_down_over();
+					api.parseTapmode();
+					Echo.init();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+ 	</script>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>问答详情页</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">
+		<input type="hidden" id="page" value="1" />
+		<ul id="more_questions"></ul>
+		<script type="text/html" id="more_questions_list">
+			<%
+			for(var i =0; i< question_all.length;i++){
+			%>
+			<li class="box c-wh ovd pdt025" tapmode="c-e0e0e0" onclick="open_w('choice_details','../html/choice_details.html',{'question_id':<%=question_all[i].question_id%>,'uid':get_local('uid'),'tangu_id':<%=question_all[i].uid%>});event.preventDefault();event.stopPropagation();">
+				<div class="">
+					<div class="ovd area_auto pstnr ftz10">
+				   		<div class="fll umh10 tx-c" style="width: 15%;">
+				   			<%
+							if(is_define(question_all[i].face)){
+							%>
+							<img src="<%=question_all[i].face%>" class="uc-a w25e h25e pdt025 pdl05 pdr05" alt="" />
+							<%
+							}else{
+							%>
+							<img src="../image/icon/no-answer.png" class="uc-a w25e h25e pdt025 pdl05 pdr05" alt="" />
+							<%
+							}
+							%>
+				   		</div>
+				   		<p class="txo w4 mart025 pdl05 umh15"><%=question_all[i].nakename%></p>
+						<p class="txo w4 umh15 pdl05 ftz08 t-999" id="time<%=question_all[i].question_id%>"></p>
+						<div class=" ftz09 pstna abst07 absr10">
+							<span class="ovd pdt025 pdb025 c-wh">
+								<!--<span onclick="pinglun(<%=question_all[i].question_id%>);event.preventDefault();event.stopPropagation();">-->
+								<span>
+									<span class="flr t-c0c0c0 umh2"><font class="ftz08 pd02" id="pinglun<%=question_all[i].question_id%>"><%=question_all[i].answer_users%></font></span>
+									<span class="flr pdt04 pdl03 pdr03"><img src="../image/icon/pinglun.png" class="w12e h10e"></span>
+								</span>
+								<!--<span onclick="dianzan(<%=question_all[i].question_id%>);event.preventDefault();event.stopPropagation();">-->
+								<span>
+									<span class="flr t-c0c0c0 umh2 pdr05"><font class="ftz08 pd02" id="zan<%=question_all[i].question_id%>"><%=question_all[i].views_count%></font></span>
+									<span class="flr pdt04 pdr03"><img src="../image/icon/eyes.png" class="w12e h10e"></span>
+								</span>		
+							</span>
+						</div>	
+				   	</div>
+				</div>
+			   	<div class="pstnr">
+			   		<div class="ovd area_auto ftz10">
+				   		<div class="flr umh10 ubb ub-e0e0e0" style="width: 85%;">
+				   			<div class="marr05 marb025 pd025 ">
+				   				<p class="ftz08 t-545454"><%=question_all[i].question_content%></p>
+				   			</div>
+				   		</div>
+				   	</div>
+			   	</div>
+			</li>
+			<%
+			}
+			%>
+		</script>
+		<div class="h05e c-wh"></div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var lastPage = true,firstPageHaveData = true;
+		apiready = function() {
+			var pars = api.pageParam.pars;
+			questions_search();
+			push_down(function(){
+				if(firstPageHaveData){
+					questions_search();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					questions_search('next');
+				}
+			});
+		};
+		function questions_search(type){
+			var keyWords = api.pageParam.keyWords;
+			var base = new Base64(); 
+			var result = base.encode(keyWords); 
+			if(type=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			var pagesize = 10;
+			var URL = serverURL + 'app_interface/question/question_search/';
+			URL += '?secret='+appSecret+'&keyword='+result+'&page='+page+'&pagesize='+pagesize;
+			g_ajax(URL,function(ret){
+//				console.log(json2str(ret))
+				if(ret.errCode==0){
+					if(ret.data && ret.data.question_all.length>0){
+						if(type=='next'){
+							$('#more_questions').append(bt('more_questions_list',ret.data));
+						}else{
+							$('#more_questions').html(bt('more_questions_list',ret.data));
+						}
+						for(var i =0;i<ret.data.question_all.length;i++ ){
+							var ID = '#time'+ret.data.question_all[i].question_id;
+							var t = getTime(ret.data.question_all[i].add_time);
+							$(ID).text(t);
+						}
+						ue_script(api.winName,'setCourseCount('+ret.data.count+')');
+					}else{
+						if( page==1 ){
+							firstPageHaveData = false;
+						}
+						lastPage = false;
+						no_data_more('more_questions');
+					}
+					push_down_over();
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		//谈股点赞
+		function dianzan(question_id){
+			var uid = get_local('uid');
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					answer_id : question_id
+				}
+			};
+			if(is_define(uid)){
+				var URL = serverURL + 'app_interface/question/answer_dianzan/';
+				r_ajax(URL,data,function(ret)
+				{
+					if(ret.errCode ==0){
+						var zan_count = $('#zan'+question_id).text();
+						$('#zan'+question_id).text(parseInt(zan_count) + 1 );
+					}else{
+						$toast(ret.errMsg,1500)	
+					}
+				})
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					open_w('login','../user/login.html');
+				},1000);
+			}
+		}
+	</script>
+</html>

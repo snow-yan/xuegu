@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="format-detection" content="telephone=no">
+		<title>首页</title>
+		<link rel="stylesheet" type="text/css" href="cool_css/cool.css">
+	</head>
+	<body class="c-wh ovd">
+		<div id="content"></div>
+		<div id="footer" class="ubt ub-e4e4e4 c-wh tx-c t-939393">
+			<ul class="clo_three h25e pdt025 pdb025">
+				<li class="col_list tx-c " ontouchend="randomSwitchBtn(0)">
+					<div class="w9 area_auto">
+						<p class="h15e tx-c">
+							<img class="h15e w15e ftz09" src="image/icon/index/footer_1_act.png">
+						</p>
+						<p class="tx-c umh15 ftz07 ">
+							首页
+						</p>
+					</div>
+				</li>
+				<li class="col_list tx-c" ontouchend="randomSwitchBtn(1)">
+					<div class="w9 area_auto">
+						<p class="h15e tx-c">
+							<img class="h15e w15e ftz09" src="image/icon/index/footer_2.png">
+						</p>
+						<p class="tx-c umh15 ftz07">
+							学股
+						</p>
+					</div>
+				</li>
+				<!--<li class="col_list tx-c" ontouchend="randomSwitchBtn(2)">
+					<div class="w9 area_auto">
+						<p class="h15e tx-c">
+							<img class="h15e w15e ftz09" src="image/icon/index/footer_3.png">
+						</p>
+						<p class="tx-c umh15 ftz07">
+							行情
+						</p>
+					</div>
+				</li>-->
+				<li class="col_list tx-c" ontouchend="randomSwitchBtn(2)" id="user">
+					<div class="w9 area_auto">
+						<p class="h15e tx-c">
+							<img class="h15e w15e ftz09" src="image/icon/index/footer_3.png">
+						</p>
+						<p class="tx-c umh15 ftz07">
+							我的
+						</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script type="text/javascript" src="script/api.js"></script>
+	<script type="text/javascript" src="script/init.js"></script>
+	<script type="text/javascript" src="script/app.js"></script>
+	<script type="text/javascript" src="script/zepto.min.js"></script>
+	<script type="text/javascript" src="script/self.js"></script>
+	<script type="text/javascript" src="script/device.js"></script>
+	<script type="text/javascript" src="script/sdk_jpush.js"></script>
+	<script type="text/javascript" src="script/sdk_live_net.js"></script>
+	<script type="text/javascript" src="script/rongyun.js"></script>
+	<script type="text/javascript">
+		var first_start;
+		var header_h;
+		var live_net;
+		var rong;
+		var fName;
+		var index1;
+		apiready = function() {
+			
+			if (api.pageParam.index =='user') {
+				index1 = 2;
+				$("#footer img").eq(2).attr("src", "image/icon/index/footer_3_act.png");
+				$("#footer img").eq(0).attr("src", "image/icon/index/footer_1.png");
+			} else if (api.pageParam.index =='study') {
+				index1 = 1;
+				$("#footer img").eq(1).attr("src", "image/icon/index/footer_2_act.png");
+				$("#footer img").eq(0).attr("src", "image/icon/index/footer_1.png");
+			} else {
+				index1 = 0;
+			}
+			
+			rong = api.require('rongCloud2');
+			
+			first_start = api.require('UIScrollPicture');
+			if (is_define(get_local("uid"))) {
+				rong_start();
+			}
+			sdk_j_init();
+			api.addEventListener({
+				name : 'keyback'
+			}, function(ret, err) {
+				if (ret) {
+					switch(fName) {
+						case 'see_live_frame':
+							fName = 'live';
+							ue_script_f('root', 'see_live_frame', 'living_stop()');
+							break;
+						default:
+							close_w();
+					}
+				} else {
+					$toast(ret.errMsg, 1500)
+				}
+			});
+			
+			//设置当前版本号
+			var Last_AppVersion = get_local("Last_AppVersion");
+			if (!is_define(Last_AppVersion)) {
+				//启动欢迎页
+				close_start_page(start_welcome);
+				//设置第一次启动的版本号
+				set_local("Last_AppVersion", app_version);
+			} else {
+				if (Last_AppVersion != app_version) {
+					close_start_page(start_welcome);
+					set_local("Last_AppVersion", app_version);
+				} else {
+					start_group();
+				}
+			}
+		}
+		function start_group() {
+			var $footer = $api.byId('footer');
+			var body_h = api.winHeight;
+			var footer_h = $api.offset($footer).h;
+			var rect_h = body_h - footer_h;
+			api.openFrameGroup({
+				name : 'index',
+				bounces : true,
+				scrollEnabled : false,
+				rect : {
+					x : 0,
+					y : 0,
+					w : 'auto',
+					h : rect_h
+				},
+				index : index1,
+				preload :0,
+				frames : [{
+					name : 'main',
+					url : 'main/main.html',
+					useWKWebView : true,
+					vScrollBarEnabled : false,
+					bounces : false,
+				}, {
+					name : 'study',
+					url : 'main/study.html',
+					useWKWebView : true,
+					vScrollBarEnabled : false,
+					bounces : false
+				}, 
+//				{
+//					name : 'market',
+//					url : 'main/market.html',
+//					useWKWebView : true,
+//					vScrollBarEnabled : false,
+//					bounces : false
+//				},
+				 {
+					name : 'user',
+					url : 'main/user.html',
+					useWKWebView : true,
+					vScrollBarEnabled : false,
+					bounces : false
+				}]
+			}, function(ret, err) {
+				var name = ret.name;
+				var index = ret.index;
+				group_frame_open = 1;
+				close_start_page();
+				first_start.close();
+			});
+			api.setWinAttr({
+				softInputMode : 'pan'
+			});
+		}
+
+		function randomSwitchBtn(index) {
+			var $header = $api.dom('#header');
+			$("#header div").addClass("dspn");
+			$("#footer li").removeClass("t-18b4ed");
+			$("#footer img").eq(0).attr("src", "image/icon/index/footer_1.png");
+			$("#footer img").eq(1).attr("src", "image/icon/index/footer_2.png");
+			$("#footer img").eq(2).attr("src", "image/icon/index/footer_3.png");
+			//$("#footer img").eq(3).attr("src", "image/icon/index/footer_4.png");
+			
+			$("#header div").eq(index).removeClass("dspn");
+			$("#footer li").eq(index).addClass("t-18b4ed");
+			$("#footer img").eq(index).attr("src", "image/icon/index/footer_" + (index + 1) + "_act.png");
+			setTimeout(function() {
+				api.setFrameGroupIndex({
+					name : 'index',
+					index : index
+				});
+			}, 300);
+		}
+
+		function open_current_w() {
+			api.setFrameGroupIndex({
+				name : 'index',
+				index : 1
+			});
+			randomSwitchBtn(1);
+		}
+
+		function rong_start() {
+			var uid = get_local("uid");
+			setOnReceiveMessageListener(function(ret)//监听融云消息
+			{
+				//			console.log("消息"+json2str(ret));
+				rong_msg = ret;
+				var message = ret.result.message;
+				if (message.objectName == 'RC:TxtMsg') {
+					var content = message.content.text;
+					var extra = message.content.extra;
+					var extra_obj = str2json(extra);
+					var nickname = extra_obj.nickname;
+					var face = extra_obj.face;
+					var sentTime = message.sentTime;
+					var senderUserId = message.senderUserId;
+					var targetId = message.targetId;
+					var firstIn = extra_obj.firstIn;
+					if (firstIn && firstIn == 'yes') {
+						ue_script_f('liveKongWin', 'live_frame', 'put_msg("' + content + '","' + nickname + '","' + firstIn + '","' + face + '")');
+						ue_script_f('root', 'see_live_frame', 'put_msg("' + content + '","' + nickname + '","' + firstIn + '","' + face + '")');
+					} else {
+						ue_script_f('liveKongWin', 'live_frame', 'put_msg("' + content + '","' + nickname + '")');
+						ue_script_f('root', 'see_live_frame', 'put_msg("' + content + '","' + nickname + '")');
+					}
+				} else if (message.objectName == 'RC:CmdNtf') {
+					if (str2json(message.content.data).action == 'in') {
+						ue_script_f('root', 'see_live_frame', 'update_onLine_user(' + json2str(message.content) + ')');
+					} else if (str2json(message.content.data).action == 'out') {
+						ue_script_f('liveKongWin', 'live_frame', 'update_onLine_user(' + json2str(message.content) + ')');
+					}
+				}
+			})
+			rongGetToken(uid, uid, uid, function(rongyunToken) {
+				set_local("rongyunToken", rongyunToken);
+				//开始链接融云
+				rongInit(function(ret) {
+					if (ret.status == 'success') {
+						rongConnect(function(ret) {
+						});
+					} else {
+						//					$toast(json2str(ret));
+					}
+				});
+			});
+		}
+
+		function setFname(name) {
+			fName = name;
+		}
+	</script>
+</html>

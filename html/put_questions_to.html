@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>提问</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">
+		<div class="w10 h30e c-4371bc" id="header">
+			<div class="box w95 area_auto pstnr h30e t-wh">
+				<p class="pstna absl0 abst0 pdt05 pdb05 h20e" ontouchend="close_w();">
+					<img src="../image/icon/left.png" class="w20e h20e">
+				</p>
+				<p class="ovd tx-c umh25 ftz12">向<font id="name">xx</font>提问</p>
+				<p class="pstna absr03 abst0 umh3" tapmode ontouchend="submit()" >提交</p>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			var nakename = api.pageParam.tagetNakename;
+			if(is_define(nakename)){
+				$('#name').text(nakename);
+			}
+			open_f('put_questions_to_c','put_questions_to_c.html','false',api.pageParam);
+		};
+		function submit(){
+			api.execScript({
+			    frameName: 'put_questions_to_c',
+			    script: 'submit_questions()'
+			});
+		}
+	</script>
+</html>

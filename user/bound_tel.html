@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>绑定手机号</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+</head>
+<body class="aui-bg-white">
+    <header class="aui-bar aui-bar-nav aui-bg-blue" id="header">
+        <a class="aui-pull-left aui-btn" ontouchstart="close_w();">
+           <img src="../img/back.png" alt="" style="height:23px;">
+        </a>
+        <div class="aui-title">绑定手机号</div>
+    </header>                
+    <div class="register">
+        <div class="tip"><span class="aui-text-red">【温馨提示】</span>为了您的账户安全，请绑定手机号</div>
+        <form>
+            <div class="control" style="border:none;margin:0rem 0 0.25rem 0">
+                <div class="control-lable"><img src="../img/password1.png" alt="" style="width:1rem;"></div>
+                <input type="tel" id="mobile"  maxlength="11" placeholder="请输入手机号"  oninput="myFunction()" class="aui-text-gray8">
+            </div> 
+            <div class="control pwd" style="border:none;border-radius:0;border-top:1px solid #dcdcdc;padding:0.25rem 0.75rem;display: none;">
+                <div class="control-lable"><img src="../img/password2.png" alt="" style="width:1rem;"></div>
+                <input type="password" id="pwd"  placeholder="密码" maxlength="16" class="aui-text-gray8">
+            </div> 
+            <div class="aui-padded-0-15 border_10">
+                <div class="control_btn control_btn_active" id="sub" onclick="go_login();">完成</div>
+                <div class="control_btn control_btn_active" id="sub1" onclick="go_register();" style="display:none;">完成</div>  
+            </div>                       
+        </form>            
+    </div>
+   
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/self.js"></script> 
+<script type="text/javascript">
+	var status;
+   apiready = function()
+	{
+		var $header = $api.dom('#header');
+		$api.fixIos7Bar($header);
+		$api.fixStatusBar($header);
+		
+	};
+	// 验证手机号是否已经注册
+	function myFunction(){
+		var mobile = $("#mobile").val();
+		if(mobile.length == 11){
+			var URL = serverURL + "app_interface/user/exists_username/";
+		 	var data = {
+		 		values :{
+		 			secret:appSecret,
+		 			username:mobile
+		 		}
+		 	};
+		 	r_ajax(URL,data,function(ret){
+		 		//alert(JSON.stringify(ret))
+		 		if(ret.errCode==0){
+		 			if(ret.data.status==0){
+	//	 				用户不存在
+						$('.pwd').hide();
+						$('#sub').hide();
+						$('#sub1').show();
+		 			}else{
+	//	 				用户存在
+						$('.pwd').show();
+						$('#sub1').hide();
+						$('#sub').show();
+		 			}
+		 		}else{
+		 			$toast(ret.errMsg, 1500);
+		 		}
+		 	})			
+		}
+	}
+	function go_register(){
+		var mobile = $("#mobile").val();
+		var phone_reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+		if (!is_define(mobile)) {
+			$toast("请输入手机号", 1000);
+			return false;
+		}
+		if (!phone_reg.test(mobile)) {
+			$toast("手机号格式错误！", 1000);
+			return false;
+		}
+		open_w('bound_code','bound_code.html',{mobile:mobile,datas:api.pageParam.qq_datas,type:api.pageParam.type});
+	}
+	 function go_login(){
+		var URL = serverURL + "app_interface/user/user_login2/";
+		var phone_reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+		var mobile = $("#mobile").val();
+		var pwd = $("#pwd").val();
+		//var login_pwd = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
+		var deviceId = api.deviceId.replace(/\-/g, "");
+		if (!is_define(mobile)) {
+			$toast("请输入手机号", 1000);
+			return false;
+		}
+		if (!phone_reg.test(mobile)) {
+			$toast("手机号格式错误！", 1000);
+			return false;
+		}
+		if (!is_define(pwd)) {
+			$toast("请输入密码", 1500);
+			return false;
+		}
+//		if (!login_pwd.test(pwd)) {
+//			$toast("密码格式错误！", 1500);
+//			return false;
+//		}
+		var data = {
+	 		values :{
+	 			user_name:mobile,
+	 			password:pwd,
+	 			secret:appSecret,
+	 			dev_label_id:deviceId
+	 		}
+	 	};
+	 	r_ajax(URL,data,function(ret){
+	 		if(ret.errCode == 0){
+	 			shouquan_login();
+	 			
+	 		}else{
+	 			$toast(ret.errMsg, 1500);
+	 		}
+	 	})
+	}
+	//授权登录成功
+	function shouquan_login(){
+		var datas=api.pageParam.qq_datas;
+		var mobile = $("#mobile").val();
+		if(api.pageParam.type=='qq'){
+			var URL = serverURL + 'app_interface/user/qq_bind/';
+			var data1 = {
+					values:{
+	                	data: datas,
+	                	secret:appSecret,
+	                	user_name : mobile,
+	                	type:2,
+	            	}
+	            };
+		}else if(api.pageParam.type=='weibo'){
+       		var URL = serverURL + 'app_interface/user/sina_bind/';
+       		var data1 = {
+					values:{
+	                	data: datas,
+	                	secret:appSecret,
+	                	user_name : mobile,
+	                	type:2,
+	            	}
+	          };
+       	}else{
+       		var URL = serverURL + 'app_interface/user/weixin_bind/';
+       		var data1 = {
+				values:{
+                	access_token: datas,
+                	access_user:api.pageParam.access_user,
+                	secret:appSecret,
+                	user_name : mobile,
+                	type:2,
+            	}
+            };
+       	}
+			r_ajax(URL, data1,function(ret){
+	            //alert(JSON.stringify(ret))
+				if(ret.errCode == 0){
+						// 已经绑定过了
+	    				
+			 			set_local('uid',ret.data.uid);
+						set_local('user_name',ret.data.user_name);
+						set_local('is_youke',ret.data.is_youke);
+	                    ue_script("root","set_local('uid','"+ret.data.uid+"');rong_start()");
+			 			$toast('授权登录成功',1500);
+			 			back(ret.data.uid,ret.data.face,ret.data.nakename);	
+	
+	            	}
+	        });
+       
+	}
+	function back(uid,face,nakename){
+		refreshNews();
+		set_local('allow_no_wifi_play','yes');
+		set_local('face',face);
+		set_local('nakename',nakename);
+		var pars = api.pageParam;
+		switch (pars.frameName)
+		{
+		case 'hot_answer_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "getAnswerList();"
+			});
+			close();
+		  	break;
+		case 'hot_lecturer_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "getHotLecturer();"
+			});
+			close();
+		  	break;
+		case 'video_pause':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.winName+'_c',
+			    script: "Video_details();"
+			});
+			close();
+		  	break;
+	  	case 'class_details_c':
+			api.execScript({
+			    name: pars.winName,
+			    script: "setUID("+uid+","+pars.cor_id+");"
+			});
+			close();
+		  	break;
+	  	case 'bull_talk_stocks_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "setUID("+uid+");"
+			});
+			close();
+		  	break;
+	  	case 'choice_details_c':
+			api.execScript({
+			    name: pars.winName,
+			    script: "getAnswerDetails();"
+			});
+			close();
+		  	break;
+		case 'course_list_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "shuaXin();"
+			});
+			close();
+		  	break;
+	  	case 'choice_details_self_c':
+			api.execScript({
+			    name: pars.winName,
+			    script: "getAnswerDetails();"
+			});
+			close();
+		  	break;
+		case 'get_gift_c':
+			api.execScript({
+			    name: pars.winName,
+			    frameName: pars.frameName,
+			    script: "is_getlibao();"
+			});
+			close();
+		  	break;
+		default:
+			api.execScript({
+			    name: 'root',
+			    frameName: 'home',
+			    script: "load_index()"
+			});
+			close();
+		}
+		open_w('index','../index.html')
+	}
+	
+</script>
+</html>

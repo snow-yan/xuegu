@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>战法课程播放</title>
+    <link rel="stylesheet" type="text/css" href="../../cool_css/cool.css" />
+</head>
+<body class="aui-bg-white">
+	<input type="hidden" id="video_unique" value="" />
+    <div id="header" class="c-bla">
+		<div class="w10 area_auto ovd" id="video_info">
+			<div id="player" class="pstnr">
+				<img id="ls_pic" src="../../image/icon/echo_bg.jpg" class="w10" alt=""/>
+			</div>
+		</div>		
+	</div>
+</body>
+<script type="text/javascript" src="http://yuntv.letv.com/bcloud.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>	
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript">
+	var sysType,H,y,connectionType,landscape,UID,player,t,allow_no_wifi_play,corName,playerConf={},fullScreen,leHeight,uu = 'q1grazmejo';
+	apiready = function() {
+		var cor_id =api.pageParam.cor_id;
+		//设置占位图片的高
+		leHeight = Math.round(api.winWidth*19/34);
+		$('#ls_pic').css('height',leHeight);
+		fullScreen = false;
+		api.setStatusBarStyle({
+		    style: 'light'
+		});
+		//判断手机类型	
+		sysType = api.systemType;
+		if(sysType == 'ios'){
+		 	H = 20;
+            $('#video_info').css('padding-top',H+"px");
+            landscape = 'landscape_right';
+        }else if(sysType == 'android'){
+        	H = 25;
+			$('#video_info').css('margin-top',H+"px");
+            landscape = 'landscape_left';
+        }
+		get_course_details(cor_id);
+		allow_no_wifi_play = get_local('allow_no_wifi_play');
+
+		    player = new CloudVodPlayer();
+	        //监听直播返回键
+			api.addEventListener({
+			    name: 'keyback'
+			}, function(ret, err) {
+				if(ret){
+					if(fullScreen){
+						api.setScreenOrientation({
+						    orientation: 'portrait_up'
+						});
+					}else{
+						back();
+					}
+				}else{
+					$toast(ret.errMsg,1500)
+				}
+			});
+			
+	};
+	function back(){
+		close_w();
+	}
+	function get_course_details(cor_id){
+		   
+			var URL = serverURL + 'app_interface/coursePack/coursePack_course_find/';
+			URL+='?secret='+appSecret+'&cor_id='+cor_id;
+		    g_ajax(URL,function(ret){
+		    	if(ret){
+		    		cor_pic= ret.data.cor_pic;
+		    		cor_name = ret.data.cor_name;
+		    		cor_info= ret.data.cor_info;
+		    		open_f('play_c','play_c.html','false',{'aid':api.pageParam.aid,'cor_id':cor_id,'aname':api.pageParam.aname,'cor_info':cor_info,'cor_name':cor_name});
+		    		var le_data = str2json(ret.data.cor_letv_msg);
+			    	var video_unique = le_data.data.video_unique;
+			    	$('#video_unique').val(video_unique);
+		    		setTimeout(function(){
+		    			if(sysType == 'ios'){
+				            y = $api.offset($api.byId('header')).h;
+				        }else if(sysType == 'android'){
+			   				y = $api.offset($api.byId('header')).h;
+				        }
+						var connectionType = api.connectionType;
+						open_pause('1');	
+						palyInit(video_unique);
+					},50);
+		    	}
+		    });
+		}
+	function palyInit(vu){
+			playerConf.vu = vu;
+			playerConf.uu = uu;
+			playerConf.width = '100%';
+			playerConf.height = '100%';
+			playerConf.controls = '1';
+			playerConf.skinnable = '0';
+			playerConf.fullscreen = '1';
+			playerConf.callbackJs = 'call';
+		    if(playerConf.height=="100%"){
+				playerConf.height = leHeight;
+		    }
+		    player.init(playerConf,"player");
+		}
+	//打开暂停遮罩
+	function open_pause(type,frameH,firstIn){
+			if(api.pageParam.UID){
+				uid = api.pageParam.UID;
+			}else if(UID){
+				uid = UID;
+			}else{
+				uid = '';
+			}
+			if(is_define(frameH)){
+				var frameHeight = frameH;
+				var bg = 'rgba(0,0,0,0.3)';
+			}else{
+				var frameHeight = 32;
+				var bg = 'rgba(0,0,0,0)';
+			}
+			if(is_define(firstIn)){
+				var firstIn = true;
+			}else{
+				var firstIn = false;
+			}
+			var pageParam = {
+				video_h : $api.offset($api.byId('video_info')).h,
+				type : type,
+				firstIn :firstIn,
+				uid : uid,
+				H:H
+			};
+			api.openFrame({
+			    name: 'video_pause',
+			    url: '../video_pause.html',
+			    pageParam : pageParam,
+			    rect: {
+			        x: 0,
+			        y: H,
+			        w: api.frameWidth,
+					h:frameHeight
+			    },
+			    bounces: false,
+			    bgColor: bg
+			});
+		}
+	//开始播放	
+	function startPlay(){
+			close_f('video_pause')
+			player.sdk.startUp();
+			open_pause('1');
+		}
+	//暂停播放
+	function pause(){
+		player.sdk.pauseVideo();	
+	}
+	//继续播放
+	function go_on_play(){
+		player.sdk.resumeVideo();				
+	}
+	function call(type,data){
+			switch (type){
+				case 'fullscreen':
+					if(!fullScreen){
+						api.setScreenOrientation({
+						    orientation: landscape
+						});
+						fullScreen = true;
+					}else{
+						api.setScreenOrientation({
+						    orientation: 'portrait_up'
+						});
+						fullScreen = false;
+					}
+				break;
+				case 'videoStop':
+					if(fullScreen){
+						api.setScreenOrientation({
+						    orientation: 'portrait_up'
+						});
+					}
+				break;
+			}
+		}
+</script>
+
+</html>

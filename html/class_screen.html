@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<title></title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style>
+			html, body {
+				background: none;
+			}
+			.ftz14p{font-size: 14px;}
+			.mara025{margin:0.25em}
+		</style>
+	</head>
+	<body>
+		<div class=" w9 box c-wh pstnr uc-a02" style="margin-top:120px">
+			<div class="pstna h15e w15e" tapmode onclick="close_f('class_screen');" style="top: -.625em;right: -.625em;">
+				<img src="../image/icon/close_down.png" class="w15e h15e">
+			</div>
+			<div class="pdl05 pdr05 tx-c t-4371bc">
+				<div class="umh25 ubb ub-4371bc">课程筛选</div>
+			</div>
+			<div class="pdt05 pdl05 pdr05 pdb025">
+				<ul class="clo_four tx-c t-999 ftz14p">
+					<li class="col_list" tapmode="c-e0e0e0" onclick="choiceThis(this)">
+						<div class="umh2 mara025 border-radius-e0e0e0">全部课程</div>
+					</li>
+				</ul>
+			</div>
+			<div class="pdb05 pdl05 pdr05">
+				<ul id="more_class" class="clo_four tx-c t-999 ftz14p classList">
+				<script id="more_class_left" type="text/html">
+				    <%
+				    for(var i=0;i< data.length;i++)
+				    {%>
+					<li class="col_list pdb025" tapmode="c-e0e0e0" onclick="choiceThis(this)">
+					<%
+					var lable = data[i].split(' ');
+					for(var j=0;j<lable.length;j++){
+					%>
+				    <div class="umh2 mara025 border-radius-e0e0e0"><%=lable[j]%></div>
+					<%
+					}
+					%>
+					</li>
+					<%
+					}
+					%>
+				</script>
+			</div>
+		</div>
+    </body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		apiready = function(){
+			Course_Screening();
+		}
+		function choiceThis(el){
+			var pageParam = api.pageParam;
+			$('.classList li').removeClass('t-4371bc');
+			$(el).addClass('t-4371bc');
+			var txt = $api.text($api.first(el,'div'));
+			if( (pageParam.winName != 'more_class') && (pageParam.winName != 'me_want_study')){
+				api.execScript({
+				    name: pageParam.winName,
+				    frameName:pageParam.frameName,
+				    script: 'changeTap("'+txt+'");'
+				});
+			}else{
+				api.execScript({
+				    name: pageParam.winName,
+				    script: 'changeTap("'+txt+'","'+api.winName+'");'
+				});
+			}
+			setTimeout(function(){
+				close_f('class_screen');
+			},300);
+		}
+
+		function Course_Screening(){
+			var URL = serverURL + 'app_interface/course/get_course_label/';
+				URL+='?secret='+appSecret;
+		        g_ajax(URL,function(ret){
+				if(ret.errCode ==0){
+					$('#more_class').html(bt('more_class_left',ret));
+					api.parseTapmode();
+				}else{
+					$toast(errMsg,1500);
+				}
+			})
+		}
+	</script>
+</html>

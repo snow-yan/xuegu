@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>注册1</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+</head>
+<body>
+    <div class="login">
+        <img src="../img/login_bg.png" alt="">
+        <div>
+            <img src="../img/login_back.png" alt="" class="top"  ontouchstart="close_w();">
+        </div>
+        <form class="form-list">
+            <div class="control">
+                <div class="control-lable"><img src="../img/login1.png" alt=""></div>
+                <input type="tel" id="mobile" oninput="myFunction()" maxlength="11" placeholder="手机号">
+            </div>
+            <div class="control">
+                <div class="control-lable"><img src="../img/login2.png" alt=""></div>
+                <input type="password" id="password1" oninput="myFunction()" maxlength="16"placeholder="密码" style="width:80%;">
+                <div class="control-lable"><img src="../img/login33.png" alt="" onclick="psd(this,1)"></div>
+            </div>
+            <div class="control">
+                <div class="control-lable"><img src="../img/login2.png" alt=""></div>
+                <input type="password" id="password2" oninput="myFunction()" maxlength="16" placeholder="确认密码" style="width:80%;">
+                <div class="control-lable"><img src="../img/login33.png" alt="" onclick="psd(this,2)"></div>
+            </div>
+            <div class="control_btn control_btn_active" id="can_pwd" onclick="sureRegister()" style="display: none;">下一步</div>
+            <div class="control_btn" id="no_can_pwd" >下一步</div>
+            <div class="aui-font-size-12 aui-margin-0-10">
+                <span>
+                    <img src="../img/login_r.png" alt="" class="right">
+                   		 同意<span class="aui-text-blue"  onclick="open_w('service','service.html')">学股网服务协议</span>
+                </span>
+            </div>                           
+        </form>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/self.js"></script>
+<script>
+	apiready = function(){
+		var h=$(window).height();
+		$('.login>img').height(h);
+	};
+	//	密码显示/不显示
+	function psd(obj,num){
+		var type=$('#password'+num).attr('type');
+		if(type=='password'){
+			$(obj).attr('src','../img/login3.png');
+			$('#password'+num).attr('type','text');
+		}else{
+			$(obj).attr('src','../img/login33.png');
+			$('#password'+num).attr('type','password');
+		}
+	}
+   function myFunction(){
+		$('#can_pwd').hide();
+		$('#no_can_pwd').show();
+		var mobile = $("#mobile").val();
+		var password = $("#password1").val();
+		var password2 = $("#password2").val();
+		if (is_define(mobile)&&is_define(password)&&is_define(password2)) {
+			$('#can_pwd').show();
+			$('#no_can_pwd').hide();
+		}
+	}
+	function sureRegister(){
+		var mobile = $("#mobile").val();	
+		var password = $("#password1").val();
+		var password2 = $("#password2").val();
+		var phone_reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+		var login_pwd = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
+		if (!is_define(mobile)) {
+			$toast("请输入手机号", 1500);
+			return false;
+		}
+		if (!phone_reg.test(mobile)) {
+			$toast("手机号格式错误！", 1500);
+			return false;
+		}
+		
+		if (!is_define(password)) {
+			$toast("请输入密码", 1500);
+			return false;
+		}
+		if (!login_pwd.test(password)) {
+			$toast("请输入6-16位密码，限英文+数字的组合！", 1500);
+			return false;
+		}
+		if (password!=password2) {
+			$toast("两次密码输入不一致", 1500);
+			return false;
+		}
+		var pageParam  = {
+ 			mobile:mobile,
+ 			password:password,
+ 			frame:1,
+	 	};
+	 	open_w('register2','register2.html',pageParam)
+	}	
+</script>
+</html>

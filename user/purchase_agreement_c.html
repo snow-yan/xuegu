@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>课程购买协议</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <style>
+        .content{
+            padding:0.75rem 0;
+            background: #fff;
+        }
+        .title{
+            padding:0.75rem 0;
+            text-align: center;
+            border-bottom: 1px solid #dcdcdc;
+        }
+        .font-size{
+            font-size: 1.4rem;
+        }
+        .detail{
+            padding:0.75rem;
+        }
+       .detail p{
+       	color:#333;
+       
+       }
+     
+    </style>
+</head>
+<body>  
+    <div class="content" id="agreement">
+        
+        <script type="text/html" id="agreement_tpl">
+			<div class="title">
+	            <div class="font-size">战法课程购买协议</div>
+	           <!-- <div class="aui-font-size-12">版本生效日期：<span>2016年8月1日</span></div>-->
+	        </div>
+	        <div class="detail">
+	            	<%:=data.content%>
+	        </div>	    
+		</script>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/zepto.min.js"></script>
+<script type="text/javascript" src="../script/init.js"></script>
+<script type="text/javascript" src="../script/app.js"></script>
+<script type="text/javascript" src="../script/self.js"></script>
+<script type="text/javascript" src="../script/template.js"></script>
+<script>
+	apiready = function(){
+		agreement();
+	};
+	function agreement(){
+			var URL= serverURL + 'app_interface/coursePack/coursePack_protocol/';
+			URL+='?secret='+appSecret;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+				//alert(JSON.stringify(ret))
+					$('#agreement').html(bt('agreement_tpl',ret));
+					api.parseTapmode();	
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+</script>
+</html>

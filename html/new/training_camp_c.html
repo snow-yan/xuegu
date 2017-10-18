@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>股市集训营</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/course.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css"> 
+</head>
+<body class="aui-bg-blue">    
+    <div class="train" id="training"></div> 
+    	<script id="training_tpl" type="text/html">
+        <div class="title">
+           <div class="swiper-container gallery-thumbs">
+              <div class="swiper-wrapper" style="margin-left:-6.5%;">
+	              <%for(var i=0;i< data.length; i++ ){%>
+	        		<div class="swiper-slide">
+	        			<% if(  data[i].number < tollgate_user_find.tollgate_num){%>
+	        			<!--闯关已通过-->
+                        <div>
+                        	<% if(i!=0){ %>
+                        	 <div class="orange"></div> 
+                        	<% } %> 
+                            <img src="<%=data[i].icon3%>" alt="" style="float:right;">                      
+                        </div>
+                        <% }else if(tollgate_user_find.tollgate_num == data[i].number){ %>
+                         <!--正在闯关-->
+                        <div>
+                        	<% if(i!=0){ %>
+                        	 <div class="orange"></div> 
+                        	<% } %> 
+                            <img src="<%=data[i].icon2%>" alt="" style="float:right;">                      
+                        </div>
+                         <% }else{ %>
+                         <!--未闯关-->
+                         <div>
+                        	<% if(i!=0){ %>
+                        	 <div></div> 
+                        	<% } %> 
+                            <img src="<%=data[i].icon1%>" alt="" style="float:right;">                      
+                        </div>
+                         <% } %>
+                         <p><%=data[i].title%></p>                  
+                    </div>
+	        	<%}%>                                                                                                                   
+              </div>
+            </div>                    
+        </div>
+        <div class="swiper-container gallery-top">
+          <div class="swiper-wrapper">
+          	<%for(var i=0;i< data.length; i++ ){%>
+        	<div class="swiper-slide">
+                <li class="game">
+	                <div class="mask">
+	                	<img src="../../image/icon/echo_bg.jpg" data-echo="<%=data[i].banner%>" alt="" style="width:100%;">
+	                	 <!-- 不可以闯关的样式 -->
+		                <%if(tollgate_user_find.tollgate_num!=data[i].id && tollgate_user_find.tollgate_num < data[i].id){%>
+		                <div class="chain" onclick="$toast('该关卡未解锁',1500);"><img src="../../img/chain3.png" alt="" ></div>
+	                </div>
+	               
+	                <% } %> 
+	                    <div class="timeline aa">
+	                    	<%if(tollgate_user_find.tollgate_num!=data[i].id && tollgate_user_find.tollgate_num < data[i].id){%>
+			                	 <div style=" width:100%; height:100%; background:none; position:absolute; z-index:2;" onclick="$toast('该关卡未解锁',1500);"></div>
+			                <% } %> 
+	                    	<%for(var j=0;j< data[i].course.length; j++ ){%>
+	                      	<%if(data[i].course[j].study_status==0){%>
+	                      	<div class="timeline-item">
+	                      		<div class="timeline-item-lable">
+	                           		<img src="../../img/chain2.png" alt="">
+	                       		</div>
+		                       	<div class="timeline-item-inner">
+		                       		<%if(data[i].course[j].cor_is_charge==1){%>
+		                       		<span class="orange_w" style="margin-left:-5px;">【精】</span>
+		                       		<%}%>
+		                          	<%=data[i].course[j].cor_name%>
+		                       	</div>
+	                       <%}else if(data[i].course[j].study_status==1){%>
+	                       <div class="timeline-item" onclick="open_w('play','play.html',{'tollgate_id':'<%=data[i].id%>','cor_id':'<%=data[i].course[j].course_id%>'})">
+		                       	<div class="timeline-item-lable">
+	                           		<img src="../../img/chain1.png" alt="">
+	                       		</div>
+		                       	<div class="timeline-item-inner bolder">
+		                       		<%if(data[i].course[j].cor_is_charge==1){%>
+		                       		<span class="orange_w" style="margin-left:-5px;">【精】</span>
+		                       		<%}%>
+		                          	<%=data[i].course[j].cor_name%>
+		                       	</div>
+	                       <%}else if(data[i].course[j].study_status==2){%>
+	                       <div class="timeline-item" onclick="open_w('play','play.html',{'tollgate_id':'<%=data[i].id%>','cor_id':'<%=data[i].course[j].course_id%>'})">
+		                       <div class="timeline-item-lable">
+	                           		<img src="../../img/playback2.png" alt="">
+	                       		</div>
+		                       	<div class="timeline-item-inner bold" >
+		                       		<%if(data[i].course[j].cor_is_charge==1){%>
+		                       		<span class="orange_w" style="margin-left:-5px;">【精】</span>
+		                       		<%}%>
+		                          	<%=data[i].course[j].cor_name%>
+		                       	</div>
+		                       <% } %> 
+	                   		</div>
+	                   		<% } %>                                                                                        
+	                    </div>
+	                    <div class="tu">
+		                    <%for(var j=0;j< data[i].headImgUrl.length; j++ ){%>
+		                    <span><img src="<%=data[i].headImgUrl[j]%>" alt=""></span>
+		                    <% } %> 
+	                        <!-- 超出几个显示省略 -->
+	                        <span><img src="../../img/omit.png" alt=""></span>
+	                        <span class="aui-pull-right aui-margin-t-5"><img src="../../img/people1.png" alt="" style="float:left;width:20px;border:none;"><%=data[i].course_num%>人学习</span>
+	                    </div>                    
+                  </li>                          
+             </div>
+        	<% } %>                              
+          </div>
+      </div> 
+      <footer id="footer">
+      	<div class="swiper-container footer-swiper-container">
+        	<div class="swiper-wrapper">
+	      		<%for(var i=0;i< data.length; i++ ){%>
+	      		 <div class="swiper-slide">
+		      		<%var uid=get_local('uid');
+		      		if(!is_define(uid)){
+		      			uid==""
+		      		}
+		      		if(data[i].number < tollgate_user_find.tollgate_num  || tollgate_user_find.tollgate_is_pass == 1){%>
+		      		<!--闯关已通过-->
+			            <div class="left1 aui-col-xs-6" onclick="open_play('<%=data[i].id%>')">修炼</div>
+			            <div class="right aui-col-xs-6">已通关</div>            
+		      		 <% }else if(data[i].number == tollgate_user_find.tollgate_num  || ( uid==""&& i==0 )){%>
+		      		 <!--闯关已通过-->
+			            <div class="left1 aui-col-xs-6"  onclick="open_play('<%=data[i].id%>')">修炼</div>
+			            <div class="right1 aui-col-xs-6" onclick="open_answer('<%=data[i].id%>')">闯关</div>            
+				     <% }else{ %> 
+				     <!--未关已通过-->
+				      <div class="left aui-col-xs-6">修炼</div>
+			          <div class="right aui-col-xs-6">闯关</div>   
+	      			<% }%>
+	      		 </div>
+      		 	<% }%>
+     		</div>
+     	</div>
+    </footer>  
+    </script>    
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/swiper.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script>
+   
+    apiready = function(){
+		training();
+		
+	};
+	function reload1(){
+        location.reload();
+	}
+	function extra(slide){
+		
+	   	var galleryThumbs = new Swiper('.gallery-thumbs', {
+            initialSlide : slide,  // 设定初始化时slide的索引
+            spaceBetween : 0,     // slide之间的距离（单位px）。
+            slidesPerView : 4,       // 设置slider容器能够同时显示的slides数量(carousel模式)。 可以设置为number或者 'auto'则自动根据slides的宽度来设定数量。 loop模式下如果设置为'auto'还需要设置另外一个参数loopedSlides。
+            centeredSlides : true,   //设定为true时，活动块会居中，而不是默认状态下的居左。
+            touchRatio : 0.2,       // 触摸距离与slide滑动距离的比率。
+            slideToClickedSlide: true       //设置为true则点击slide会过渡到这个slide。
+        });
+
+        // 内容部分滑动事件
+        var galleryTop = new Swiper('.gallery-top', {
+            initialSlide : slide,  // 设定初始化时slide的索引
+            slidesPerView : "auto",   //设置slider容器能够同时显示的slides数量(carousel模式)。 可以设置为number或者 'auto'则自动根据slides的宽度来设定数量。 loop模式下如果设置为'auto'还需要设置另外一个参数loopedSlides。
+            centeredSlides : true,    // 设定为true时，活动块会居中，而不是默认状态下的居左。
+            watchSlidesProgress : !0,     // 开启这个参数来计算每个slide的progress(进度、进程)，Swiper的progress无需设置即开启。
+            pagination:".swiper-pagination",    //分页器容器的css选择器或HTML标签。分页器等组件可以置于container之外，不同Swiper的组件应该有所区分
+
+            // 回调函数，当Swiper的progress被改变时执行。接受Swiper实例和progress作为参数（可选）。
+            onProgress:function(a){
+                var b,c,d;
+                for(b=0;b<a.slides.length;b++) {
+                    c = a.slides[b],
+                        d = c.progress,
+                        scale = 1 - Math.min(Math.abs(.2 * d), 1),
+                        es = c.style, es.opacity = 1 - Math.min(Math.abs(d / 2), 1),
+                        es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = "translate3d(0px,0," + -Math.abs(150 * d) + "px)"
+                }
+            }
+        });
+
+        var mySwiperFooter = new Swiper('.footer-swiper-container', {
+            initialSlide : slide,  // 设定初始化时slide的索引
+            slidesPerView : "auto",   //设置slider容器能够同时显示的slides数量(carousel模式)。 可以设置为number或者 'auto'则自动根据slides的宽度来设定数量。 loop模式下如果设置为'auto'还需要设置另外一个参数loopedSlides。
+            centeredSlides : true,    // 设定为true时，活动块会居中，而不是默认状态下的居左。
+            watchSlidesProgress : !0,     // 开启这个参数来计算每个slide的progress(进度、进程)，Swiper的progress无需设置即开启。
+            pagination:".swiper-pagination",    //分页器容器的css选择器或HTML标签。分页器等组件可以置于container之外，不同Swiper的组件应该有所区分
+        });
+
+        // 关联两个滑动slide块
+        galleryTop.params.control = galleryThumbs;
+        galleryThumbs.params.control = galleryTop;
+        
+		mySwiperFooter.params.control = galleryTop;
+        galleryTop.params.control = mySwiperFooter;
+        
+        mySwiperFooter.params.control = galleryThumbs;
+        galleryThumbs.params.control = mySwiperFooter;
+	
+	}
+	//闯关列表
+	function training(){
+			var uid=get_local('uid');
+			if(!is_define(uid)){
+		         uid="";
+	        }
+			var URL = serverURL + 'app_interface/newCourse/tollgate_list/';
+			URL+='?secret='+appSecret+'&uid='+uid;
+			g_ajax(URL,function(ret)
+			{	//alert(JSON.stringify(ret))
+				if(ret.errCode==200){
+					$('#training').html(bt('training_tpl',ret));
+					var slide=ret.tollgate_user_find.tollgate_num;
+					extra(slide-1);
+					//alert(slide)
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+				Echo.init();
+				api.parseTapmode();
+			})
+	} 
+	function open_play(tollgate_id){
+	 	var uid=get_local('uid');
+        if(!is_define(uid)){
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+
+           }else{
+           		open_w('play','play.html',{'tollgate_id':tollgate_id});
+           }
+	
+	}
+	function open_answer(train_id){
+	 	var uid=get_local('uid');
+        if(!is_define(uid)){
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+
+           }else{
+           		open_w('answer','answer.html',{'train_id':train_id});
+           }
+	
+	}
+</script>
+</html>

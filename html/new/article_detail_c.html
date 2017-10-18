@@ -1,0 +1,411 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>谈股详情</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/message.css" />
+    <link rel="stylesheet" href="../../cool_css/cool.css">
+</head>
+<body>
+    <div class="detail" >
+    	<div id="article_detail"></div> 
+    	<script type="text/html" id="article_detail_tpl">
+    		 <div class="title"><strong><%=data.title%></strong></div>
+			 <div class="aui-card-list-header aui-card-list-user aui-bg-white">
+	            <div class="aui-card-list-user-avatar"  style="width:2.5rem;">
+	                <img  src="<%=data.userInfo.headImgUrl%>"/ style="border-radius: 50%;">
+	            </div>
+	            <div class="aui-card-list-user-name">
+	                <div><strong><%=data.userInfo.user_name%></strong></div>
+	                 <% if(data.focus==0){ %>
+                       <!-- 关注之前 -->
+	                	<span class="fouse a0" onclick="change_attention(this,'1',<%=data.userInfo.uid%>);">+关注</span>
+	                	<span class="fouse1 a1" onclick="change_attention(this,'0',<%=data.userInfo.uid%>);" style="display: none;">已关注</span>
+	                	
+                   	<% }else if(data.focus==1){ %> 
+                   	 <!-- 关注之后 -->
+                   	 	<span class="fouse a0" onclick="change_attention(this,'1',<%=data.userInfo.uid%>);" style="display: none;">+关注</span>
+	               		<span class="fouse1 a1" onclick="change_attention(this,'0',<%=data.userInfo.uid%>);">已关注</span>
+                   	<% } %>     
+
+	            </div>
+	            <div class="aui-card-list-user-info"><%=data.add_time%></div>
+	        </div> 
+	        <div class="content">
+	      		<%:=data.message%>
+	        </div>
+	        <div class="aui-card-list-header aui-card-list-user aui-border-b aui-bg-white">
+	            <div class="eye">
+	                <span><img src="../../img/eye.png" alt=""><%=data.page_view%></span>
+	                <% if(data.is_zan==0){ %>
+                       <!-- 点赞之前 -->
+	                <span class="zan" onclick="article_zan(<%=data.like_num%>,this);"><img src="../../img/zan.png" alt=""><%=data.like_num%></span>
+                   <% }else if(data.is_zan==1){ %> 
+                   	 <!-- 点赞之后 -->
+	                <span class="blue"><img src="../../img/zan1.png" alt=""><%=data.like_num%></span> 
+                   <% } %>     
+	               <span class="aui-pull-right" onclick="help_feedback();">投诉</span>
+	            </div>
+	            <%if(data.service_url!=0){%>
+	            <div class="aui-card-list-user-name" onclick="chat(<%=data.service_url%>);">
+	                <img src="../../img/ad.png" alt="" style="margin:25px 0;width:100%;">
+	            </div> 
+	            <%}%>           
+	        </div>
+		</script>  
+		
+        <div class="comment">
+        	 <div class="title1">
+                <img src="../../img/lable.png" alt="">评论<span class="aui-margin-l-5" id="article_comment_num"></span>
+            </div>
+            <input type="hidden" id="page" value="1"/>
+            <section class="aui-content aui-border-t"  id="comment"> </section>  
+        </div>
+        <script type="text/html" id="comment_tpl">
+			<%
+			for(var i=0;i< data.length;i++){
+			%>
+			<div class="aui-card-list ">
+                <div class="aui-info aui-padded-l-15 aui-padded-r-15">
+                    <div class="aui-info-item ">
+                        <img src="<%=data[i].headImgUrl%>" style="width:30px" class="aui-img-round" />
+                        <span class="aui-margin-l-5 blue1"><%=data[i].user_name%>
+                            <span class="aui-margin-l-5" style="color:#888888;">评论</span>
+                        </span>
+                    </div>
+                    <div class="aui-info-item">
+                    	<% if(data[i].comment_zan==0){ %>
+                        <span class="pinglun_zan" onclick="pinglun_zan(<%=data[i].comment_zan_num%>,<%=data[i].id%>,this)">
+                            <img src="../../img/zan.png" alt="" style="height:18px;margin-right:5px;"><%=data[i].comment_zan_num%>
+                        </span>
+                       <% }else if(data[i].comment_zan==1){ %> 
+                       	 <span class="blue">
+                            <img src="../../img/zan1.png"alt="" style="height:18px;margin-right:5px;"><%=data[i].comment_zan_num%>
+                        </span> 
+                       <% } %>                           
+                    </div>
+                </div>
+                <div class="saysay">
+                    <%=data[i].message%>
+                </div>
+                <div class="list-footer aui-font-size-12" style="color:#a4a4a4;">
+                   <div><%=data[i].add_time%>
+                   <%if(data[i].current_uid==data[i].article_uid){%>
+                   <span class="reply" onclick="reply_comment(<%=data[i].uid%>)">回复</span></div>
+                   <% } %>   
+                </div>
+                <% if(data[i].reply!=null){ %>
+                <div class="title2">
+                    <img src="../../img/lable.png" alt=""><%=data[i].reply.user_name%>
+	                    <span class="aui-pull-right"><%=data[i].reply.add_time%></span>
+	                </div>   
+	            </div>
+             	<div class="saysay" style="padding:0 0 10px 10px;">
+                   	<%=data[i].reply.message%>
+                </div> 
+               <% } %>     
+             </div>  
+				<%
+					}
+				%>
+			
+		</script> 
+       </div>                
+   
+    
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script>
+	var lastPage = true,firstPageHaveData = true ,article_comment_num;
+  	 apiready = function(){	
+     	article_detail();
+     	 
+     	comment()
+     	push_down(function(){
+				if(firstPageHaveData){
+					comment();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					comment('next');
+				}
+			}); 
+    }
+ 	// 获取文章详情 
+    function article_detail(){
+    		var uid = get_local('uid');
+			var URL = serverURL + 'app_interface/newMobile/article_find/';
+			URL+='?secret='+appSecret+'&article_id='+api.pageParam.article_id+'&uid='+uid;
+			g_ajax(URL,function(ret)
+			{	//alert(JSON.stringify(ret))
+				if(ret.errCode==200){
+					$('#article_detail').html(bt('article_detail_tpl',ret));
+					article_comment_num=ret.data.article_comment_sum;
+					$('#article_comment_num').text(article_comment_num)
+					
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+				
+				api.parseTapmode();
+			})
+		}
+	// 获取评论列表
+	function comment(type){
+		var uid = get_local('uid');
+		if(is_define(uid)){
+		
+		}else{
+			uid='';
+		}
+		
+	 	if(type=='next'){
+			var page = $('#page').val();
+			page = parseInt(page)+1;
+			$('#page').val(page);
+		}else{
+			var page =1;
+			$('#page').val(page);
+			lastPage =true;
+		}
+		var pagesize = 10;
+		var URL = serverURL + 'app_interface/newMobile/article_comment_list/';
+		URL+='?secret='+appSecret+'&article_id='+api.pageParam.article_id+'&page='+page+'&uid='+uid;
+		g_ajax(URL,function(ret)
+		{
+		
+			if(ret.errCode==200 || ret.errCode==101){
+				if(ret.errCode==200){
+					if(type=='next'){
+						$('#comment').append(bt('comment_tpl',ret));	
+					}else{
+						$('#comment').html(bt('comment_tpl',ret));
+					}
+				}else{
+					if( page == 1 ){
+						firstPageHaveData = false;
+						lastPage = false;
+						firstPage_no_data('comment');
+					}else{
+						lastPage = false;
+						no_data_more('comment');
+					}
+				}	
+			push_down_over();
+			api.parseTapmode();
+			}else{
+				$toast(ret.errMsg,1500);		
+			}
+		})
+	}
+	// 评论
+	function add_comment(){
+		var uid = get_local('uid');
+		if(is_define(uid)){
+			openFrameFull("ui_comment",{frameName:api.frameName,article_id:api.pageParam.article_id,uid:uid},'rgba(0,0,0,0)');
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+				}else{
+					open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				}
+				
+			},1000);
+		}
+	}
+	// 回复评论
+	function reply_comment(at_uid){
+		var uid = get_local('uid');
+		if(is_define(uid)){
+			openFrameFull("ui_comment",{frameName:api.frameName,article_id:api.pageParam.article_id,uid:uid,at_uid:at_uid},'rgba(0,0,0,0)');
+		}else{u
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+				}else{
+					open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				}
+				
+			},1000);
+		}
+		
+	}
+	// 文章点赞
+	function article_zan(zan_num,obj){
+			var uid = get_local('uid');
+			var URL = serverURL + 'app_interface/newMobile/article_add_zan/';
+			if(is_define(uid)){
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					article_id :api.pageParam.article_id,
+				}
+			};
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode ==200){
+				
+					$('.zan').addClass('blue');
+					zan_num=zan_num+1;
+					var html='<img src="../../img/zan1.png" alt="" style="height:18px;margin-right:5px;"/>'+zan_num 
+					$('.zan').empty().append(html);
+					$(obj).attr('onclick','');
+				}else{
+					$toast(ret.errMsg,1500)	
+				}
+			})
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+				}else{
+					open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				}
+				
+			},1000);
+		}
+		api.parseTapmode();
+	}
+	// 文章评论点赞
+	function pinglun_zan(zan_sum,id,obj){
+	
+			var uid = get_local('uid');
+			var URL = serverURL + 'app_interface/newMobile/article_comment_add_zan/';
+			if(is_define(uid)){
+				var data = {
+					values:{
+						secret : appSecret,
+						uid : uid,
+						item_id :id
+					}
+				};
+			r_ajax(URL,data,function(ret)
+			{
+				
+				if(ret.errCode ==200){
+					$(obj).addClass('blue');
+					zan_sum=zan_sum+1;
+					var html='<img src="../../img/zan1.png" alt="" style="height:18px;margin-right:5px;"/>'+zan_sum 
+					$(obj).empty().append(html);
+					$(obj).attr('onclick','');
+				}else{
+				
+					$toast(ret.errMsg,1500)	
+				}
+			})
+
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+				}else{
+					open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				}
+				
+			},1000);
+		}
+		api.parseTapmode();
+	}
+	//关注
+	function change_attention(el,type,tagetUid){
+		var URL = serverURL + 'app_interface/main/follow_user/';
+		var UID = get_local('uid');
+		if(is_define(UID)){
+			if(UID!=tagetUid){
+				var data = {
+					values: {
+					secret:appSecret,
+					uid:tagetUid,
+					login_uid:UID
+					}
+				};
+				r_ajax(URL,data,function(ret){
+					if(ret.errCode == 0){
+						if(type == 0){
+							$('.a1').hide();
+							$('.a0').show();
+							$toast('关注已取消',500);
+						}
+						if(type == 1){
+							$('.a0').hide();
+							$('.a1').show();
+							$toast('关注成功',500);
+						}
+					}else{
+						$toast(ret.errMsg,1500);
+					}
+				api.parseTapmode();
+				})
+			}else{
+				$toast('自己不能关注自己',1500);
+			}
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+				}else{
+					open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				}
+				
+			},1000);
+		}
+		api.parseTapmode();
+	}
+	function help_feedback(){
+		var UID = get_local('uid');
+		if(is_define(UID)){
+			open_w('help_feedback','../../user/help_feedback.html');
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+				}else{
+					open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				}
+				
+			},1000);
+		}
+		api.parseTapmode();
+	}
+	function chat(cor_kefuurl){
+	
+		var uid = get_local('uid');
+		if(is_define(uid)){
+			open_w('chat','../chat.html',{cor_kefuurl:cor_kefuurl});
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:api.pageParam.cor_id});
+				}else{
+					open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:api.pageParam.cor_id});
+				}
+				
+			},1000);
+		}
+	
+	}
+</script>
+</html>

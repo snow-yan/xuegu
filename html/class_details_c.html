@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>课程详情</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style type="text/css">
+			#header{
+				background:none;
+			}
+			.border-w{
+				width: 24px;
+				height: 24px;
+				border:1px solid white;
+				border-radius: 13px;
+			}
+			.absbl-per-10{right:10%;bottom:5%}
+			.fiexd {
+				position: fixed;
+				top: 0px;
+				z-index: 22222222;
+			}
+		</style>
+	</head>
+	<body>
+    	<input type="hidden" id="u_id" value="" />
+		<div id="video">
+        <script id="vl" type="text/html">
+        	<input type="hidden" id="charge_money" value="<%=cor_charge_money%>" />
+        	<input type="hidden" id="is_buy" value="<%=is_buy%>" />
+        	<input type="hidden" id="cor_id" value="<%=cor_id%>" />
+			<ul class="clo_two ftz085 ubtb ub-e0e0e0 c-wh">
+				<li class="col_list umh3 tx-c">
+				    <%
+					if(cor_charge_money){
+					%>
+					<span class="t-ff7b00 umh3">
+						<img src="../image/icon/guzi.png" class="w10e h10e pdt10 pdb10"/>
+						<%=cor_charge_money%>
+					</span>
+					<%}else{%>
+					<span class="t-ff7b00 umh3 tx-c">
+						限时免费
+					</span>
+					<%
+					}
+					%>
+				</li>
+				<%
+				if(!is_buy){
+				if(cor_charge_money){
+				%>
+				<li class="col_list umh3 tx-c c-ff7b00 jionStudy" tapmode="op8" onclick="pay('<%=cor_id%>','<%=cor_name%>','<%=cor_charge_money%>')">
+					<span class="t-wh">加入学习</span>
+				</li>
+				<%
+				}else{
+				%>
+				<li class="col_list umh3 tx-c c-ff7b00" id="button" tapmode="op8" onclick="surePay('<%=cor_id%>')">
+					<span class="t-wh">加入学习</span>
+				</li>
+				<li class="col_list umh3 tx-c c-c0c0c0" id="buttons" style=" display: none;">
+					<span class="t-wh">已加入</span>
+				</li>
+				<%
+				}
+				}else{
+				%>
+				<li class="col_list umh3 tx-c c-c0c0c0 jionStudy">
+					<span class="t-wh">已加入</span>
+				</li>
+				<%
+				}
+				%>
+			</ul>
+			<%
+				if(cor_kefuurl){
+			%>
+			<div style="padding:10px;" onclick="chat();">
+				<img src="../icon/lian.png" alt=""  style="width:100%;"/>
+			</div>
+			<%
+				}
+			%>
+			<div class="h05e c-ebf2fc"></div>
+			<div class="pdl05 pdr05 pdt07 pdb07 ubtb ftz085 ub-e4e4e4">
+				<ul class="clo_three tx-c class ftz09">
+					<li class="col_list umh15 ubr ub-e4e4e4" tapmode="" onclick="switch_class(0)">
+						<font class="t-4371bc">课程简介</font>
+					</li>
+					<li class="col_list umh15 ubr ub-e4e4e4" tapmode="" onclick="switch_class(1)">
+						<font class="">相关课程</font>
+					</li>
+					<li class="col_list umh15" tapmode="" onclick="switch_class(2)">
+						<font>评论详情</font>
+					</li>
+				</ul>
+			</div>
+			<div class="h03e c-ebf2fc"></div>
+	    </script>
+		</div>
+		<!--课程简介-->
+		<div class="pdl10 pdr10" id="class0">
+			<div id="video_detail">
+				<script id="video_details_left" type="text/html">
+					<p class="umh15 pdt075 ftz095" id="cor_name"><%=cor_name%></p>
+					<p class="umh1 pdt03 pdb075 t-999 ftz07"><%=cor_label%></p>
+					<p class="umh15 ftz08"><%=cor_info%></p>
+				</script>
+			</div>
+		</div>
+		<!--相关课程-->
+		<div class="clo_two pdb03 ovd dspn" id="class1">
+		    <div class=" w96 area_auto" id="video_left"></div>
+		    <script id="video_data_left" type="text/html">
+			    <%
+			    for(var i=0;i<kk_course_other_all.length;i++){
+			    var le_msg = str2json(kk_course_other_all[i].cor_letv_msg);
+			    var let_v=le_msg.data.video_unique;
+			    %>
+				<div class="col_list pdb04" tapmode="op8" onclick="switchs('<%=kk_course_other_all[i].cor_id%>','<%=kk_course_other_all[i].cor_letv_msg%>','<%=kk_course_other_all[i].cor_pic%>');">
+					<div class="box pdt05 pdl03 pdr03">
+						<p class="w10 tx-c"><img src="<%=kk_course_other_all[i].cor_pic%>" style=" height:<%=api.frameWidth/3.4-15%>px;" class="w10 uc-a02"></p>
+						<p class="w10 t-333 ftz08 umh15 txo pdt05"><%= kk_course_other_all[i].cor_name%></p>
+						<p class="w10 umh1 t-c0c0c0 txo"><img src="../image/icon/play.png" class=" h09e pdt01"> <font class="ftz075"><%=kk_course_other_all[i].cor_view%>人/<font><%=kk_course_other_all[i].cor_label%></font></font></p>
+						<%
+						if(kk_course_other_all[i].cor_charge_money){
+						%>
+						<p class="w10 ovd t-ff7b00 umh15 ftz08"><img src="../image/icon/guzi.png" class="w10e pdt02 pdr01" alt="" /><%=kk_course_other_all[i].cor_charge_money%></p>
+					    <%}else{%>
+						<p class="w10 ovd t-ff7b00 umh15 ftz08">限时免费</p>
+						<%
+						}
+						%>
+					</div>
+				</div>
+				<%
+				}
+				%>
+			</script>
+		</div>
+		<!--评论详情-->
+		<div class="dspn" id="class2">
+			<ul class="c-wh pdb10" id="comment"></ul>
+			<script id="comment_left" type="text/html">
+		    <%
+		    if(is_define(kk_course_comment) && kk_course_comment.length>0){
+		    for(var i=0;i<kk_course_comment.length;i++)
+		    {%>
+			<li class="ovd">
+				<div class="w15 fll tx-c pdt04">
+					<img src="<%=kk_course_comment[i].userinfo.face+"?a="+Date.parse(new Date());%>" class="uc-a w18e h18e pd05">						
+				</div>
+				<div class="w85 fll pdt02">
+					<p class="pdt05 umh2 pdr05">
+						<span class="ftz10 t-333"><%=kk_course_comment[i].userinfo.nakename%></span>		
+						<span class="ftz07 t-999 pdl02" id="kk_course_comment<%=kk_course_comment[i].tg_id%>"></span>
+					</p>
+					<div class="pdr05">
+						<div class="ovd ubb ub-e0e0e0">
+							<p class="t-646464 ftz075 umh15"><%=kk_course_comment[i].corcom_comment%></p>
+							<div class="flr umh1 pdt03 pdb05" taapmode='' onclick="dianzan(<%=kk_course_comment[i].corcom_id%>,<%=kk_course_comment[i].corcom_uid%>)">
+								<img id="kk_course_comment<%=kk_course_comment[i].corcom_id%>" src="../image/icon/zan.png" class="w10e h10e"/>
+								<span class="t-999 pdr025 ftz07 pdl02" id="corcom<%=kk_course_comment[i].corcom_id%>">
+									<%
+									if(is_define(kk_course_comment[i].zan_num)){
+									%>
+									<%=kk_course_comment[i].zan_num%>
+									<%
+									}else{
+									%>
+									0
+									<%
+									}
+									%>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+			<%
+			}
+			}else{
+			%>
+			<div class="umh25 tx-c ubtb ub-e0e0e0">
+				<p class="ftz08">暂无评论</p>
+			</div>
+			<%
+			}
+			%>
+	    	</script>
+	    	<div class="w30e h30e c-4371bc uc-a tx-c pstnf absbl-per-10 zindex9" tapmode="op5" onclick="add_comment_p();"><img src="../image/icon/submit.png" class="w15e mart075 h15e tx-c" /></div>
+    	</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">	
+		var UID,leHeight,cor_kefuurl,video_info;
+		apiready = function() {
+			leHeight = Math.round(api.winWidth*19/34);
+			$('#u_id').val(get_local('uid'));
+			UID = get_local('uid');
+			var cor_id = api.pageParam.cor_id;
+			Video_details(cor_id);
+		};
+		function add_comment_p(){
+			var cor_id = $('#cor_id').val();
+			if(is_define(UID)){
+				openFrameFull("../user/ui_comment",{frameName:api.frameName,uid:UID,cor_id:cor_id},'rgba(0,0,0,0)');
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+				
+			}
+		}
+		function Video_details(cor_id){
+			UID = get_local('uid');
+		    if(!is_define(cor_id)){
+		   	var cor_id = api.pageParam.cor_id;
+		    }
+			var URL = serverURL + 'app_interface/course/course_detail/';
+			if(is_define(UID)){
+				URL+='?secret='+appSecret+'&uid='+UID+'&cor_id='+cor_id;
+			}else{
+				URL+='?secret='+appSecret+'&cor_id='+cor_id;
+			}
+		    g_ajax(URL,function(ret){
+		    	var comment_count=ret.data.comment_count;
+		    	video_info=ret.data.video_info;
+		    	ue_script('class_details','comment_num('+comment_count+')');
+		    	//log(JSON.stringify(ret.data.kk_course_comment[0].userinfo.face))
+				if(ret.errCode ==0){
+					var comment_id_list='';
+					cor_kefuurl=ret.data.cor_kefuurl;
+					$('#video').html(bt('vl',ret.data));
+				    $('#video_detail').html(bt('video_details_left',ret.data));
+				    $('#video_left').html(bt('video_data_left',ret.data));
+				    $('#comment').html(bt('comment_left',ret.data));
+				    for(var i =0 ; i < ret.data.kk_course_comment.length;i++){
+						var idx = '#kk_course_comment'+ret.data.kk_course_comment[i].tg_id;
+						var t = getTime(ret.data.kk_course_comment[i].tg_date);
+						$(idx).text(t);
+					}
+				    for(var i =0; i<ret.data.kk_course_comment.length;i++){
+						if(i==ret.data.kk_course_comment.length-1){
+							comment_id_list += ret.data.kk_course_comment[i].corcom_id;
+						}else{
+							comment_id_list += ret.data.kk_course_comment[i].corcom_id+',';
+						}
+					}
+					api.parseTapmode();
+					if(is_define(UID)){
+						whether_Praise(comment_id_list);
+					}
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		function switch_class(index){
+			$(".class font").removeAttr('class');
+			$(".class font").eq(index).attr('class',"t-4371bc");
+			for (var i=0;i<3;i++){
+				var ID = "#class"+i;
+				$(ID).addClass('dspn');
+			}
+			$("#class"+index).removeClass("dspn");
+		}
+	
+		function switchs(cor_id,cor_msg,cor_pic){
+			ue_script("class_details","moiveclose("+cor_id+")");
+			
+		}
+		//回答点赞
+		function dianzan(corcom_id,corcom_uid){
+			UID = get_local('uid');
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : UID,
+					corcom_id : corcom_id
+				}
+			};
+			if(is_define(UID)){
+				if(UID == corcom_uid){
+		        	$toast("自己不能给自己点赞",1500);
+		        }else{
+					var URL = serverURL + 'app_interface/course/comment_dianzan/';
+					r_ajax(URL,data,function(ret)
+					{
+						if(ret.errCode ==0){
+							var corcom = $('#corcom'+corcom_id).text();
+							$('#kk_course_comment'+corcom_id).attr('src', '../image/icon/zans.png');
+							$('#corcom'+corcom_id).text(parseInt(corcom) + 1 );
+						}else{
+							$toast(ret.errMsg,1500);	
+						}
+					})
+				}
+			}else{
+				
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:api.pageParam.cor_id});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:api.pageParam.cor_id});
+					}
+					
+				},1000);
+			}
+		}
+		function pay(cor_id,cor_name,cor_money){
+			if(is_define(UID)){
+				open_w('sure_order','sure_order.html',{uid:UID,cor_id:cor_id,cor_name:cor_name,cor_charge_money:cor_money});
+			}else{
+
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:cor_id});
+				}else{
+					open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:cor_id});
+				}
+				
+			},1000);
+			}
+		}
+		function button(){
+			$('#buttons').css('display', 'block');
+			$('#button').css('display', 'none');
+		}
+		function setUID(uid,cor_id){
+			api.execScript({
+			    name: 'class_details',
+			    script: 'refreshData("'+cor_id+'");'
+			});
+		}
+		function refresh_comment_data(){
+		   	var cor_id = api.pageParam.cor_id;
+			var URL = serverURL + 'app_interface/course/course_detail/';
+			if(is_define(UID)){
+				URL+='?secret='+appSecret+'&uid='+UID+'&cor_id='+cor_id;
+			}else{
+				URL+='?secret='+appSecret+'&cor_id='+cor_id;
+			}
+		    g_ajax(URL,function(ret){
+		    	var comment_count=ret.data.comment_count;
+		    	ue_script('class_details','comment_num('+comment_count+')');
+				if(ret.errCode ==0){
+					var comment_id_list ='';
+				    $('#comment').html(bt('comment_left',ret.data));
+				    for(var i =0 ; i < ret.data.kk_course_comment.length;i++){
+					var idx = '#kk_course_comment'+ret.data.kk_course_comment[i].tg_id;
+					var t = getTime(ret.data.kk_course_comment[i].tg_date);
+					$(idx).text(t);
+					for(var i =0; i<ret.data.kk_course_comment.length;i++){
+						if(i==ret.data.kk_course_comment.length-1){
+							comment_id_list += ret.data.kk_course_comment[i].corcom_id;
+						}else{
+							comment_id_list += ret.data.kk_course_comment[i].corcom_id+',';
+						}
+					}
+					if(is_define(UID)){
+						whether_Praise(comment_id_list);
+					}
+				}
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		function check_buy_agin(cor_id){
+			UID = $('#u_id').val();
+		   	if(!is_define(cor_id)){
+		   	var cor_id = api.pageParam.cor_id;
+		    }
+			var URL = serverURL + 'app_interface/course/course_detail/';
+			if(is_define(UID)){
+				URL+='?secret='+appSecret+'&uid='+UID+'&cor_id='+cor_id;
+			}else{
+				URL+='?secret='+appSecret+'&cor_id='+cor_id;
+			}
+		    g_ajax(URL,function(ret){
+		    	var comment_count=ret.data.comment_count;
+		    	ue_script('class_details','comment_num('+comment_count+')');
+				if(ret.errCode ==0){
+				    $('#comment').html(bt('comment_left',ret.data));
+				}
+			})
+		}
+		function whether_Praise(corcom_id){
+		var corcom_ids = corcom_id.split(',');
+		var uid = get_local('uid');
+		var data = {
+			values:{
+				secret : appSecret,
+				uid : uid,
+				corcom_ids : corcom_id
+			}
+		};
+		var URL = serverURL + 'app_interface/course/comment_is_dianzan/';
+		r_ajax(URL,data,function(ret)
+		{
+			if(ret.errCode ==0){
+				for (var Key in ret.data){
+			      var TGID = '#kk_course_comment'+Key; 
+			      if(ret.data[Key]==1){
+			          $(TGID).attr('src', '../image/icon/zans.png');
+			      }else{
+			          $(TGID).attr('src', '../image/icon/zan.png');
+			      } 
+				}
+			}else{
+				$toast(ret.errMsg,1500)
+			}
+		})
+		api.parseTapmode();
+	}
+		function surePay(cor_id){
+		var uid = get_local('uid');
+		if(is_define(uid)){
+			var URL = serverURL + "app_interface/course/course_fufei/";
+			var data = {
+		 		values :{
+		 			uid:uid,
+		 			secret:appSecret,
+		 			cor_id:cor_id
+		 		}
+		 	};
+		 	r_ajax(URL,data,function(ret){
+		 		if(ret.errCode==0){
+		 			button();
+		 		}else{
+		 			$toast(ret.errMsg,1500);
+		 		}
+		 	})
+		 }else{
+		 	$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:cor_id});
+				}else{
+					open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:cor_id});
+				}
+				
+			},1000);
+		 }
+	}
+		function chat(){
+		var uid = get_local('uid');
+		if(is_define(uid)){
+			open_w('chat','chat.html',{cor_kefuurl:cor_kefuurl});
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:api.pageParam.cor_id});
+				}else{
+					open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:api.pageParam.cor_id});
+				}
+				
+			},1000);
+		}
+	
+	}
+	</script>
+</html>

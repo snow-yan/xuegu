@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>粉丝</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+	</head> 
+	<body class="c-wh">
+	    <input type="hidden" id="page" value="1"/>
+		<div class="w10 c-edf0f5 h10p"></div>
+		<div class="box w10 ovd">
+			<ul id="fan_list"></ul>
+			<script type="text/html" id="fan_template">
+			     <%for(i in data){%>
+					 <li class="ubb ub-e0e0e0" tapmode="c-e0e0e0" onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=data[i].uid%>,uid:get_local('uid')});">
+						<div class="pd05 pstnr ovd">
+							<div class="w8 ovd">
+								<div class="fll dsplb pdr05 ovd pdl02">
+									<img src="<%=data[i].face%>" class="uc-a w35e h35e">
+								</div>
+								<p class="ftz10 pdt05 umh15 ftb t-333"><%if(!is_define(data[i].nakename)){%><%}else{%><%=data[i].nakename%><%}%></p>
+								<p class="txo umh15 ftz075 mart02 t-999"><%if(!is_define(data[i].signature)){%><%}else{%><%=data[i].signature%><%}%></p>
+							</div>
+							<div class="w20e tx-c h20e umh15 pstna abst16 absr10"><img src="../image/icon/add_fans_act.png" class="w15e h15e "></div>
+						</div>
+					 </li>
+				 <%}%>
+			 </script>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script>
+		var lastPage = true,firstPageHaveData = true;
+		apiready = function() {
+			fan_list();
+			push_down(function(){
+				if(firstPageHaveData){
+					fan_list();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					fan_list('next');
+				}
+			});
+		};
+		function fan_list(type){
+			if(type=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			var pagesize = 1;
+			var uid = api.pageParam.uid;
+	        var URL = serverURL + 'app_interface/user/get_user_fensi/';
+	        URL+='?secret='+appSecret+'&uid='+uid+'&page='+page;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					if(ret.data){
+						if(type == 'next'){
+							$('#fan_list').append(bt('fan_template',ret));
+						}else{
+							$('#fan_list').html(bt('fan_template',ret));
+							api.execScript({
+							    name: 'root',
+							    frameName: 'user',
+							    script: "getUserInfo()"
+						    });
+						}
+					}else{
+						if(page==1){
+							firstPageHaveData = false;
+						}
+						lastPage = false;
+						no_data_more('fan_list');
+					}
+					push_down_over();
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+	</script>
+</html>

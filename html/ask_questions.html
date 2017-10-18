@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>提问</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+	</head> 
+	<body class="c-edf0f5">
+		<div class="w10 h30e c-4371bc" id="header">
+			<div class="box area_auto pstnr h30e t-wh">
+				<p class="pstna absl05 abst0 pdt05 pdb05 h20e" ontouchend="close_w();">
+					<img src="../image/icon/left.png" class="w20e h20e">
+				</p>
+				<p class="ovd tx-c umh25 ftz12">提问</p>
+				<p class="pstna absr05 abst0 umh3 h20e pdl05 pdr05" tapmode="op8" onclick="submit()">提交</p>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script>
+	apiready = function(){
+		open_f('ask_questions_c','ask_questions_c.html','false',api.pageParam);
+	}
+	function submit(){
+		api.execScript({
+			frameName:'ask_questions_c',
+			script:'submit_questions();'
+		});
+	}
+	</script>
+</html>

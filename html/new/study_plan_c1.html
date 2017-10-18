@@ -1,0 +1,243 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>全部课程</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../cool_css/cool.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/study_plan.css" />
+</head>
+<body>
+<div class="headerbox">   
+    <div class="kmenu" id="course_tab"></div>
+     <script id="course_tab_tpl" type="text/html">
+       	<a class="active" id="kl_tab1" data-id="0" onclick="click_tab(this,0)"><span>全部课程</span></a>
+   		<%for(var i=0;i< data.length;i++){	%>
+    	<a data-id="<%=data[i].id%>" onclick="click_tab(this,<%=data[i].id%>)"><span><%=data[i].title%></span></a>
+    	<%}%>             
+	  </script>          
+</div> 
+<div class="aui-mask "></div>   
+<!--课程-->
+<div id="course" style="margin-top:60px;">
+   <ul class="aui-list aui-media-list"id="course_ajax_list"></ul>
+   <script id="course_ajax_list_tpl" type="text/html">
+	<%for(var i=0;i< data.length;i++){	%>
+	<li class="aui-list-item courselink" id="study_plan_course_del_<%=data[i].cortab_id%>">
+      <div class="aui-media-list-item-inner" >
+      	<input name="ids" type="checkbox" class="aui-radio" value="<%=data[i].cortab_id%>" onclick="course_ids_del()" />
+          <div class="aui-list-item-media" style="width:7rem;">
+              <img src="../../image/icon/echo_bg.jpg" data-echo="<%=data[i].cor_pic%>" style="border-radius:5px;">
+          </div>
+          <div class="aui-list-item-inner aui-margin-t-10">
+              <div class="aui-list-item-text">
+                  <div class="aui-list-item-title aui-font-size-16 aui-ellipsis-1">
+                  <strong><%=data[i].cor_name%></strong>
+                  </div>
+              </div>
+              <div class="aui-list-item-text aui-margin-t-5"  style="height:1rem;"></div>
+              <div class="aui-list-item-text">
+              	  <span style="color:#8d8d8d;">
+	               	<img src="../../img/eye.png" alt="" style="float:left;width:15px;margin:3px 5px 0 0;"><%=data[i].cor_view%>
+	              </span>
+                  <%if(data[i].cortab_status==0){%>
+                  <span class="w_course"  onclick="open_w('class_details','../class_details.html',{'cor_id':'<%=data[i].cor_id%>'});">马上学习</span>
+                  <%}else{%>
+                  <span class="y_course"  onclick="open_w('class_details','../class_details.html',{'cor_id':'<%=data[i].cor_id%>'});">已学完</span>
+                  <%}%>
+              </div>                      
+          </div>
+      </div>
+    </li> 
+	<%}%>             
+	</script>
+    <div class="alleditor" style="display:none;">
+        <label><input name="demo0" type="checkbox" class="aui-radio">&nbsp;全选</label>
+        <input type="submit" class="editorsub" id="del_study_course" value="" />
+    </div>
+</div>
+</div>  
+</body>
+<script type="text/javascript" src="../../script/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/echo.min.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script>
+var page=0,category=0,lastPage = true,firstPageHaveData =true;
+apiready = function() {
+	course_tab();
+	base_course_list();
+	push_down(function(){
+		if(firstPageHaveData){
+			 base_course_list();
+		}else{
+			setTimeout(function(){
+				push_down_over();
+			},500);
+		}
+	});
+	scrollBottom(function(){
+		if(lastPage){
+			base_course_list('next')
+		}
+	});
+	var topw=$(window).width();
+    $(".headerbox").css("width",topw);
+ 
+    $(".alleditor .aui-radio").click(function(){
+        //全选
+        if($(this).get(0).checked){
+            $(".courselink input").prop('checked','true');
+            $(".editorsub").addClass("editbtn");
+
+        }else{
+            $(".courselink input").removeAttr("checked");
+            if($(".courselink .aui-radio:checked").length == 0){
+                $(".editorsub").removeClass("editbtn");
+            }
+        }
+    });
+	// 删除学习计划课程
+	$("#del_study_course").click(function () {
+        var oUl = $("#course_ajax_list");
+        var oInput = oUl.find("input[name='ids']");
+        var ids = [];
+        oInput.each(function () {
+            if($(this).is(':checked') == true){
+                ids.push($(this).val())
+            }
+        });
+        if(ids.length == 0){
+            alert('请选择要删除的对象');
+            return;
+        }
+        var uid = get_local('uid');	
+		var URL = serverURL + 'app_interface/newCourse/del_my_study_basis_course/';
+		var data = {
+			values: {
+				secret:appSecret,
+				ids:ids,
+				uid:uid
+			}
+		};
+		r_ajax(URL,data,function(ret){		
+			if(ret.errCode == 200){
+				$toast('删除成功',1000);			
+				 // 移除掉对应的li
+                for (var i=0 ; i< ids.length ; i++){
+                    var tInput = $("#study_plan_course_del_"+ids[i]);
+                    tInput.remove();
+                }
+				 ue_script('study_plan','editoring()');
+				 var uid=get_local('uid');
+
+			}else{
+				$toast(ret.errMsg,1500);
+			}
+		})
+		api.parseTapmode();
+	});	
+};
+
+ // 选择一个改变删除按钮颜色
+ function course_ids_del() {
+        var oUl = $("#course_ajax_list");
+        var oInput = oUl.find("input[name='ids']");
+        var ids = [];
+        oInput.each(function () {
+            if($(this).is(':checked') == true){
+                ids.push($(this).val())
+            }
+        });
+        if(ids.length == 0){
+            $(".editorsub").removeClass("editbtn");
+        }else{
+            $(".editorsub").addClass("editbtn");
+        }
+    }
+
+//编辑 
+function ceditor(obj){
+	$(".alleditor,.courselink input").show();  
+}
+//取消编辑
+function ceditoring(obj){
+	$(".alleditor").hide();
+    $(".ceditor").show();
+    $(".alleditor .aui-radio,.courselink input").removeAttr("checked");
+    $(".courselink input").hide();
+}
+
+//基础可证标签点击事件
+function click_tab(obj,data){
+	 $(obj).addClass("active").siblings().removeClass("active");
+	 ue_script('study_plan','editoring()');
+     category=data;
+     page=0;
+     base_course_list();
+}
+// 课程分类标签
+function course_tab(){
+		var URL = serverURL + 'app_interface/newCourse/course_category/';
+		URL+='?secret='+appSecret;
+		g_ajax(URL,function(ret)
+		{	//alert(JSON.stringify(ret.data))
+		if(ret.errCode==200){
+			$('#course_tab').html(bt('course_tab_tpl',ret));
+
+		}else{
+			$toast(ret.errMsg,1500);		
+		}
+			api.parseTapmode();
+		})
+} 
+	
+//基础课程
+function base_course_list(type){
+	if(type=='next'){
+		page = parseInt(page)+1;
+		$('#page').val(page);
+	}else{
+		page =1;
+		$('#page').val(page);
+		lastPage =true;	
+	}
+	var uid=get_local('uid');
+	var URL = serverURL + 'app_interface/newCourse/my_study_basis_course/';
+	URL+='?secret='+appSecret+'&uid='+uid+'&page='+page+'&category='+category;
+	g_ajax(URL,function(ret)
+	{	//alert(JSON.stringify(ret))
+		if(ret.errCode==200||ret.errCode==101){
+			if(ret.errCode ==200){
+				if( type == 'next'){
+					$('#course_ajax_list').append(bt('course_ajax_list_tpl',ret));
+				}else{
+					$('#course_ajax_list').html(bt('course_ajax_list_tpl',ret));
+				}
+			}else{
+				if(page==1){
+					firstPageHaveData = false;
+					lastPage = false;
+					firstPage_no_data('course_ajax_list');
+				}else{
+					lastPage = false;
+					no_data_more('course_ajax_list');
+				}
+			}
+			Echo.init();
+			push_down_over();
+			api.parseTapmode();
+		}else{
+			$toast(ret.errMsg,1500);		
+		}
+
+	})
+} 
+</script>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>确认订单</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style type="text/css">
+			.circle{
+				position: absolute;
+				
+			}
+			.grayBagCircle{
+				width: 14px;
+				height: 14px;
+				border: 2px solid #bbbbbb;
+				border-radius: 9px;
+			}
+			.whiteCircle{
+				width: 8px;
+				height: 8px;
+				border: 3px solid #ffffff;
+				border-radius: 9px;
+			}
+			.c-fd0000{
+				background: #fd0000;
+			}
+			.t-fd0000{
+				color: #fd0000;
+			}  	
+			.h18{
+				height: 18px;
+			}
+			.c-616161{ background: #616161}
+			.absb-09{
+				bottom: -0.9em;
+			}
+			.mask-alert{
+		   		position:fixed;
+		   		top: 0;
+		   		left: 0;
+		   		height:100%;
+		   		width:100%;
+		   		background:#000;
+		   		opacity: 0.8;
+		   		z-index:10002;
+		   		display: none;
+		   	}
+		   	.alert1 {
+		   		position:fixed;
+		   		top:40%;
+		   		width: 80%;
+		   		margin:0 10%;
+		   		border-radius:10px;
+		   		background:#fff;
+		   		color:#000;
+		   		z-index: 10003;
+		   		display: none;
+		   		
+		   	}
+		   	.alert1 .aui-icon-close{
+		   		float:right;
+		   		padding:5px 5px;
+		   	}
+		   	.alert1 .titlea{
+		   		padding:1em;
+		   		font-size:1em;
+		   	}
+		   	.alert1 .bottom{
+		   		line-height: 2.2em;
+		   		overflow: hidden;
+		   		border-top:1px solid #dcdcdc;
+		   	}
+		   	.alert1 .bottom div{
+		   		width:49.5%;
+		   		float:left;
+		   		line-height:1.6em;
+		   		height:1.6em;
+		   		margin:0.6em 0;
+		   		text-align:center;
+		   		font-size:1.2em;
+		   	}
+		</style>
+	</head>
+	<body class="c-wh">
+		<div class="h05e c-ebf2fc"></div>
+		<div class="pdl10 pdr10">
+			<p class="ftz09 umh3 ubb ub-e0e0e0 pstnr txo">
+				<span>课程名称：</span>
+				<span id="cor_name"></span>
+				<span class="pstna h10e absb-09 absl20">
+					<img src="../image/icon/down-border.png" class="w10e h05e"/>
+				</span>
+			</p>
+			<p class="ftz09 umh3 ubb ub-e0e0e0">
+				<span>类型：</span>
+				<span>视频课程</span>
+			</p>
+			<p class="ftz09 umh3 ubb ub-e0e0e0">
+				<span>价格：</span>
+				<span><font id="charge_money"></font>谷子</span>
+			</p>
+		</div>
+		<div class="h05e c-ebf2fc"></div>
+		<div class="pdl10 pdr10">
+			<div class="ubb ub-e0e0e0 ovd pstnr pdt05 pdb05">
+				<div class="fll">
+					<img src="../image/icon/guzi-big.png" class="w25e h25e pdt05 pdb05 marr05"/>
+				</div>
+				<div class="fll umh3 pdt025">
+					<p class="t-c0c0c0 ftz09">谷子余额<font id="integral"></font></p>
+				</div>
+				<div class="w1 h18 fll tx-c circle pstna abst15 absr0" onclick="changeStatus(this);">
+					<div class="grayBagCircle dsplb">
+						<div class="whiteCircle c-fd0000"></div>
+					</div>
+				</div>
+			</div>
+       		<div class="box w92 mart10 t-4371bc tx-l ftz08 ovd">
+	    		<img src="../image/icon/select.png" id="agreement" class="w10e yes" onclick="selectAgreement(this)">
+	    		<font class="umh1 pdl02" onclick="open_w('xuegu_agreement','../user/xuegu_agreement.html')">《学股网服务协议》</font>
+	        </div>
+		</div>
+		<div class="ovd umh3 c-wh ubt ub-e0e0e0" id="footer">
+			<div class="w5 fll ftz09 ubr ub-e0e0e0">
+				<span class="pdl10">应付：</span>
+				<span class="t-ff7b00"><font id="charge_money1"></font>谷子</span>
+			</div>
+			<div class="w5 fll ftz09 tx-c ubr ub-e0e0e0" tapmode="c-e0e0e0" onclick="submit()">
+				<span class="t-ff7b00">立即支付</span>
+			</div>
+		</div>
+		<div class="mask-alert"></div>
+   		<div class="alert1">
+   			<span class="aui-icon-close"><img src="../image/icon/close_down.png" alt="" style="width:20px;"/></span>
+   			<div class="titlea">您现在处于游客模式,登录后多设备可同步学习。</div>
+	   		<div class="bottom">
+	   			<div id="youke" style="color:#0055aa;border-right:1px solid #dcdcdc;" >游客购买</div>
+	   			<div style="color:#ff2a2a;" onclick="user_buy()">登录购买</div>	
+	   		</div>
+   		</div>
+	   
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript">
+		
+		apiready = function() 
+		{
+			
+			getGuziCount();
+			setCourseDetails();
+			$('.alert1 .aui-icon-close').click(function(){
+				$('.mask-alert').hide();
+				$('.alert1').hide();
+			});
+			$('#youke').click(function(){
+				setTimeout(function(){
+					$('.mask-alert').hide();
+					$('.alert1').hide();
+				},100)
+				 surePay();
+			})
+			
+		};
+		function submit(){
+			if(api.systemType=='android'){
+				surePay();
+			}else{
+				var is_youke = get_local('is_youke');
+				//alert(is_youke)
+				if(is_youke==1){
+					//游客
+					var courseDetails = api.pageParam;
+					var integral = $('#integral').text();
+					if(parseInt(courseDetails.cor_charge_money)>parseInt(integral)){
+						//余额不充足
+						$('.mask-alert').hide();
+						$('.alert1').hide();
+						open_w('recharge_ios','new/recharge_ios.html',{uid:get_local('uid'),winName:api.winName,frameName:api.frameName})
+					}else{
+						//余额 充足
+						$('.mask-alert').show();
+						$('.alert1').show();
+					}
+				}else{
+					//账号
+					$('.mask-alert').hide();
+					$('.alert1').hide();
+					surePay();
+				}
+			}
+			
+		}
+		//登录购买
+		function user_buy(){
+			open_w('ios_login','../user/ios_login.html',{winName:api.winName,frameName:api.frameName});
+			setTimeout(function(){
+				$('.mask-alert').hide();
+				$('.alert1').hide();
+			},100)
+	
+		}
+		function reload2(){
+	        location.reload();
+		}  
+		function changeStatus(el){
+			var that = $(el).children().children();
+			$('.whiteCircle').removeClass('c-fd0000');
+			if( $(that[0]).hasClass('c-fd0000') )
+			{
+				$(that[0]).removeClass('c-fd0000');
+			}
+			else
+			{
+				$(that[0]).addClass('c-fd0000');
+			}
+		}
+		function setCourseDetails(){
+			var courseDetails = api.pageParam;
+			$('#cor_name').text(courseDetails.cor_name);
+			$('#charge_money').text(courseDetails.cor_charge_money);
+			$('#charge_money1').text(courseDetails.cor_charge_money);
+		}
+		function getGuziCount(){
+			var uid = get_local('uid');
+			var URL = serverURL + 'app_interface/user/get_other_user_info/';
+			var data = {
+				values:{
+					targetuid  : uid,
+					loginuid : 0,
+					secret : appSecret
+				}
+			}
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode ==0){
+					$('#integral').text(ret.data.integral);
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		function surePay(){
+			var uid = get_local('uid');
+			var cor_id = api.pageParam.cor_id;
+			if($('#agreement').attr('src')=='../image/icon/select-gray.png'){
+				$toast("请选择学股网服务协议", 1000);
+				return false;
+			}
+			var URL = serverURL + "app_interface/course/course_fufei/";
+			var data = {
+		 		values :{
+		 			uid:uid,
+		 			secret:appSecret,
+		 			cor_id:cor_id
+		 		}
+		 	};
+		 	r_ajax(URL,data,function(ret){
+		 	//alert(JSON.stringify(ret))
+		 		if(ret.errCode==0){
+					$toast(ret.errMsg,1500);
+		 			api.execScript({
+					    name: 'class_details',
+					    script: 'refreshData("'+cor_id+'");'
+					});
+					api.execScript({
+	 					name :'root',
+	 					frameName : 'user',
+	 					script : 'getUserInfo()'
+	 				});
+					api.execScript({
+					    name: 'album_details',
+					    frameName : 'album_details_c',
+					    script: 'course()'
+					});
+					api.execScript({
+					    name: 'root',
+					    frameName : 'study()',
+					    script: ' is_login1()'
+					});
+					setTimeout(function(){
+						close_w();
+					},1500)
+					
+		 		}else{
+		 			$toast(ret.errMsg,1500);
+		 			if(ret.errMsg == '用户余额不足'){
+		 				setTimeout(function(){
+		 					var integral = $('#integral').text();
+		 					if(api.systemType=='android'){
+								open_w('recharge_andriod','new/recharge_andriod.html',{uid:get_local('uid'),integral:integral,winName:api.winName,frameName:api.frameName})
+							}else{
+								open_w('recharge_ios','new/recharge_ios.html',{uid:get_local('uid'),integral:integral,winName:api.winName,frameName:api.frameName})
+								
+							}
+						},1500)
+		 			}
+		 		}
+		 	})
+		}
+		function selectAgreement(el){
+			if($(el).hasClass('no')){
+				$(el).attr('src','../image/icon/select.png').attr('class','w10e yes');
+			}else{
+				$(el).attr('src','../image/icon/select-gray.png').attr('class','w10e no');
+			}
+		}
+		
+	</script>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>订单确认页</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/course_order.css" />
+</head>
+<body>
+    <header class="aui-bar aui-bar-nav aui-bg-blue" id="header">
+        <a class="aui-pull-left aui-btn" ontouchstart="close_w();">
+           <img src="../../img/back.png" alt="" style="width:27px;">
+        </a>
+        <div class="aui-title">订单确认页</div>
+    </header>
+    <footer class="red_w" id="footer">
+        实付款：<span class="aui-font-size-18 aui-margin-r-10"><b  id="price"></b></span>
+        <span class="submit" onclick="submit()">提交订单</span>
+    </footer>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript">
+	apiready = function() {
+		$('#price').text('￥'+api.pageParam.special_price)
+		open_f_f('order_confirm_c','order_confirm_c.html','false',{'aid':api.pageParam.aid,'special_price':api.pageParam.special_price});
+		api.addEventListener({
+		    name: 'zhen_price'
+		}, function(ret, err) {
+			$('#price').text(ret.value.zhen_price);
+		});
+		
+	};
+	function submit(){
+		api.execScript({
+			frameName : 'order_confirm_c',
+	        script:'submit_order()' 
+	    });
+	}
+	
+</script>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>我的关注</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+	</head> 
+	<body class="c-edf0f5">
+			<div class=" h05e w-10"></div>
+			<div class="box w10 c-wh ovd">
+				<p class="ovd list_pt_1 pd05 " onclick="openPage(1)" tapmode="c-e0e0e0" >
+					<span class="sl w30e h30e pdl02">
+						<img src="../image/icon/attention01.png" class="w10 uc-a">
+					</span>
+					<span class="sl text pstnr">
+						<span class="w10 ubb ub-e0e0e0 pdb10  ovd pstna abst05 absl06">
+							<span class="sl tx-l ftb t-333 umh2">关注的人</span>
+							<span class="sr pdt025"><img src="../image/icon/right_gra.png" class="w15e h15e"></span>
+						</span>
+					</span>
+				</p>
+				<p class="ovd list_pt_1 pd05 " onclick="openPage(2);" tapmode="c-e0e0e0" >
+					<span class="sl w30e h30e pdl02">
+						<img src="../image/icon/attention02.png" class="w10 uc-a">
+					</span>
+					<span class="sl text pstnr">
+						<span class="w10 ubb ub-e0e0e0 pdb10  ovd pstna abst05 absl06">
+							<span class="sl tx-l ftb t-333 umh2">关注的视频</span>
+							<span class="sr pdt025"><img src="../image/icon/right_gra.png" class="w15e h15e"></span>
+						</span>
+					</span>
+				</p>
+				<!--<p class="ovd list_pt_1 pd05 " onclick="open_w('live_streaming','live_streaming.html');" tapmode="c-e0e0e0" >
+					<span class="sl w30e h30e pdl02">
+						<img src="../image/icon/attention03.png" class="w10 uc-a">
+					</span>
+					<span class="sl text pstnr">
+						<span class="w10 ubb ub-e0e0e0 pdb10  ovd pstna abst05 absl06">
+							<span class="sl tx-l ftb t-333 umh2">关注的直播</span>
+							<span class="sr pdt025"><img src="../image/icon/right_gra.png" class="w15e h15e"></span>
+						</span>
+					</span>
+				</p>
+				<p class="ovd list_pt_1 pd05 " tapmode="c-e0e0e0" onclick="open_w('attention_talk_stocks','attention_talk_stocks.html');">
+					<span class="sl w30e h30e pdl02">
+						<img src="../image/icon/dynamics06.png" class="w10 uc-a">
+					</span>
+					<span class="sl text pstnr">
+						<span class="w10 ubb ub-e0e0e0 pdb10  ovd pstna abst05 absl06">
+							<span class="sl tx-l ftb t-333 umh2">关注的谈股</span>
+							<span class="sr pdt025"><img src="../image/icon/right_gra.png" class="w15e h15e"></span>
+						</span>
+					</span>
+				</p>-->
+				<p class="ovd list_pt_1 pd05 " onclick="openPage(3);" tapmode="c-e0e0e0" >
+					<span class="sl w30e h30e pdl02">
+						<img src="../image/icon/dynamics07.png" class="w10 uc-a">
+					</span>
+					<span class="sl text pstnr">
+						<span class="w10 pdb10  ovd pstna abst05 absl06">
+							<span class="sl tx-l ftb t-333 umh2">关注的问答</span>
+							<span class="sr pdt025"><img src="../image/icon/right_gra.png" class="w15e h15e"></span>
+						</span>
+					</span>
+				</p>
+			</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+	<script>
+	apiready = function()
+	{
+		$(".list_pt_1 .text").width(api.frameWidth-80);
+	};
+	function openPage(type){
+		if(type==1){
+			open_w('my_attention_persons','my_attention_persons.html',api.pageParam);
+		}
+		if(type==2){
+			open_w('attention_video','attention_video.html',api.pageParam);
+		}
+		if(type==3){
+			open_w('attention_answer_ask','attention_answer_ask.html',api.pageParam);
+		}
+	}
+	</script>
+</html>

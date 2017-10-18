@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>关注的问答</title>
+		 <link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">
+		<input type="hidden" id="page" value="1"/>
+		<div id="focus_questions"></div>
+		<script type="text/html" id="focus_questions_list">
+			<div class=" h10p w10 c-edf0f5"></div>
+			<%
+			for(var i =0; i< data.length;i++){
+			%>
+			<div class="box w10 ovd ubb ub-e0e0e0" tapmode="c-e0e0e0" onclick="open_w('choice_details','../html/choice_details.html',{'question_id':<%=data[i].question_id%>,'uid':get_local('uid'),'tangu_id':<%=data[i].published_uid%>})">
+				<p class="area_auto w95">
+					<span class="sl pdb05 pdt05 pdl02">
+						<span class="pdl05 pdr05 h10e umh1 c-wh ftz075 pdb03 pdt03 border-radius-ff7b00 tx-c t-ff7b00">
+						    <img src="../image/icon/guzi.png" class="w10e pdr01 " alt="" /><%=data[i].question_reward%>
+						</span>
+					</span>
+					<span class="sr umh2 t-c0c0c0 pdt08 pdb05 pdr02 ftz07" id="createTime<%=data[i].question_id%>"></span>
+				</p>
+				<p class="ovd w95 area_auto ftz085 t-545454 tx-lr">
+					<span class="pdl02 pdr02"><%=data[i].question_content%></span>
+				</p>
+				<div class="ovd w95 area_auto pdt05 pdb05">
+					<p class="w5 fll txo ftz075 umh2">
+						<span class="sl umh2 t-c0c0c0 w10 txo pdl02">
+							<%
+							if(data[i].last_answer != 0){
+							%>
+							<img src="<%=data[i].qiangda_user.face%>" class="w20e h20e uc-a10">
+							<font class="pdl05 pdt01 t-999"><%=data[i].nakename%></font>
+							<font class="pdl05 pdt01 t-999">已抢答</font>
+							<%
+							}else{
+							%>
+							<img src="../image/icon/no-answer.png" class="w20e h20e uc-a10">
+							<%
+							}
+							%>
+						</span>
+					</p>
+					<p class="w5 flr ftz075">
+						<span class="sl t-c0c0c0 umh2 pdr07 tx-r w10 txo">
+							<img src="../image/icon/dot-gray.png" class="w20e h20e">
+							<%=data[i].view_count%>人
+							<img src="../image/icon/biaoqian.png" class="w10e h10e mart04 pdl05 pdr02">
+							<font class=" pdr02"><%=data[i].question_label%></font>
+						</span>
+					</p>
+				</div>
+			</div>
+			<%
+			}
+			%>
+		</script>
+		<div class=" h10p w10 c-wh"></div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var lastPage = true,firstPageHaveData = true;
+		apiready = function() {
+			get_my_focus_question();
+			push_down(function(){
+				if(firstPageHaveData){
+					get_my_focus_question();
+				}else{
+					setTimeout(function(){
+						push_down_over();
+					},500);
+				}
+			});
+			scrollBottom(function(){
+				if(lastPage){
+					get_my_focus_question('next');
+				}
+			});
+		};
+		function get_my_focus_question(type){
+			var uid = api.pageParam.uid;
+			var pagesize= 10;
+			if(type=="next"){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			var URL = serverURL + 'app_interface/user/my_focus_question/';
+			URL+='?secret='+appSecret+'&uid='+uid+'&page='+page+'&pagesize='+pagesize;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					if(ret.data.length>0){
+						if(type=='next'){
+							$('#focus_questions').append(bt('focus_questions_list',ret));
+						}else{
+							$('#focus_questions').html(bt('focus_questions_list',ret));
+						}
+						for(var i =0 ; i < ret.data.length;i++){
+							var idx = '#createTime'+ret.data[i].question_id;
+							var t = getTimeDifference(ret.data[i].add_time);
+							$(idx).text(t);
+						}
+					}else{
+						if(page==1){
+							firstPageHaveData = false;
+						}
+						lastPage =false;
+						no_data_more('focus_questions');
+					}
+					push_down_over();
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+ 	</script>
+</html>

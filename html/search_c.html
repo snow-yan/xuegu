@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>搜索</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+	</head> 
+	<body class="c-edf0f5">
+		<div class="box c-wh t-333">
+			<div id="history">
+				<p class="ovd ubb pdt05 ub-e4e4e4 ftz09" tapmode="c-e0e0e0">
+					<span class="sl pd05 "><img src="../image/icon/time_s.png" class="w10e pdl02 h10e" /></span>
+					<span class="sl umh2 pdt01">历史搜索</span>
+					<span class="sr umh2 pdl025 t-4371bc pdr05" id="clear" style="display: none" tapmode='' onclick="clearHistory()">清除</span>
+				</p>
+				<p class="w8 area_auto ovd pdt05 ftz09" style="display: none" id="history_list"></p>
+			</div>
+			<div id="hot" class=" ftz09">
+				<p class="ovd ubtb pdt05 pdb025 ub-e4e4e4" tapmode="c-e0e0e0">
+					<span class="sl pd025"><img src="../image/icon/search_hot.png" class="w15e pdl02 h15e" /></span>
+					<span class="sl umh2 ">热门推荐</span>
+					<!--<span class="sr umh2 pdl025 t-4371bc pdr05">换一换</span>-->
+				</p>
+				<p class="w8 area_auto ovd pdt05" id="hot_search"></p>
+				<script type="text/html" id="hot_search_label">
+					<%
+					for(var i=0;i<data.length;i++){
+					if((i+1)%2==0){
+					%>
+					<span class="t-4371bc w25 tx-l umh2 sl" tapmode="" onclick="searchThis(this)"><%=data[i]%></span>
+					<%
+					}else{
+					%>
+					<span class="w25 tx-l umh2 sl" tapmode="" onclick="searchThis(this)"><%=data[i]%></span>
+					<%
+					}
+					}
+					%>
+				</script>
+			</div>
+		</div>
+		<div id="search_data"></div>
+		<script type="text/html" id="search_data_details">
+			<%
+			if(data.search_course && data.search_course.length>0){
+			%>
+			<div class="h05e c-edf0f5"></div>
+			<div class="box ubtb w10 ub-e4e4e4 c-wh">
+				<p class="pdl07 pdr07 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10">
+					<span class="sl"><font class="t-4371bc pdl025">课程</font></span>
+				</p>
+			</div>
+			<div class="h03e c-edf0f5"></div>
+			<div class="clo_two pdb03 c-wh">
+			    <div class=" w96 area_auto">
+			    	<%
+			    	for(var i=0;i< data.search_course.length;i++){
+			    	var le_msg = str2json(data.search_course[i].cor_letv_msg);
+					var let_v=le_msg.data.video_unique;
+			    	%>
+			    	<div class="col_list" onclick="open_w('class_details','../html/class_details.html',{'cor_id':'<%=data.search_course[i].cor_id%>','UID':get_local('uid'),pic:'<%=data.search_course[i].cor_pic%>',video_unique:'<%=let_v%>'})">
+						<div class="box pdt05 pdl03 pdr03">
+							<p class="w10 tx-c"><img src="<%=data.search_course[i].cor_pic%>" style=" height:<%=api.frameWidth/3.4-15%>px;" class="w10 uc-a02 c-bla" tapmode="op8"></p>
+							<p class="w10 t-333 ftz08 umh15 txo pdt05" id="course<%=data.search_course[i].cor_id%>"></p>
+							<p class="w10 umh1 t-c0c0c0 txo"><img src="../image/icon/play.png" class=" h09e pdt01"><font class="ftz075"><%=data.search_course[i].cor_view%>人/<font id="courseLabel<%=data.search_course[i].cor_id%>"></font></font></p>
+							<%
+							if(is_define(data.search_course[i].cor_charge_money)){
+							%>
+							<p class="w10 ovd t-ff7b00 umh15 ftz075"><img src="../image/icon/guzi.png" class="w10e pdt03 pdr01" alt="" /><%=data.search_course[i].cor_charge_money%></p>
+							<%
+							}else{
+							%>
+							<p class="w10 ovd t-ff7b00 umh15 ftz075">限时免费</p>
+							<%	
+							}
+							%>
+						</div>	
+					</div>
+			    	<%
+			    	}
+			    	%>
+				</div>
+			</div>
+			<div class="box ubtb w10 ub-e4e4e4 ftz095 c-wh" tapmode="c-e0e0e0" onclick="getMoreClass('<%=data.keyWords%>')">
+				<p class="pdl07 pdr07 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10 ovd">
+					<span class="sl">
+						<font class="t-4371bc ftz08">查看更多课程</font>
+					</span>
+					<span class="sr tx-r umh1 pdt085 pdb075"><img src="../image/icon/right_gra.png" class="w10e h10e"></span>
+				</p>
+			</div>
+			<%	
+			}
+			%>
+			<!--<%
+			if(data.search_live && data.search_live.length>0){
+			%>
+			<div class="h05e c-edf0f5"></div>
+			<div class="box ubtb w10 ub-e4e4e4 c-wh">
+				<p class="pdl07 pdr07 ubb ub-e4e4e4 umh25 tx-l t-939393">
+					<span class="sl"><font class="t-4371bc pdl025">直播</font></span>
+				</p>
+			</div>
+			<ul>
+				<%
+				for(var i=0;i< data.search_live.length;i++){
+				%>
+				<li>
+					<p class="pdl05 pdr07 ubb ub-e4e4e4 umh25 tx-l t-939393 ovd">
+						<span class="fll"><img class="h15e pdt07" src="../image/icon/live_pic.png"/></span>
+						<span class="fll"><font class="ftz085">【<font class="t-4371bc"><%=data.keyWords%></font><%=data.search_live[i].live_name%>】<font id="liveName<%=data.search_live[i].live_id%>"></font></font></span>
+						<span class="flr tx-r umh1 pdt085 pdb075"><img src="../image/icon/right_gra.png" class="w10e h10e"></span>
+						<span class="flr tx-r h25e"><font class="ftz075 t-4371bc">前往</font></span>
+					</p>
+				</li>
+				<%
+				}
+				%>
+			</ul>
+			<div class="box ubb w10 ub-e4e4e4 ftz095 c-wh">
+				<p class="pdl07 pdr07 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10 ovd">
+					<span class="sl">
+						<font class="t-4371bc ftz08">查看更多直播</font>
+					</span>
+					<span class="sr tx-r umh1 pdt085 pdb075"><img src="../image/icon/right_gra.png" class="w10e h10e"></span>
+				</p>
+			</div>
+			<%
+			}
+			%>-->
+			<%
+			if(data.search_question && data.search_question.length>0){
+			%>
+			<div class="h05e c-edf0f5"></div>
+			<div class="box ubtb w10 ub-e4e4e4 c-wh">
+				<p class="pdl07 pdr07 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10">
+					<span class="sl"><font class="t-4371bc pdl025">问股</font></span>
+				</p>
+			</div>
+			<div class=" c-wh" >
+				<%
+				for(var i=0;i<data.search_question.length;i++){
+				%>
+				<div class="box w10 ovd ubb ub-e0e0e0 c-wh" tapmode="c-e0e0e0" onclick="open_w('choice_details','../html/choice_details.html',{'question_id':<%=data.search_question[i].question_id%>,'uid':get_local('uid'),'tangu_id':<%=data.search_question[i].uid%>})">
+					<p class="ovd w95 area_auto ftz085 pdt04 t-545454 tx-lr">
+						<span class="pdr02 umh2" id="content<%=data.search_question[i].question_id%>"></span>
+					</p>
+					<p class="ovd w95 area_auto">
+						<span class="sl umh1 t-999 pdt03 pdb05 pdr02 ftz08" id="createTime<%=data.search_question[i].question_id%>"></span>
+					</p>
+				</div>
+				<%
+				}
+				%>
+			<div class="box ubb w10 ub-e4e4e4 ftz095 c-wh" tapmode="c-e0e0e0" onclick="getMoreQuestions('<%=data.keyWords%>')">
+				<p class="pdl07 pdr07 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10 ovd">
+					<span class="sl">
+						<font class="t-4371bc ftz08">查看更多问答</font>
+					</span>
+					<span class="sr tx-r umh1 pdt085 pdb075"><img src="../image/icon/right_gra.png" class="w10e h10e"></span>
+				</p>
+			</div>
+			<%
+			}
+			%>
+			<%
+			if(data.user_data && data.user_data.length>0){
+			%>
+			<div class="h05e c-edf0f5"></div>
+			<div class="box ubtb w10 ub-e4e4e4 c-wh">
+				<p class="pdl07 pdr07 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10">
+					<span class="sl"><font class="t-4371bc pdl025">牛人</font></span>
+				</p>
+			</div>
+			<div class="" >
+			<%
+			for(var i=0;i<data.user_data.length;i++){
+			%>
+			<li class="ubb ub-e0e0e0" tapmode="c-e0e0e0" >
+				<div class="pdl07 pdr07 pdt07 pdb07 pstnr ovd">
+					<div class="w8 ovd" onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=data.user_data[i].uid%>,uid:get_local('uid')});event.preventDefault();event.stopPropagation();">
+						<div class="fll dsplb pstnr">
+							<img src="<%=data.user_data[i].face%>" class="uc-a w30e h30e marr05">
+						</div>
+						<p class="ftz10 mart01 umh15 t-4371bc"><%=data.user_data[i].nakename%></p>
+						<%
+						if(is_define(data.user_data[i].signature)){
+						%>
+						<p class="txo umh15 mart01 ftz08 t-999"><%=data.user_data[i].signature%></p>
+						<%
+						}else{
+						%>
+						<p class="txo umh15 mart01 ftz08 t-999"></p>
+						<%
+						}
+						%>
+					</div>
+					<!--<%
+					if(data.user_data[i].focus){
+					%>
+					<div class="w35e h25e pstna abst10 absr05 reduce" onclick="change_attention(this,'0',<%=data.user_data[i].uid%>);event.preventDefault();event.stopPropagation();">
+						<div class="w35e t-ff7b00 tx-c h15e umh15 ftz09 mart05 border-radius-ff7b00 c-wh" tapmode>-关注</div>
+					</div>
+					<%
+					}else{
+					%>
+					<div class="w35e h25e pstna abst10 absr05 add" onclick="change_attention(this,'1',<%=data.user_data[i].uid%>);event.preventDefault();event.stopPropagation();">
+						<div class="w35e t-wh tx-c h15e umh15 ftz09 mart05 c-ff7b00 uc-a02" tapmode>+关注</div>
+					</div>
+					<%
+					}
+					%>-->
+				</div>
+			</li>
+			<%
+			}
+			%>
+			<div class="box ubb w10 ub-e4e4e4 ftz095 c-wh" tapmode="c-e0e0e0" onclick="getMoreLecture('<%=data.keyWords%>')">
+				<p class="pdl07 pdr07 ubb ub-e4e4e4 umh25 tx-l t-939393 ftz10 ovd">
+					<span class="sl">
+						<font class="t-4371bc ftz08">查看更多牛人</font>
+					</span>
+					<span class="sr tx-r umh1 pdt085 pdb075"><img src="../image/icon/right_gra.png" class="w10e h10e"></span>
+				</p>
+			</div>
+			<%
+			}
+			%>
+			
+			<div class="h05e c-edf0f5"></div>
+			<!--<div class="box ubb w10 ub-e4e4e4 ftz095">
+				<p class="pdl07 pdr07 ubtb ub-e4e4e4 umh25 tx-l t-939393 ftz10 ovd">
+					<span class="sl">
+						<font class="t-4371bc ftz08">查看更多文章</font>
+					</span>
+					<span class="sr tx-r umh1 pdt085 pdb075"><img src="../image/icon/right_gra.png" class="w10e h10e"></span>
+				</p>
+			</div>-->
+			<%
+			if((data.search_live && data.search_live.length>0) || (data.search_question && data.search_question.length>0) || (data.search_course && data.search_course.length>0) || (data.user_data && data.user_data.length>0)){
+			%>
+			<%
+			}else{
+			%>
+			<div class="box ubb w10 ub-e4e4e4 ftz095 c-wh">
+				<p class="pdl07 pdr07 ubb ub-e4e4e4 umh25 tx-c t-939393 ftz10 ovd">
+					<font class="t-4371bc ftz08">暂无数据</font>
+				</p>
+			</div>
+			<%
+			}
+			%>
+			<!--<div class="h10e"></div>-->
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script>
+		
+		apiready = function()
+		{
+			var frameName = api.pageParam.frameName;
+			set_search_history();
+			get_search_hot_label();
+		}
+		function get_search_list(keyWords){
+			var uid = get_local('uid');
+			var base = new Base64(); 
+			var result = base.encode(keyWords); 
+			var page = 1;
+			var URL = serverURL + 'app_interface/main/search/';
+			if(is_define(uid)){
+				URL += '?secret='+appSecret+'&keyword='+result+'&uid='+uid;
+			}else{
+				URL += '?secret='+appSecret+'&keyword='+result;
+			}
+			g_ajax(URL,function(ret){
+				if(ret.errCode==0){
+					$('#history').css('display','none');
+					$('#hot').css('display','none');
+					var search_history = get_local('search_history');
+					if(!is_define(search_history)){
+						set_local('search_history',keyWords);
+					}else{
+						if(search_history.indexOf(keyWords) == -1){
+							var history = search_history.split(',');
+							for(var i=0;i<history.length;i++){
+								if(history[i]!=keyWords){
+									set_local('search_history',search_history+','+keyWords);
+								}
+							}
+						}
+					}
+					ret.data.keyWords = keyWords;
+					$('#search_data').html(bt('search_data_details',ret));
+					if(ret.data.search_question && ret.data.search_question.length>0){
+						for(var i =0 ; i < ret.data.search_question.length;i++){
+							var idx = '#createTime'+ret.data.search_question[i].question_id;
+							var t = getTime(ret.data.search_question[i].add_time);
+							$(idx).text(t);
+							var ID = '#content'+ret.data.search_question[i].question_id;
+							var content = ret.data.search_question[i].question_content;
+							content=content.replace(ret.data.keyWords,"<font style='color:#4371bc;'>"+ret.data.keyWords+"</font>");
+							$(ID).html(content);							
+						}
+					}
+					if(ret.data.search_course && ret.data.search_course.length>0){
+						for(var i=0;i<ret.data.search_course.length;i++){
+							var ID = '#course'+ret.data.search_course[i].cor_id;
+							var t = ret.data.search_course[i].cor_name;
+							t=t.replace(ret.data.keyWords,"<font style='color:#4371bc;'>"+ret.data.keyWords+"</font>");
+							$(ID).html(t);
+							var Id = '#courseLabel'+ret.data.search_course[i].cor_id;
+							var m = ret.data.search_course[i].cor_label;
+							m=m.replace(ret.data.keyWords,"<font style='color:#4371bc;'>"+ret.data.keyWords+"</font>");
+							$(Id).html(m);
+						}
+					}
+					if(ret.data.search_live && ret.data.search_live.length>0){
+						for(var i=0;i<ret.data.search_live.length;i++){
+							var ID = '#liveName'+ret.data.search_live[i].live_id;
+							var t = ret.data.search_live[i].live_name;
+							t=t.replace(ret.data.keyWords,"<font style='color:#4371bc;'>"+ret.data.keyWords+"</font>");
+							$(ID).html(t);
+						}
+					}
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			});
+		}
+		function set_search_history(){
+			var search_history = get_local('search_history');
+			if( is_define(search_history)){
+				$('#clear').css('display','');
+				$('#history_list').css('display','');
+				var history = search_history.split(',');
+				for(var i=0;i<history.length;i++){
+					if(i<10 && is_define(history[i])){
+						var html = '<div class="t-333 w25 tx-l umh2 fll txo" tapmode="" onclick="searchThis(this)">'+history[i]+'</div>';
+						$('#history_list').append(html);
+					}
+				}
+			}
+		}
+		function clearHistory(){
+			remove_Local('search_history');
+			$('#clear').css('display','none');
+			$('#history_list').css('display','none');
+		}
+		
+		function searchThis(el){
+			var keyWords = $(el).text();
+//			alert(keyWords);
+
+			get_search_list(keyWords);
+			api.execScript({
+				name :api.winName,
+	            script: 'set_keyWords("'+keyWords+'");'
+            });
+		}
+		function get_search_hot_label(){
+			var URL = serverURL + 'app_interface/main/get_search_hot_label/';
+			URL += '?secret='+appSecret;
+			g_ajax(URL,function(ret){
+				if(ret.errCode==0){
+					$('#hot_search').html(bt('hot_search_label',ret.data))
+				}
+			});
+		}
+		function getMoreClass(keyWords){
+			open_w('search_more_course','search_more_course.html',{keyWords:keyWords});
+		}
+		function getMoreQuestions(keyWords){
+			open_w('search_more_questions','search_more_questions.html',{keyWords:keyWords});
+		}
+		function getMoreLecture(keyWords){
+			open_w('search_more_lecture','search_more_lecture.html',{keyWords:keyWords});
+		}
+		function change_attention(el,type,tagetUid){
+			var URL = serverURL + 'app_interface/main/follow_user/';
+			var UID = get_local('uid');
+			if(is_define(UID)){
+				var data = {
+					values: {
+					secret:appSecret,
+					uid:tagetUid,
+					login_uid:UID
+					}
+				};
+				r_ajax(URL,data,function(ret){
+					if(ret.errCode == 0){
+						if(type == 0){
+							$(el).children('div').attr('class','w35e t-wh tx-c h15e umh15 ftz09 mart05 c-ff7b00 uc-a02').text('+关注');
+							$(el).attr('onclick',"change_attention(this,'1',"+tagetUid+");event.preventDefault();event.stopPropagation();")
+							$toast('关注已取消',500);
+						}
+						if(type == 1){
+							$(el).children('div').attr('class','w35e t-ff7b00 tx-c h15e umh15 ftz09 mart05 border-radius-ff7b00 c-wh').text('-关注');
+							$(el).attr('onclick',"change_attention(this,'0',"+tagetUid+");event.preventDefault();event.stopPropagation();")
+							$toast('关注成功',500);
+							open_w('teacher_info','../html/teacher_info.html',{targetuid:tagetUid,uid:get_local('uid')});
+						}
+					}else{
+						$toast(ret.errMsg,1500);
+					}
+				})
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				},1000);
+			}
+			api.parseTapmode();
+		}	
+	</script>
+</html>

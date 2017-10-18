@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>我的动态</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+        .abst15{top:21px;}
+        .cur_pading{padding:8px 8px 7px 8px;}
+        </style>
+	</head> 
+	<body class="c-wh">
+		<div class="box w10">
+			<div class="w10 ovd">
+				<p class="ovd list_pt_1 ftz09 cur_pading" tapmode="c-e0e0e0" onclick="open_w('system_notice','system_notice.html')">
+					<span class="sl w30e h30e pstnr pdl02">
+						<img src="../image/icon/dynamics01.png" class="w10 uc-a">
+						<span class="w10e pstna absr0 zindex9 uba-fff uc-a abst0 ftz07 umh1 t-wh c-ff7b00 tx-c ovd" id="notification" style=" display: none;"><font class="ftz08"></font></span>
+					</span>	
+					<span class="sl text pstnr h30e">
+						<span class="w10 umh15 ovd pstna abst0 absl06">
+							<span class="sl tx-l ftb t-333">系统通知</span>
+							<span class="sr tx-r t-999 ftz08 pdr025" id="systemNoticeTime"></span>
+						</span>
+						<span class="w10 umh15 txo pstna abst15 absl06 t-999 pdb05 ubb ub-ccc">
+							<font class="t-999 ftz09 tx-lr" id="systemNotice"></font>
+						</span>
+					</span>		
+				</p>
+			</div>
+			<div class="w10 ovd">
+				<p class="ovd list_pt_1 ftz09 cur_pading" tapmode="c-e0e0e0" onclick="open_w('comment_my','../html/new/comment_my.html')">
+					<span class="sl w30e h30e pdl02 pstnr">
+						<img src="../image/icon/dynamics02.png" class="w10 uc-a">
+						<span class="w10e pstna absr0 zindex9 uba-fff uc-a abst0 ftz07 umh1 t-wh c-ff7b00 tx-c ovd" id="notification2" style=" display: none;"><font class="ftz08"></font></span>
+					</span>
+					<span class="sl text pstnr c-ff0000">
+						<span class="w10 umh15 ovd pstna abst0 absl06">
+							<span class="sl tx-l ftb t-333">评论我的</span>
+							<span class="sr tx-r t-999 ftz08 pdr025" id="commentNoticeTime"></span>
+						</span>
+						<span class="w10 umh15 txo pstna abst15 absl06 t-999 pdb05 ubb ub-ccc">
+							<font class="t-999 ftz09 tx-lr" id="commentNotice"></font>
+						</span>
+					</span>
+				</p>
+			</div>
+			<div class="w10 ovd">
+				<p class="ovd list_pt_1 ftz09 cur_pading" tapmode="c-e0e0e0" onclick="open_w('mention_me','mention_me.html',{uid:get_local('uid')})">
+					<span class="sl w30e h30e pdl02 pstnr">
+						<img src="../image/icon/dynamics03.png" class="w10 uc-a">
+						<span class="w10e pstna absr0 zindex9 uba-fff uc-a abst0 ftz07 umh1 t-wh c-ff7b00 tx-c ovd" id="notification3" style=" display: none;"><font class="ftz08"></font></span>
+					</span>
+					<span class="sl text pstnr ">
+						<span class="w10 umh15 ovd pstna abst0 absl06">
+							<span class="sl tx-l ftb t-333">提到我的</span>
+							<span class="sr tx-r t-999 ftz08 pdr025" id="mentionsNoticeTime"></span>
+						</span>
+						<span class="w10 umh15 txo pstna abst15 absl06 t-999 pdb05 ubb ub-ccc">
+							<font class="t-999 ftz09 tx-lr" id="mentionsNotice"></font>
+						</span>
+					</span>
+				</p>
+			</div>	
+			<div class="w10 ovd">
+				<p class="ovd list_pt_1 ftz09 cur_pading" tapmode="c-e0e0e0" onclick="open_w('my_class','my_class.html',{uid:get_local('uid')});" >
+					<span class="sl w30e h30e pdl02"><img src="../image/icon/dynamics05.png" class="w10 uc-a"></span>
+					<span class="sl text pstnr ">
+						<span class="w10 umh15 ovd pstna abst0 absl06">
+							<span class="sl tx-l ftb t-333">我的课程</span>
+							<!--<span class="sr tx-r t-999 ftz08 pdr025">09-23 10:23</span>-->
+						</span>
+						<span class="w10 umh15 txo pstna abst15 absl06 t-999 pdb05 ubb ub-ccc">
+							<font class="t-999 ftz09 tx-lr" id="cor_notice"></font>
+						</span>
+					</span>
+				</p>
+			</div>	
+			<div class="w10 ovd">
+				<p class="ovd list_pt_1 ftz09 cur_pading" tapmode="c-e0e0e0" onclick="open_w('my_talk_stocks','my_talk_stocks.html',{uid:get_local('uid')});">
+					<span class="sl w30e h30e  pdl02 pstnr">
+						<img src="../image/icon/dynamics06.png" class="w10 uc-a">
+						<!--<span class="w10e pstna absr0 zindex9 uba-fff uc-a abst0  ftz08 umh1 t-wh c-ff7b00 tx-c ovd"><font class="ftz08"></font></span>-->
+					</span>
+					<span class="sl text pstnr ">
+						<span class="w10 umh15 ovd pstna abst0 absl06">
+							<span class="sl tx-l ftb t-333">我的谈股</span>
+							<!--<span class="sr tx-r t-999 ftz08 pdr025">09-23 10:23</span>-->
+						</span>
+						<span class="w10 umh15 txo pstna abst15 absl06 t-999 pdb05 ubb ub-ccc">
+							<font class="t-999 ftz09 tx-lr" id="tg_notice"></font>
+						</span>
+					</span>
+				</p>
+			</div>
+			<div class="w10 ovd">
+				<p class="ovd list_pt_1 ftz09 cur_pading" tapmode="c-e0e0e0" onclick="open_w('my_message','../html/new/my_message.html',{uid:get_local('uid')});" >
+					<span class="sl w30e h30e  pdl02"><img src="../image/icon/dynamics08.png" class="w10 uc-a"></span>
+					<span class="sl text pstnr ">
+						<span class="w10 umh15 ovd pstna abst0 absl06">
+							<span class="sl tx-l ftb t-333">我的文章</span>
+							<!--<span class="sr tx-r t-999 ftz08 pdr025">09-23 10:23</span>-->
+						</span>
+						<span class="w10 umh15 txo pstna abst15 absl06 t-999 pdb05 ubb ub-ccc">
+							<font class="t-999 ftz09 tx-lr" id="article_notice"></font>
+						</span>
+					</span>
+				</p>
+			</div>	
+			<div class="w10 ovd">
+				<p class="ovd list_pt_1 ftz09 cur_pading" tapmode="c-e0e0e0" onclick="open_w('my_ques_answer','my_ques_answer.html',{uid:get_local('uid')});" >
+					<span class="sl w30e h30e  pdl02"><img src="../image/icon/dynamics07.png" class="w10 uc-a"></span>
+					<span class="sl text pstnr ">
+						<span class="w10 umh15 ovd pstna abst0 absl06">
+							<span class="sl tx-l ftb t-333">我的问答</span>
+							<!--<span class="sr tx-r t-999 ftz08 pdr025">09-23 10:23</span>-->
+						</span>
+						<span class="w10 umh15 txo pstna abst15 absl06 t-999 pdb05 ubb ub-ccc">
+							<font class="t-999 ftz09 tx-lr" id="question_notice"></font>
+						</span>
+					</span>
+				</p>
+			</div>
+			<div class="w10 ovd dspn">
+				<p class="ovd list_pt_1 ftz09 cur_pading" tapmode="c-e0e0e0" onclick="open_w('my_live_class','my_live_class.html',{uid:get_local('uid')});">
+					<span class="sl w30e h30e pdl02 pstnr">
+						<img src="../image/icon/dynamics04.png" class="w10 uc-a">
+						<!--<span class="w10e pstna absr0 zindex9 uba-fff uc-a abst0  ftz08 umh1 t-wh c-ff7b00 tx-c ovd"><font class="ftz08"></font></span>-->
+					</span>
+					<span class="sl text pstnr ">
+						<span class="w10 umh15 ovd pstna abst08 absl06">
+							<span class="sl tx-l ftb t-333">我的直播</span>
+							<!--<span class="sr tx-r t-999 ftz08 pdr025">09-23 10:23</span>-->
+						</span>
+						<!--<span class="w10 umh15 txo pstna abst15 absl06 t-999 pdb05 ubb ub-ccc">
+							<font class="t-999 ftz09 tx-lr">00235股票最近不合适持有最近行情不好建议不要 补仓去投，真的投就多咨询些</font>
+						</span>-->
+					</span>
+				</p>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+	<script>
+//	var UID = 3309;
+	UID = get_local('uid');
+	apiready = function()
+	{
+		$(".text").width(api.frameWidth-80);
+        getNotices();
+	};
+	function getNotices(){
+		MyAnswer_Question();//我的问答
+		MyCourse();//我的课程
+		MyTangu();//我的谈股
+		has_new_tongzhi();//系统消息
+		pinglun_have_new();//评论我的
+		has_new_atme();//提到我的
+	}
+	function system_Notification(){
+//      var UID = get_local('uid');
+		var URL = serverURL + 'app_interface/user/new_tongzhi/';
+		URL+='?secret='+appSecret+'&uid='+UID;
+	    g_ajax(URL,function(ret){
+//	    	console.log(json2str(ret))
+			if(ret.errCode ==0){
+			    if(ret.data){
+			    	if(is_define(ret.data.add_time)){
+		        		$('#systemNoticeTime').text(getTime(ret.data.add_time));
+			       	}
+			    	if(is_define(ret.data.message)){
+				       	$('#systemNotice').text(ret.data.message);
+			    	}else{
+				       	$('#systemNotice').text('暂无消息');
+			    	}
+			       	if(ret.data.status){
+				        $('#notification').css('display', 'block');
+			       	}else{
+			       		$('#notification').css('display', 'none');
+			       	}
+			    }else{
+				    $('#notification').css('display', 'none');
+				    $('#systemNotice').text('暂无消息');		
+		        }
+			}
+		})
+	}
+	//评论
+	function Comment(){
+		var URL = serverURL + 'app_interface/user/new_pinlun/';
+		URL+='?secret='+appSecret+'&uid='+UID;
+	    g_ajax(URL,function(ret){
+			if(ret.errCode ==0){
+			    if(ret.data){
+			    	if(is_define(ret.data.add_time)){
+		        		$('#commentNoticeTime').text(getTime(ret.data.add_time));
+			       	}
+			    	if(is_define(ret.data.nakename)){
+				       	$('#commentNotice').text(ret.data.nakename+'评论了你');
+			    	}else{
+				       	$('#commentNotice').text('暂无评论');
+			    	}
+			    }else{
+				    $('#commentNotice').text('暂无评论');
+		        }
+			}
+		})
+	}
+	//提到
+	function Mentions(){
+//      var UID = get_local('uid');
+		var URL = serverURL + 'app_interface/user/new_atme/';
+		URL+='?secret='+appSecret+'&uid='+UID;
+	    g_ajax(URL,function(ret){
+//	    	console.log(json2str(ret));
+			if(ret.errCode ==0){
+			    if(ret.data){
+			    	if(is_define(ret.data.add_time)){
+				    	$('#mentionsNoticeTime').text(getTime(ret.data.add_time));
+			    	}
+			    	if(is_define(ret.data.nakename)){
+				       	$('#mentionsNotice').text(ret.data.nakename+'提到了你');
+			    	}else{
+				       	$('#mentionsNotice').text('暂无消息');
+			    	}
+			       	if(ret.data.status){
+				        $('#notification3').css('display', 'block');
+			       	}else{
+			       		$('#notification3').css('display', 'none');
+			       	}
+			    }else{
+				    $('#notification3').css('display', 'none');
+				    $('#mentionsNotice').text('暂无消息');
+		        }
+			}
+		})
+	}
+//	我的课程
+	function MyCourse(){
+//	 	var UID = get_local('uid');
+		var URL = serverURL + 'app_interface/user/my_course_first/';
+		URL+='?secret='+appSecret+'&uid='+UID;
+	    g_ajax(URL,function(ret){
+//	    	console.log(json2str(ret));
+			if(ret.errCode ==0){
+			    if(ret.data){
+			    	if(ret.data.cor_name){
+				    	$('#cor_notice').text(ret.data.cor_name)
+			    	}else{
+				    	$('#cor_notice').text('暂无课程')
+			    	}
+			    }else{
+			    	$('#cor_notice').text('暂无课程')
+			    }
+			}
+		})
+	}
+//	我的谈股列表
+	function MyTangu(){
+//		var UID = get_local('uid');
+		var URL = serverURL + 'app_interface/user/my_tangu_first/';
+		URL+='?secret='+appSecret+'&uid='+UID;
+	    g_ajax(URL,function(ret){
+//	    	console.log(json2str(ret));
+			if(ret.errCode ==0){
+			    if(ret.data){
+			    	$('#tg_notice').text(ret.data.tg_content)
+			    }else{
+			    	$('#tg_notice').text('暂无谈股')
+			    }
+			}
+		})
+	}
+//	我的直播
+	function MyLive(){}
+//	我的问答
+	function MyAnswer_Question(){
+//		var UID = get_local('uid');
+		var URL = serverURL + 'app_interface/user/my_aq_question_first/';
+		URL+='?secret='+appSecret+'&uid='+UID;
+	    g_ajax(URL,function(ret){
+//	    	console.log(json2str(ret));
+			if(ret.errCode ==0){
+			    if(ret.data){
+			    	$('#question_notice').text(ret.data.question_content)
+			    }else{
+			    	$('#question_notice').text('暂无问答')
+			    }
+			}
+		})
+	}
+	function pinglun_have_new(){
+		var URL = serverURL + 'app_interface/user/pinglun_have_new/';
+		URL+='?secret='+appSecret+'&uid='+UID;
+		g_ajax(URL,function(ret){
+			if(ret.errCode ==0){
+				if(ret.data.status==1){
+					$('#notification2').css('display','block');
+				}else{
+					$('#notification2').css('display','none');
+				}
+				Comment();//评论我的
+			}
+		});
+	}
+	function has_new_tongzhi(){
+		var URL = serverURL + 'app_interface/user/has_new_tongzhi/';
+		URL+='?secret='+appSecret+'&uid='+UID;
+		g_ajax(URL,function(ret){
+			if(ret.errCode ==0){
+				if(ret.data.status==1){
+					$('#notification').css('display','block');
+				}else{
+					$('#notification').css('display','none');
+				}
+				system_Notification();//系统消息
+			}
+		});
+	}
+	function has_new_atme(){
+		var URL = serverURL + 'app_interface/user/has_new_atme/';
+		URL+='?secret='+appSecret+'&uid='+UID;
+		g_ajax(URL,function(ret){
+			if(ret.errCode ==0){
+				if(ret.data.status==1){
+					$('#notification1').css('display','block');
+				}else{
+					$('#notification1').css('display','none');
+				}
+				Mentions();//提到我的
+			}
+		});
+	}
+	</script>
+</html>

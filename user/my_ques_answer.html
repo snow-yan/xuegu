@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>我的问答</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+			.pre {
+				color: #00b7ee
+			}
+			.pre_after {
+				color: #333;
+			}
+		</style>
+	</head> 
+	<body class="c-wh">
+		<div class="w10 h30e c-4371bc" id="header">
+			<div class="box w95 area_auto pstnr h30e t-wh">
+				<p class="pstna absl0 abst0 pdt05 pdb05 h20e" ontouchstart="close_w();"><img src="../image/icon/left.png" class="w20e h20e"></p>
+				<p class="ovd tx-c umh3 ftz12">我的问答</p>
+			</div>
+			<div class="w10 area_auto h30e c-wh ubb ub-ccc" id="add_h">
+				<div class="fll w5 pre umh15 tx-c mart075 ubr ub-ccc " id="questions" onclick="randomSwitchBtn('0')">我的问题</div>
+				<div class="fll w5 pre_after umh2 mart05 tx-c" id="answers" onclick="randomSwitchBtn('1')">我的回答</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script>
+	apiready = function(){
+			win_h = api.winHeight;
+			var $header = $api.dom('#header');
+			$api.fixIos7Bar($header);
+			$api.fixStatusBar($header);
+			var header_h = $api.offset($header).h;
+			var add_h=$api.offset($api.byId('add_h')).h
+			var rect_h = win_h - header_h-add_h;
+			api.openFrameGroup({
+				name : 'my_question',
+				scrollEnabled : false,
+				bounces : true,
+				rect : {
+					x : 0,
+					y : header_h+add_h,
+					w : 'auto',
+					h : rect_h
+				},
+				index : 0,
+				frames : [{
+					name : 'my_question_c',
+					url : 'my_question_c.html',
+					bounces : true,
+					pageParam : api.pageParam
+				}, {
+					name : 'my_answer_c',
+					url : 'my_answer_c.html',
+					bounces : true,
+					pageParam : api.pageParam
+				}]
+			}, function(ret, err) {
+			});
+	}
+	function randomSwitchBtn(index){
+			$api.addCls($api.byId('questions'), "pre_after");
+			$api.addCls($api.byId('answers'), "pre_after");
+			if (index == 0) {
+				$api.addCls($api.byId('questions'), "pre");
+				$api.removeCls($api.byId('questions'), 'pre_after');
+			}
+			if (index == 1) {
+				$api.removeCls($api.byId('answers'), 'pre_after');
+				$api.addCls($api.byId('answers'), "pre");
+			}
+			api.setFrameGroupIndex({
+				name : 'my_question',
+				index : index
+			});
+		}
+	</script>
+</html>

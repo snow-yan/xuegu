@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>谈股详情</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/message.css" />
+</head>
+<body>
+    <header class="aui-bar aui-bar-nav aui-bg-blue" id="header">
+        <a class="aui-pull-left aui-btn" ontouchstart="close_w();">
+           <img src="../../img/back.png" alt="" style="width:27px;">
+        </a>
+        <div class="aui-title aui-font-size-20">文章详情</div>
+    </header>
+ 	<div class="footer" id="footer">
+        <div class="form" onclick="click_comment()">
+             <img src="../../img/edit4.png" alt="" ><input type="text" placeholder="写评论"  >
+        </div>
+        <div class="star" id="star"> </div>
+        <script type="text/html" id="star_tpl">
+        	<span style="padding-right:5px;"><img src="../../img/comment2.png" alt="" style="height:16px;">评论</span>
+         	<% 
+         	if(data.is_collect==0){
+         	 %>
+               <!--收藏之前 -->
+          	<span style="border-left:1px solid #ddd;padding-left:10px;" onclick="collect_article(this);"><img src="../../img/star.png" alt="" style="height:20px;" id="collect">收藏</span>	
+          
+           	<%}else{ %> 
+           	 <!-- 收藏之后 -->
+           		<span style="color:#0a75e0;border-left:1px solid #ddd;padding-left:10px;" ><img src="../../img/star1.png" alt="" style="height:20px;" id="collect">收藏</span>
+           	<% } %>     
+			 
+		</script>  
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript">
+	var collect_num;
+	apiready = function() {
+		open_f_f('article_detail_c','article_detail_c.html','false',{'article_id':api.pageParam.article_id});
+		article_detail();
+	};
+	//评论
+	function click_comment(){
+			ue_script_f('article_detail','article_detail_c',"add_comment()");
+	}
+	// 获取谈股详情 
+    function article_detail(){
+    		var uid = get_local('uid');
+			var URL = serverURL + 'app_interface/newMobile/article_find/';
+			URL+='?secret='+appSecret+'&article_id='+api.pageParam.article_id+'&uid='+uid;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode==200){
+					collect_num=ret.data.collect_num;
+					$('#star').html(bt('star_tpl',ret));
+					
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+			})
+		}
+	//收藏谈股
+	function collect_article(obj){
+		var uid = get_local('uid');
+		var URL = serverURL + '/app_interface/newMobile/article_add_collect/';
+		if(is_define(uid)){
+			var data = {
+				values:{
+					secret : appSecret,
+					uid : uid,
+					article_id :api.pageParam.article_id
+				}
+			};
+			r_ajax(URL,data,function(ret)
+			{
+				if(ret.errCode ==200){
+			
+					var html='<img src="../../img/star1.png" alt="" style="height:18px;margin-right:5px;"/>'+'收藏 ';
+					$(obj).empty().append(html);
+					$(obj).css('color','#0a75e0');
+					$(obj).attr('onclick','');
+					
+				}else{
+				
+					$toast(ret.errMsg,1500)	
+				}
+			})
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+				}else{
+					open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				}
+				
+			},1000);
+		}
+		api.parseTapmode();
+	}
+</script>
+</html>

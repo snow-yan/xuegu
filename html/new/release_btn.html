@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>发布</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <style>
+        body{
+            background: url(../../img/release_bg.png) no-repeat ;
+            background-size:100% 100%; 
+           
+        }
+        .header{
+            padding:15px;
+        }
+        .header img{
+            width:30px;
+        }
+        .img1{
+            width:100%;
+            text-align: center;
+            margin:0 auto;
+        }
+        .img1 img{
+            width:100px;
+            display: inline-block;
+
+        }
+        .a1{
+            padding-top:60%;
+            margin-bottom:10px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="header" id="header" ontouchstart="close_w();"><img src="../../img/close.png" alt=""></div>
+    <div class="img1 a1">
+        <a onclick="open1();"><img src="../../img/btn1.png" alt="" style="margin-right: 20px;"></a>
+        <a onclick="open_w('release','release.html',{'type':'2'});"><img src="../../img/btn2.png" alt=""></a>
+    </div>
+    <div class="img1 a2">
+        <a onclick="open_w('answer_list','../answer_list.html');"><img src="../../img/btn3.png" alt="" style="margin-right: 20px;"></a>
+        <a onclick="open_w('release','release.html',{'type':'1'});"><img src="../../img/btn4.png" alt=""></a>
+    </div>    
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script>
+	
+	apiready = function() {
+   		$('body').height($(window).height());
+   		var $header = $api.dom('#header');
+		$api.fixIos7Bar($header);
+		$api.fixStatusBar($header);
+ 	}
+ 	function open1(){
+ 		var uid = get_local('uid');
+		if(is_define(uid)){
+			open_w('ask_questions','../ask_questions.html',{uid:get_local('uid')})
+		}else{
+			$toast('您还没有登录，请先登录',1000);
+			setTimeout(function(){
+				if(api.systemType=='ios'){
+					open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+				}else{
+					open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				}	
+			},1000);
+		}
+ 	}
+</script>
+</html>

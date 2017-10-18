@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>我关注的人</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+	</head> 
+	<body class="c-edf0f5">
+		<input type="hidden" id="page" value="1"/>
+		<div class="w10 c-edf0f5 h10p"></div>
+		<div id="my_attention"></div>
+		<script type="text/html" id="my_attention_list">
+			<div class="box c-wh w10 ovd">
+				<ul>
+					<%
+					for(var i=0;i<data.length;i++){
+					%>
+					<li class="ubb ub-e0e0e0" tapmode="c-e0e0e0">
+						<div class="pd05 pstnr ovd">
+							<div class="w6 ovd" onclick="open_w('teacher_info','../html/teacher_info.html',{'targetuid':<%=data[i].friend_uid%>,uid:get_local('uid')});event.preventDefault();event.stopPropagation();">
+								<div class="fll dsplb pdr05 ovd pdl02">
+									<img src="<%=data[i].face%>" class="uc-a w35e h35e">
+								</div>
+								<p class="ftz10 pdt03 umh15 ftb t-333 txo"><%=data[i].nakename%></p>
+								<p class="txo umh15 ftz075 mart02 t-999"><%=data[i].signature%></p>
+							</div>
+							<div class="w60e h15e umh15 pstna abst15 ftz09 absr10 c-ff7b00 border-radius-ff7b00">
+								<div class="fll w5 tx-c umh15 t-wh ubr ub-wh yes" id="reduce<%=data[i].friend_uid%>" onclick="change_attention(this,'0',<%=data[i].friend_uid%>);event.preventDefault();event.stopPropagation();">
+									<div class="t-wh c-c0c0c0" style="border-radius: 0.3em 0 0 0.2em;"><font class="ftz085">已关注</font></div>
+								</div>
+								<div class="fll w5 tx-c umh15 t-wh ovd no dspn" id="add<%=data[i].friend_uid%>" onclick="change_attention(this,'1',<%=data[i].friend_uid%>);event.preventDefault();event.stopPropagation();">
+									<div class="c-wh t-ff7b00" style="border-radius: 0.3em 0 0 0.2em;">+关注</div>
+								</div>
+								<span class="fll w5 tx-c umh15 t-wh" onclick="open_w('put_questions_to','../html/put_questions_to.html',{targetuid:<%=data[i].friend_uid%>,uid:get_local('uid'),tagetNakename:'<%=data[i].nakename%>'});event.preventDefault();event.stopPropagation();">@TA</span>
+							</div>
+							<!--<div class="w20e tx-c h20e umh15 pstna abst16 absr10"><img src="../image/icon/add_fans_act.png" class="w15e h15e "></div>-->
+						</div>
+					</li>
+					<%
+					}	
+					%>
+				</ul>
+			</div>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script>
+	var lastPage = true,firstPageHaveData = true;
+	apiready = function() {
+		set_local('uid',api.pageParam.uid);
+		get_my_attention();
+		push_down(function(){
+			if(firstPageHaveData){
+				get_my_attention();
+			}else{
+				setTimeout(function(){
+					push_down_over();
+				},500);
+			}
+		});
+		scrollBottom(function(){
+			if(lastPage){
+				get_my_attention('next');
+			}
+		});
+	};
+	function get_my_attention(type){
+			var uid = get_local('uid');
+			var pagesize= 10;
+			var URL = serverURL + 'app_interface/user/my_follow_list/';
+			if(type=="next"){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			URL+='?secret='+appSecret+'&uid='+uid+'&page='+page+'&pagesize='+pagesize;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					if(ret.data.length>0){
+						if(type=='next'){
+							$('#my_attention').append(bt('my_attention_list',ret));
+						}else{
+							$('#my_attention').html(bt('my_attention_list',ret));
+						}
+					}else{
+						if(page==1){
+							$('#my_attention').html('');
+							firstPageHaveData = false;
+							lastPage =false;
+							firstPage_no_data('my_attention');
+						}else{
+							lastPage =false;
+							no_data_more('my_attention');
+						}						
+					}
+					push_down_over();
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		function change_attention(el,type,tagetUid){
+			var URL = serverURL + 'app_interface/main/follow_user/';
+			var UID = get_local('uid');
+			var reduceId = '#reduce'+tagetUid;
+			var addId = '#add'+tagetUid;
+			if(is_define(UID)){
+				var data = {
+					values: {
+					secret:appSecret,
+					uid:tagetUid,
+					login_uid:UID
+					}
+				};
+				r_ajax(URL,data,function(ret){
+					if(ret.errCode == 0){
+						if(type == 0){
+							$(reduceId).addClass('dspn');
+							$(addId).removeClass('dspn');
+							$toast('关注已取消',500);
+						}
+						if(type == 1){
+							$(addId).addClass('dspn');
+							$(reduceId).removeClass('dspn');
+							$toast('关注成功',500);
+						}
+						api.execScript({
+							name:'root',
+							frameName:'home',
+							script : 'getHomeData()'
+						})
+						get_my_attention();
+					}else{
+						$toast(ret.errMsg,1500);
+					}
+				})
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+				},1000);
+			}
+			api.parseTapmode();
+		}
+	</script>
+</html>

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="format-detection" content="telephone=no"/>
+		<title>我的</title>
+		<!-- 基础样式及JS -->
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-edf0f5">
+		<input type="hidden" value="" id="sign_in_num">
+		<div class="c-4371bc umh3 t-wh w10 zindex3" id="header">
+			<div class="box h30e w95 area_auto">
+				<p class="ovd umh3 absl0 w10 tx-c pstnr">
+					<span class="umh2 absl0 abst0 pstna w1 tx-r pdt05 pdb05" tapmode="op8" onclick="open_dynamics()">
+						<span class="pstnr"> 
+							<img src="../image/icon/msg.png" class="w20e h20e"> 
+							<span class="w10e h10e pstna absr01 abst03 umh1 t-wh c-ff7b00 tx-c uc-a ftz065" id="origin" style="display: none">
+								<span class="ftz07 umh1 h10e pdt02" id="dynamic"></span>
+							</span>
+						</span>
+					</span>
+					<span class="pstna absr0 abst0 pdt05 pdb05 pdl05 " tapmode="op5" onclick="open_page('shezhi')" > <img src="../image/icon/set.png" class="w15e h15e pd025"> </span>
+				</p>
+			</div>
+		</div>
+		<div class="box c-4371bc" >
+			<p id="no_login" class="ovd area_auto pdt05  h50e"  style="text-align:center;">
+				<img tapmode="op8" src="../image/icon/not-login.png" class="w40e uc-a" style="margin:0 auto;" onclick="ioslogin()">
+				<div id="deng" style="color:#fff;text-align:center;" onclick="ioslogin()">立即登录</div>
+			</p>
+			<div id="isset_login" class="dspn pstnr" tapmode="op7" onclick="open_w('user_info','../user/user_info.html',{'winName':api.winName,'frameName':api.frameName})">
+				<img src="../image/icon/right.png" class="h15e w15e flr pstna absr05 abst20" alt="" />
+				<div class="pd05 w8 pstnr ovd">
+						<div id="userInfo"></div>
+						<script type="text/html" id="infoDetails">
+							<div class="ovd">
+								<div class="fll dsplb pdb15">
+									<img class="uc-a w40e h40e marr05" id="face" src="<%=data.face+"?a="+Date.parse(new Date());%>">
+								</div>
+								<div class="ftz10 umh15 t-wh pdt05 w95">
+									<div class="ovd">
+										<div class="fll" style="max-width: 70%;display: inline-block;">
+											<p class="txo"><%=data.nakename%></p>
+										</div>
+										<div class="pstnr dsplb">
+											<img src="../image/icon/level.png" class="h18e pdl02" alt="" />
+											<%
+											if(data.current_grade>0){
+											%>
+											<span style="left:2.7em" class="pstna abst05 ftz06 h18e zindex2">LV<%=data.current_grade%></span>
+											<%
+											}else{
+											%>
+											<span style="left:2.7em" class="pstna abst05 ftz06 h18e zindex2">LV0</span>
+											<%
+											}
+											%>
+										</div>
+									</div>
+									<div>
+										<%
+										if(is_define(data.introduction)){
+										%>
+										<p class="ovd t-wh ftz08 umh15 txo"><%=data.introduction%></p>
+										<%
+										}else{
+										%>
+										<p class="ovd t-wh ftz08 umh15"></p>
+										<%
+										}
+										%>
+									</div>
+							    </div>
+								<div class="ovd progressGray">
+								<div class="progress"></div>
+								</div>
+								<p class="txo umh15 ftz08 t-wh ovd">
+									<span class="w50 fll txo umh15">
+										<img src="../image/icon/start.png" class="w15e h15e" alt="" />
+										<%if(data.current_grade>0){%>
+											<font>LV<%=data.current_grade%></font>
+										<%}else{%>
+											<font>LV0</font>
+										<%}%>
+									</span>
+									<span class="flr w50 tx-r">
+										<%if(data.experience>0){%>
+											<font class="t-ff7b00" id="experience11"><%=data.experience%></font>
+										<%}else{%>
+											<font class="t-ff7b00" id="experience11">0</font>
+										<%}%>
+										/
+										<%if(data.experience_top>0){%>
+											<font><%=data.experience_top%></font>
+										<%}else{%>
+											<font>0</font>
+										<%}%>
+									</span>
+								</p>
+							</div>
+						</script>
+				</div>
+			</div>
+			<p class="ovd h40e">
+				<span class="h20e w10 c-4371bc t-wh pdt075 pdb075 ubt ub-e0e0e0">
+				 	<span class="sl w333333 tx-c h20e" tapmode="op7" onclick="open_page('guzi')" >
+					   <span class="umh1 t-fff888 ftz08" id="guzi"></span>
+					   <span class="umh15">
+					   	<font class="ftz075">谷子+</font>
+					   </span>
+				    </span> 
+				    <span class="sl w333333 tx-c h20e" tapmode="op7" onclick="open_page('chzhangjyan');" > 
+					    <span class="ublr ub-wh"> 
+					    	 <span class="umh1 t-fff888 ftz075" id="experience"></span>
+						     <span class="umh15">
+						     	<font class="ftz08">成长经验+</font>
+						     </span> 
+					    </span>
+				    </span> 
+				    <span class="sl w333333 tx-c h20e" tapmode="op7" onclick="open_page('fensi');">
+				       <span class="umh1 ftz08" id="funs"></span> 
+				       <span class="umh15">
+				       	<font class="ftz075">粉丝</font>
+				       </span> 
+				    </span>
+				</span>
+			</p>
+		</div>
+		<div class=" h10e w10"></div>
+		<div id="before" style="display: none;"><img src="../img/ios.png" alt="" style="width:100%;margin-top:20%;"/></div>
+		<div id="after" >
+			<div class=" h30e w10 tx-c umh3 c-wh t-4371bc ovd" onclick="open_page('zhanghuguanli')" tapmode="c-e0e0e0">
+				<img tapmode="op8" src="../image/icon/user_info.png" class="w15e pdr05 h12e pdt09">账户管理
+			</div>
+			<div class=" h05e w10"></div>
+			<div class="box w10 sl">
+				<p class="sl h30e c-wh ovd  w10" tapmode="c-e0e0e0" onclick="open_page('chzhangrenwu')">
+					<span class="sl w30e h30e"><img src="../image/icon/growup.png" class="w20e h20e pd05"></span>
+					<span class="sl w85 ubb ovd ub-e4e4e4 h30e">
+						<span class="sl umh3 ftz10">成长任务</span>
+						<span class="sr pdt09">
+							<img src="../image/icon/right_gra.png" class="w12e h12e pdr025">
+						</span> 
+						<span class="sr w35e h15e ovd mart09 pdb01 pdr01 pdl01 uc-a10 ftz09 c-ff7b00 tx-c marr025 t-wh" id="sign_in">签到</span>
+					</span>
+				</p>
+				<p class="sl h30e c-wh ovd  w10" tapmode="c-e0e0e0" onclick="open_page('wodeduntai')">
+					<span class="sl w30e h30e"><img src="../image/icon/dongtai.png" class="w20e h20e pd05"></span>
+					<span class="sl w85 ubb ovd ub-e4e4e4 h30e">
+						<span class="sl umh3 ftz10">我的动态</span>
+						<span class="sr pdt09">
+							<img src="../image/icon/right_gra.png" class="w12e h12e pdr025">
+						</span>
+						<span class="sr w75e h15e ovd mart09 ftz08 tx-r t-999 pdr025" id="news" style="display: none;">你有新的动态</span>
+					</span>
+				</p>
+			</div>
+			<div class=" h05e w10"></div>
+			<div class="box w10 sl">
+				<p class="sl h30e c-wh ovd  w10" tapmode="c-e0e0e0" onclick="open_page('wodeguanzhu');">
+					<span class="sl w30e h30e"><img src="../image/icon/attention.png" class="w20e h20e pd05"></span>
+					<span class="sl w85 ubb ovd ub-e4e4e4 h30e"> <span class="sl umh3 ftz10">我的关注</span> <span class="sr pdt09"><img src="../image/icon/right_gra.png" class="w12e h12e pdr025"></span> </span>
+				</p>
+				<p class="sl h30e c-wh ovd  w10" tapmode="c-e0e0e0" onclick="open_libao();">
+					<span class="sl w30e h30e"><img src="../image/icon/libao.png" class="w15e h15e" style="padding:0.75em;"></span>
+					<span class="sl w85 ubb ovd ub-e4e4e4 h30e"> <span class="sl umh3 ftz10">学股礼包</span> <span class="sr pdt09"><img src="../image/icon/right_gra.png" class="w12e h12e pdr025"></span> </span>
+				</p>
+				<p class="sl h30e c-wh ovd  w10" tapmode="c-e0e0e0" onclick="open_page('wodeshoucang');">
+					<span class="sl w30e h30e"><img src="../image/icon/collect.png" class="w15e h15e" style="padding:0.75em;"></span>
+					<span class="sl w85 ubb ovd ub-e4e4e4 h30e"> <span class="sl umh3 ftz10">我的收藏</span> <span class="sr pdt09"><img src="../image/icon/right_gra.png" class="w12e h12e pdr025"></span> </span>
+				</p>
+				<p class="sl h30e c-wh ovd  w10" tapmode="c-e0e0e0" onclick="open_page('xuegurenzheng')">
+					<span class="sl w30e h30e"><img src="../image/icon/authentication.png" class="w20e h20e pd05"></span>
+					<span class="sl w85 ubb ovd ub-e4e4e4 h30e"> <span class="sl umh3 ftz10">学股认证</span> <span class="sr pdt09"><img src="../image/icon/right_gra.png" class="w12e h12e pdr025"></span> <span class="sr w75e h15e ovd mart09 ftz08 tx-r t-999 pdr025" id="is_info">未认证</span> </span>
+				</p>
+				<p class="sl h30e c-wh ovd w10" tapmode="c-e0e0e0" onclick="open_page('fenxiang')">
+					<span class="sl w30e h30e"><img src="../image/icon/shear-logo.png" class="w20e h20e pd05"></span>
+					<span class="sl w85 ubb ovd ub-e4e4e4 h30e"> <span class="sl umh3 ftz10">分享学股网</span> <span class="sr pdt09"><img src="../image/icon/right_gra.png" class="w12e h12e pdr025"></span> <span class="sr w75e h15e ovd mart09 ftz08 tx-r t-999 pdr025">立即分享</span> </span>
+				</p>
+				<p class="sl h30e c-wh ovd  w10" tapmode="c-e0e0e0" onclick="open_page('fankui')">
+					<span class="sl w30e h30e"><img src="../image/icon/help.png" class="w20e h20e pd05"></span>
+					<span class="sl w85 ubb ovd ub-e4e4e4 h30e"> <span class="sl umh3 ftz10">帮助与反馈</span> <span class="sr pdt09"><img src="../image/icon/right_gra.png" class="w12e h12e pdr025"></span> </span>
+				</p>
+				<p class="sl h30e c-wh ovd w10" tapmode="c-e0e0e0" onclick="to_qiyukf()">
+					<span class="sl w30e h30e"><img src="../image/icon/service.png" class="w20e h20e pd05"></span>
+					<span class="sl w85 ubb ovd ub-e4e4e4 h30e"> <span class="sl umh3 ftz10">在线客服</span> <span class="sr pdt09"><img src="../image/icon/right_gra.png" class="w12e h12e pdr025"></span> </span>
+				</p>
+			</div>
+			<div class="h10e w10"></div>
+			<input type="hidden" value="" id="status">
+			
+		</div>
+		
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript" src="../script/sdk_qq.js"></script>
+	<script type="text/javascript" src="../script/sdk_wx.js"></script>
+	<script type="text/javascript" src="../script/sdk_wb.js"></script>
+	<script>
+		var userInfo,reg_time;
+		apiready = function() {
+			var $header = $api.dom('#header');
+			$api.fixIos7Bar($header);
+			$api.fixStatusBar($header);
+			header_h = $api.offset($header).h;
+			$("body").css("padding-top", header_h + "px");
+			is_login();
+			Dynamic();
+			api.addEventListener({
+			    name:'viewappear'
+			}, function(ret, err){        
+			   is_login();
+			});
+			
+		};
+		function Dynamic(){
+	        var UID = get_local('uid');
+			var URL = serverURL + 'app_interface/user/get_my_dongtai_num/';                                                                    
+	        if(is_define(UID)){
+				URL+='?secret='+appSecret+'&uid='+UID;
+			    g_ajax(URL,function(ret){
+					if(ret.errCode ==0){
+					    if(ret.data.num){
+					    	$('#origin').css('display', '');
+						    var dt=ret.data.num;
+					        $('#dynamic').text(dt);
+				        }else{
+				        	$('#origin').css('display', 'none');
+				        }
+					}
+				})
+			}else{
+				$('#dynamic').text('0');
+				$('#origin').css('display', 'none');
+		    }
+		}
+		function ioslogin(){
+			if(api.systemType=='ios'){
+				open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+			}else{
+				open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+			}
+		}
+        function open_page(type){
+           var uid=get_local('uid');
+           if(!is_define(uid)){
+           
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+
+           }else{
+                if (type == 'shezhi') {
+				    open_w('set','../user/set.html');
+				}
+				if (type == 'guzi') {
+					open_w('transaction_detail','../user/transaction_detail.html');
+				}
+				if (type == 'chzhangjyan') {
+					openExperience();
+				}
+				if (type == 'fensi') {
+					open_w('fans','../user/fans.html',{uid:uid});
+				}
+				if (type == 'zhanghuguanli') {
+		
+					open_w('account_management', '../user/account_management.html')
+				}
+				if (type == 'chzhangrenwu') {
+					var val_sign=$('#sign_in_num').val();
+					var status = $("#status").val();
+					if(val_sign==0){
+						submit_sign_in();
+					}else{
+						open_w('growth_task','../user/growth_task.html',{'status':status,'userInfo':userInfo,'uid':get_local('uid'),'integral':userInfo.data.integral});
+					}
+				}
+				if (type == 'wodeduntai') {
+					open_w('my_dynamics','../user/my_dynamics.html');
+				}
+
+				if (type == 'wodeguanzhu') {
+					open_w('my_attention','../user/my_attention.html',{uid:uid});
+				}
+				if (type == 'wodeshoucang') {
+					open_w('my_collect','../html/new/my_collect.html');
+				}
+				if (type == 'xuegurenzheng') {
+					isApplyAuthentication();
+				
+				}
+				if (type == 'fenxiang') {
+					share_app();
+				}
+				if (type == 'fankui') {
+					open_w('help_feedback','../user/help_feedback.html');
+				}
+           }
+        }
+        function open_libao(){
+        	var uid = get_local('uid');
+        	if(!is_define(uid)){
+	           	$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+           }else{
+           		open_w('gift_center','../html/new_gift/gift_center.html',{'reg_time':reg_time});
+           }
+			
+        }
+        function isApplyAuthentication(){
+			var status = $("#status").val();
+			if (status == 0) {
+				open_w('apply_result', '../user/apply_result.html', {
+					status_info : "正在审核！"
+				});
+			} else if (status == 1) {
+				open_w('apply_result', '../user/apply_result.html', {
+					status_info : "认证通过！"
+				});
+			} else if (status == -1) {
+				open_w('apply_result', '../user/apply_result.html', {
+					status_info : "认证被拒绝！"
+				});
+			} else {
+				open_w('apply_authentication', '../user/apply_authentication.html');
+			}
+		}
+        function show_sign_in(){
+         	var uid = get_local('uid');
+			var URL= serverURL + 'app_interface/user/is_day_sign/';
+			URL+='?secret='+appSecret+'&uid='+uid;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.data==0){//未签到
+					$('#sign_in').text("签到");
+					$('#sign_in_num').val(ret.data);
+				}else{//今日已经签到
+					$('#sign_in_num').val(ret.data);
+					$('#sign_in').text("已签到");
+				}
+			})
+		}
+		function AuthenticationInfo() {
+			var uid = get_local('uid');
+			var URL = serverURL + 'app_interface/user/get_verify/';
+			URL += '?secret=' + appSecret + '&uid=' + uid + '';
+			g_ajax(URL, function(ret) {
+				$("#status").val(ret.data.status);
+				set_local('AuthenticationStatus',ret.data.status);
+				if (ret.data.status == 0) {
+					$('#is_info').text("正在审核");
+				} else if (ret.data.status == 1) {
+					$('#is_info').text("已认证");
+				} else if (ret.data.status == -1) {
+					$('#is_info').text("认证被拒绝");
+				} else {
+					$('#is_info').text("未认证");
+				}
+			})
+		}
+
+		function is_login() {
+			var uid = get_local('uid');
+			//alert(uid)
+			if (!is_define(uid)) {
+				$('#no_login').css('display', 'block');
+				$('#deng').css('display', 'block');
+				if(api.systemType=='ios'){
+					$('#before').show();
+					$('#after').hide();
+				}
+				$('#isset_login').css('display', 'none');
+				$('#guzi').text('0');
+				$('#experience').text('0');
+				$('#funs').text('0');
+				$('#sign_in').text("签到");
+				$('#is_info').text("未认证");
+			} else {
+				AuthenticationInfo();
+				$('#no_login').css('display', 'none');
+				$('#deng').css('display', 'none');
+				$('#isset_login').css('display', 'block');
+				if(api.systemType=='ios'){
+					$('#before').hide();
+					$('#after').show();
+				}
+				getUserInfo();
+			}
+		}
+
+		function getUserInfo() {
+			var uid = get_local("uid");
+			var URL = serverURL + 'app_interface/user/get_other_user_info/';
+			var data = {
+				values : {
+					targetuid  : uid,
+					loginuid : 0,
+					secret : appSecret
+				}
+			}
+			r_ajax(URL, data, function(ret) {
+				
+				reg_time=ret.data.reg_time;
+				if (ret.errCode == 0) {
+					show_sign_in();
+					userInfo = ret;
+					$('#userInfo').html(bt('infoDetails', ret));
+					if (ret.data.fans_count > 0) {
+						$('#funs').text(ret.data.fans_count);
+						//粉丝数量
+					} else {
+						$('#funs').text('0');
+					}
+					if (ret.data.integral > 0) {
+						$('#guzi').text(ret.data.integral);
+						//谷子数量
+					} else {
+						$('#guzi').text('0');
+					}
+					if (ret.data.experience > 0) {
+						$('#experience').text(ret.data.experience);
+						//经验值
+					} else {
+						$('#experience').text('0');
+					}
+					var W = ret.data.experience / ret.data.experience_top;
+					if (W) {
+						$('.progress').css('width', (W*100).toFixed(2) + '%');
+					} else {
+						$('.progress').css('width', '0%');
+					}
+				} else {
+					$toast(ret.errMsg, 1500);
+				}
+			})
+		}
+
+		function openExperience() {
+			open_w('grow_experience', '../user/grow_experience.html', {
+				'uid':userInfo.data.uid,
+				'userName' : userInfo.data.nakename,
+				'face' : userInfo.data.face,
+				'current_grade' : userInfo.data.current_grade,
+				'experience' : userInfo.data.experience,
+				'experience_top' : userInfo.data.experience_top
+			})
+		}
+
+		function updateImage(face) {
+			$('#face').attr('src', face);
+		}
+
+		
+		function open_dynamics(){
+			var uid = get_local('uid');
+			if(is_define(uid)){
+				open_w('my_dynamics','../user/my_dynamics.html');
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					if(api.systemType=='ios'){
+						open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+					}else{
+						open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+					}
+					
+				},1000);
+			}
+		}
+		function submit_sign_in(){
+				var sign_val=$('#sign_in_num').val();
+				var status = $("#status").val();
+				var URL = serverURL + 'app_interface/user/everyone_day_qiandao/';
+		    	var data = {
+					values : {
+						uid : get_local('uid'),
+						secret:appSecret
+					}
+				}
+		        r_ajax(URL,data,function(ret){
+		        	if(ret.errCode==0){
+			        	$toast("已签到",2000);
+						var experience = userInfo.data.experience;
+						$('#experience').text(parseInt(experience)+10);
+						$('#experience11').text(parseInt(experience)+10);
+						userInfo.data.experience = parseInt(userInfo.data.experience)+10;
+						setTimeout(function(){
+							show_sign_in();
+							open_w('growth_task','../user/growth_task.html',{'status':status,'userInfo':userInfo,'sign_val_nums':sign_val,'uid':get_local('uid')});
+						},2000);
+		        	}else{
+		        		$toast(ret.errMsg,2000);
+		        	}
+				})
+			}
+	</script>
+</html>

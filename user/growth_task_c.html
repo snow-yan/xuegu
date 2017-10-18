@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title>成长任务</title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style type="text/css">
+        	.progressGray{
+	        	height: 4px; 
+	        	margin-top: 4px;
+	        	margin-bottom: 5px;
+	        	background: #395d99;
+	        	border-radius: 5px;
+	        }
+	        .progress{
+	    		height: 4px; 
+	    		width: 30%;
+	    		background: #ff7b00;
+	    		border-radius: 2px;
+	    	}
+        	.top-pic{width: 16%; 
+        		height: 32%; 
+        	 	top: 20.5%; 
+        	 	left: 42.4%;
+        		border-radius: 5em;
+        		overflow: hidden;
+        		border: 2px solid white;
+        	 }
+        	 .h18e{
+        		height: 1.8em;
+        		line-height: 1.8em;
+        	}
+        </style>
+	</head> 
+	<body class="c-wh">
+		<div class="bg-dark tx-c pstnr c-edf0f5">
+			<img src="../image/icon/grow-up-bg.png" data-echo="../image/icon/grow-up-bg.png" class="w10" alt="" />
+			<div class="pstna top-pic">
+				<img id="imguser" src="" class="w10 h10" />
+			</div>
+			<div class="pstna t-wh w10 tx-c" style="top: 58%;">
+				<span id="username"></span>
+				<span class="h18e pstnr">
+					<img src="../image/icon/level.png" class="h18e" alt="" />
+					<span class="pstna abst01 absr02 ftz065 h18e" >LV<font id='level0'></font></span>
+				</span>
+			</div>
+			<div class="pstna t-wh w10 tx-c" style="top: 72%;">
+				<div class="w7 dsplb">
+					<div class="ovd progressGray">
+						<div class="progress"></div>
+					</div>
+					<p class="txo umh15 ftz08 t-wh ovd">
+						<span class="w50 fll txo umh15"><img src="../image/icon/start.png" class="w15e h15e" alt="" />LV<font id='level1'></font></span>
+						<span class="flr w250 tx-r"><font class="t-ff7b00" id="current_experience"></font>/<font id="total_experience"></font></span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="h05e c-edf0f5"></div>
+		<div class="box ubtb w10 ub-e4e4e4" style="margin: 0; padding: 0;" tapmode="c-e0e0e0">
+			<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393">
+				<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+				<span class="sl"><font class="t-666">快速升级</span>
+				<!--<span class="sr tx-r umh1 pdt075 pdb075"><img src="../image/icon/right_gra.png" class="w10e h10e"></span>-->
+			</p>
+		</div>
+		<div class="h03e c-edf0f5"></div>
+		<ul class="clo_three">
+			<li class="col_list tx-c pdt025 pdb05 ubr ub-e0e0e0" tapmode="c-e0e0e0" onclick="openAccount();">
+				<div class="w30e h30e dsplb pd05 pstnr pdl02">
+					<img src="../image/icon/recharge.png" class="w30e">
+					<span class="w10e pstna absr05 abst05 zindex9 uba-fff uc-a ftz08 umh1 t-wh c-ef3f3f tx-c ovd"><font class="ftz08"></font></span>
+				</div>
+				<p class="t-ef3f3f ftz08">我要充值</p> 
+			</li>
+			<li class="col_list tx-c pdt025 pdb05 ubr ub-e0e0e0" tapmode="c-e0e0e0"  onclick="share_app()" >
+				<div class="w30e h30e dsplb pd05 pstnr pdl02">
+					<img src="../image/icon/shear.png" class="w30e">
+					<!--<span class="w10e pstna absr05 abst05 zindex9 uba-fff uc-a ftz08 umh1 t-wh c-ff7b00 tx-c ovd"><font class="ftz08"></font></span>-->
+				</div>
+				<p class="t-00b7ee ftz08">我要分享</p>
+			</li>
+			<li class="col_list tx-c pdt025 pdb05" tapmode="c-e0e0e0"  onclick="open_w('me_want_attention','me_want_attention.html')">
+				<div class="w30e h30e dsplb pd05 pstnr pdl02">
+					<img src="../image/icon/follow.png" class="w30e">
+					<!--<span class="w10e pstna absr05 abst05 zindex9 uba-fff uc-a ftz08 umh1 t-wh c-ff7b00 tx-c ovd"><font class="ftz08"></font></span>-->
+				</div>
+				<p class="t-ff7b00 ftz08">我要关注</p>
+			</li>
+		</ul>
+		<div class="h05e c-edf0f5"></div>
+		<div class="box ubtb w10 ub-e4e4e4" style="margin: 0; padding: 0;" tapmode="c-e0e0e0">
+			<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393">
+				<span class="sl umh1 mart075 mara05" style="width: 1px; border-right: 2px solid #4371bc ;"></span>
+				<span class="sl"><font class="t-666">持续升级</span>
+				<!--<span class="sr tx-r umh1 pdt075 pdb075"><img src="../image/icon/right_gra.png" class="w10e h10e"></span>-->
+			</p>
+		</div>
+		<div class="h03e c-edf0f5"></div>
+		<!--第一行-->
+		<ul class="clo_three ubb ub-e0e0e0">
+			<li class="col_list tx-c pdt025 pdb05 ubr ub-e0e0e0" tapmode="c-e0e0e0" onclick="invite_friend()">
+				<div class="w30e h30e dsplb pd05 pdl02">
+					<div class="w30e h30e umh3 t-wh c-2fa9e0 uc-a15"><font class="ftz08">+100</font></div>
+				</div>
+				<p class="ftz08">邀请好友</p> 
+			</li>
+			<li class="col_list tx-c pdt025 pdb05 ubr ub-e0e0e0" tapmode="c-e0e0e0"  onclick="open_w('user_info','user_info.html')" >
+				<div class="w30e h30e dsplb pd05 pdl02">
+					<div class="w30e h30e umh3 t-wh c-2fa9e0 uc-a15"><font class="ftz08">+100</font></div>
+				</div>
+				<p class="ftz08">完善资料</p> 
+			</li>
+			<li class="col_list tx-c pdt025 pdb05" tapmode="c-e0e0e0"  onclick="openFrameFull('ui_calendar',{'uid':api.pageParam.uid})">
+				<div class="w30e h30e dsplb pd05 pdl02">
+					<div class="w30e h30e umh3 t-wh c-2fa9e0 uc-a15"><font class="ftz08">+10</font></div>
+				</div>
+				<p class="ftz08">签到成长</p> 
+			</li>
+		</ul>
+		<!--第二行-->
+		<ul class="clo_three ubb ub-e0e0e0">
+			<li class="col_list tx-c pdt025 pdb05 ubr ub-e0e0e0" tapmode="c-e0e0e0"  onclick="open_w('course_list','../html/new/course_list.html');">
+				<div class="w30e h30e dsplb pd05 pdl02">
+					<div class="w30e h30e umh3 t-wh c-2fa9e0 uc-a15"><font class="ftz08">+50</font></div>
+				</div>
+				<p class="ftz08">我要学习</p> 
+			</li>
+			<li class="col_list tx-c pdt025 pdb05 ubr ub-e0e0e0" tapmode="c-e0e0e0"  onclick="open_w('ask_questions','../html/ask_questions.html',{'uid':get_local('uid')})">
+				<div class="w30e h30e dsplb pd05 pdl02">
+					<div class="w30e h30e umh3 t-wh c-4983e2 uc-a15"><font class="ftz08">+20</font></div>
+				</div>
+				<p class="ftz08">我要提问</p> 
+			</li>
+			<li class="col_list tx-c pdt025 pdb05" tapmode="c-e0e0e0" onclick="open_w('answer_list','../html/answer_list.html')">
+				<div class="w30e h30e dsplb pd05 pdl02">
+					<div class="w30e h30e umh3 t-wh c-4983e2 uc-a15"><font class="ftz08">+20</font></div>
+				</div>
+				<p class="ftz08">我要回答</p> 
+			</li>
+		</ul>
+		<!--第三行-->
+		<ul class="clo_three">
+			<li class="col_list tx-c pdt025 pdb05 ubr ub-e0e0e0" tapmode="c-e0e0e0" onclick="authentication_info()">
+				<div class="w30e h30e dsplb pd05 pdl02">
+					<div class="w30e h30e umh3 t-wh c-b28850 uc-a15"><font class="ftz08">+500</font></div>
+				</div>
+				<p class="ftz08">我要认证</p> 
+			</li>
+			<li class="col_list tx-c pdt025 pdb05 ubr ub-e0e0e0" tapmode="c-e0e0e0" onclick="open_w('help_feedback','help_feedback.html')">
+				<div class="w30e h30e dsplb pd05 pdl02">
+					<div class="w30e h30e umh3 t-wh uc-a15"  style="background: #FFAB00;"><font class="ftz08">+100</font></div>
+				</div>
+				<p class="ftz08">我要反馈</p> 
+			</li>
+			<li class="col_list tx-c pdt025 pdb05" tapmode="c-e0e0e0" onclick="meWantStudy()">
+				<div class="w30e h30e dsplb pd05 pdl02">
+					<div class="w30e h30e umh3 t-wh uc-a15" style="background: #FFAB00;"><font class="ftz08">+100</font></div>
+				</div>
+				<p class="ftz08">我要评论</p> 
+			</li>
+		</ul>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+    <script type="text/javascript" src="../script/self.js"></script>
+    <script type="text/javascript" src="../script/sdk_qq.js"></script>
+	<script type="text/javascript" src="../script/sdk_wx.js"></script>
+	<script type="text/javascript" src="../script/sdk_wb.js"></script>
+	<script>
+	apiready = function(){
+		if(api.pageParam.sign_val_nums==0){
+			openFrameFull('ui_calendar',{'uid':api.pageParam.uid});
+		}
+		setUserInfo();
+	};
+	function authentication_info(){
+			if (api.pageParam.status == 0) {
+				open_w('apply_result', 'apply_result.html', {
+					status_info : "正在审核！"
+				});
+			} else if (api.pageParam.status == 1) {
+				open_w('apply_result', 'apply_result.html', {
+					status_info : "认证通过！"
+				});
+			} else if (api.pageParam.status == -1) {
+				open_w('apply_result', 'apply_result.html', {
+					status_info : "认证被拒绝！"
+				});
+			} else {
+				open_w('apply_authentication', 'apply_authentication.html');
+			}
+	
+	}
+	function invite_friend(){
+			var pars='?id=' + api.pageParam.uid;
+			var url="http://www.xueguwang.cn/app_down/app_xgw/down_app.php"+pars;
+			api.download({
+			    url: down_app_logo,
+			    savePath: 'fs://test.png',
+			    report: true,
+			    cache: false,
+			    allowResume: true
+			}, function(ret, err) {
+			    if (ret.state==1) {
+			   			var path=ret.savePath;
+						wx = api.require('wx');
+						wx.isInstalled(function(ret, err) {
+							if (ret.installed) {
+								wx.shareWebpage({
+									scene : "session",
+									title : "学股网APP",
+									description : "邀请你参与",
+									thumb : path,
+									contentUrl : url
+								}, function(ret, err) {
+									if (ret.status){
+										$toast('邀请成功', 2000);
+									} else {
+										$toast('邀请失败', 2000);
+									}
+								});
+							} else {
+								$toast('当前设备未安装微信客户端，请下载后邀请', 2000);
+							}
+						});
+			    }
+			});
+	}
+	function setUserInfo(){
+			var w ; 
+			var userInfo = api.pageParam.userInfo;
+			if(userInfo.data.face){
+				$('#imguser').attr('src',userInfo.data.face+"?a="+Date.parse(new Date()));
+			}else{
+				$('#imguser').attr('src','../image/icon/no-answer.png');
+			}
+//			$api.attr($api.byId('imguser'),'src',userInfo.face);
+			$('#username').text(userInfo.data.username);
+			if(userInfo.data.current_grade){
+				$('#level0').text(userInfo.data.current_grade);
+				$('#level1').text(userInfo.data.current_grade);
+			}else{
+				$('#level0').text('0');
+				$('#level1').text('0');
+			}
+			if(userInfo.data.experience){
+				$('#current_experience').text(userInfo.data.experience);
+				if(userInfo.data.experience_top){
+					w =  userInfo.data.experience/userInfo.data.experience_top;
+				}else{
+					w = 0;
+				}
+			}else{
+				$('#current_experience').text('0');
+				w = 0;
+			}
+			if(userInfo.data.experience_top){
+				$('#total_experience').text(userInfo.data.experience_top);
+			}else{
+				$('#total_experience').text('0');
+			}
+			$('.progress').css('width',(w*100).toFixed(2) + '%');
+		}
+//	function share_app(){
+//			api.actionSheet({
+////				title : '开始分享',
+//				cancelTitle : '取消分享',
+//				buttons : ['QQ好友', 'QQ空间', '微信好友', '微信朋友圈', '新浪微博']
+//			}, function(ret, err){
+//				if(ret.buttonIndex==1){
+//					$toast("正在开发中",1500);
+//				}
+//				if(ret.buttonIndex==2){
+//					$toast("正在开发中",1500);
+//				}
+//				if(ret.buttonIndex==3){
+//					$toast("正在开发中",1500);
+//				}
+//				if(ret.buttonIndex==4){
+//					$toast("正在开发中",1500);
+//				}
+//				if(ret.buttonIndex==5){
+//					$toast("正在开发中",1500);
+//				}
+//			});
+//		}
+		function meWantStudy(){
+			open_w('bull_talk_stocks','../html/bull_talk_stocks.html');
+		}
+		function openAccount(){
+			
+			if(api.systemType=='android'){
+				open_w('recharge_andriod','../html/new/recharge_andriod.html',api.pageParam)
+			}else{
+				open_w('recharge_ios','../html/new/recharge_ios.html',api.pageParam)
+			}
+		} 
+	</script>
+</html>

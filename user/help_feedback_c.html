@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no"/>
+        <title></title>
+        <!-- 基础样式及JS -->
+        <link rel="stylesheet" href="../cool_css/cool.css">
+        <style>
+			::-webkit-input-placeholder {
+				color: #999;
+				font-size : 14px;
+			}
+			#feedback_content::-webkit-input-placeholder{color:#ff7b00;font-size: 14px;}
+			.uba-eee{border-top:1px solid #eee;}
+        	.uba-999{border:1px solid #999}
+        	.h120e{height:12em}
+        	.w12{ width: 12%}
+        </style>
+	</head> 
+	<body class="c-wh">
+			<input type="hidden" id="page" value="1"/>
+			<div class=" h05e w-10 c-edf0f5"></div>
+			<div class="box w10 c-wh t-666">
+				<p class="ubb ub-e4e4e4 h120e w10">
+					<textarea id="feedback_content" placeholder="请输入您的意见和建议" name="content" class="w95 pdt05 h120e pdl10 area_auto ovd c-wh  ubnone ftz10"></textarea>
+				</p>
+				<!--<p class="ovd c-wh pdb10">
+					<span class="sl w3 marl05 mart10" onclick="add_pic()" tapmode="op9">
+						<span class="w8 tx-c uba ub-e4e4e4 area_auto"><img src="../image/icon/interface/add.png" class="w95"></span>
+					</span>
+				</p>-->
+				<p class="w10 ovd c-wh pdb05 uba-eee">
+					<span class=" w9 mart05 area_auto t-999 ovd c-ebf2fc uc-a02 umh25  uba-eee">
+							<span class="w10" style=""><input type="text" placeholder="请输入手机号或邮箱" id="contact_way" class="umh15 pdt02 pdb03 c-ebf2fc w9 pdl05"  ></span>
+					</span>
+				</p>
+				<p class=" w9  area_auto ftz085 pdb05 t-999 ovd umh15">
+					你的联系方式有助于我们沟通解决问题，我们会严格为你保密。
+				</p>
+			</div>
+			<div class="box  w10 c-wh pdt05 pdb10">
+		    	<p class="w9 area_auto c-ff7b00 uc-a02" onclick="submit_info()" tapmode="op7">
+		        	<span class="w10 tx-c t-wh umh25">提交</span>
+		        </p>
+		    </div>
+		    <div class=" h05e w-10 c-edf0f5"></div>
+		    <div class=" w10 box c-wh umh25 ubb ub-ccc">
+		   		<p class=" area_auto w9 ftz10">
+		   			<span class="sl umh25 t-4371bc ftb pdr05">|</span>
+		   			<span class="sl umh25">常见问题</span>
+		   		</p>
+		    </div>
+		    <div id="problem_info"> </div>
+		    <script type="text/html" id="problem_info_tmp">
+			    <%for(var i=0;i<data.length;i++){%>
+				    <div class=" w10 box c-wh ovd ftz09 pdt05">
+				   		<p class="ovd area_auto w9 ftz10">
+				   			<span class="sl umh10 w1 pdt05">
+				   				<span class="sl tx-c w10e t-999 pdl025 pdr025 marr05 uc-a02 uba-999">问</span>
+				   			</span>
+				   			<span class="sl umh10 w9 pdt05 <%if(i==data.length-1){%><%}else{%>ubb ub-ccc<%}%> marb025">
+				   				<span class="w10 tx-l sl pdl025 ftz09 t-646464"><%=data[i].detail%></span>
+				   				<span class="w10 tx-l sl pdt05 pdb05 ">
+				   				    <span class=" w12 sl">
+										<span class="w20e h20e sl uc-a15 c-4371bc t-wh tx-c umh2">答</span>
+									</span>
+									<span class="sl w85 pdl025 umh15 pdt03 ftz09 t-646464 pdt01" ><%=data[i].answer%></span>
+				   				</span>
+				   			</span>
+				   		</p>
+				    </div>
+			    <%}%>
+		    </script>
+		    <div class="h10p w10"></div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+    <script type="text/javascript" src="../script/interface.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script>
+		var lastPage = true;
+		apiready = function(){
+			problem_list();
+			scrollBottom(function(){
+				if(lastPage){
+					problem_list('next');
+				}
+			});
+		};
+		function problem_list(type){
+			if(type=='next'){
+				var page = $('#page').val();
+				page = parseInt(page)+1;
+				$('#page').val(page);
+			}else{
+				var page =1;
+				$('#page').val(page);
+				lastPage =true;
+			}
+			var pagesize = 10;
+			var URL = serverURL + 'app_interface/user/recommend_yijian_list/';
+			URL+='?secret='+appSecret+'&page='+page+'&pagesize='+pagesize;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					if(ret.data.length>0){
+						if(type=='next'){
+							$('#problem_info').append(bt('problem_info_tmp',ret));
+						}else{
+							$('#problem_info').html(bt('problem_info_tmp',ret));
+						}
+					}else{
+						lastPage =false;
+						no_data_more('problem_info');
+					}
+					push_down_over();
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+			})
+		}
+		function submit_info(){
+			var URL = serverURL + "app_interface/user/set_yijian/";
+			var content = $("#feedback_content").val();
+			var contact_way = $("#contact_way").val();
+			var uid=get_local('uid');
+			if (!is_define(content)) {
+				$toast("请输入您的意见或建议", 1500);
+				return false;
+			}
+			if (!is_define(contact_way)) {
+				$toast("请输入联系方式", 1000);
+				return false;
+			}
+			if (content.length>500){
+				$toast("反馈内容不能超过500字", 1500);
+				return false;
+			}
+			 var data = {
+		 		values:{
+		 			uid:uid,
+		 			phone:contact_way,
+		 			detail :content,
+		 			secret:appSecret
+		 		}
+		 	};
+		 	r_ajax(URL,data,function(ret){
+		 		if(ret.errCode==0){
+					$toast("已提交意见", 1500);
+					setTimeout(function(){
+						close_w();
+					},1500);
+		 		}else{
+		 			$toast("提交失败", 1500);
+		 		}
+		 	})
+		}
+		function add_pic(){
+			api.actionSheet({
+				title : '上传图片',
+				cancelTitle : '关闭',
+				buttons : ['打开相机', '本地图库']
+			}, function(ret, err){
+				if(ret.buttonIndex==3){
+					return false;
+				}else{
+					var type_arr=new Array('camera','library');
+					api.getPicture(
+					{
+						sourceType : type_arr[ret.buttonIndex-1],
+						encodingType : 'jpg',
+						mediaValue : 'pic',
+						destinationType : 'url',
+						allowEdit : true,
+						quality : 100
+					},function(ret, err){
+						if(ret){
+//							$("#pic_list").append('<span class="sl w25 mart10" onclick="add_pic()" tapmode="op9"><span class="w8 tx-c area_auto"><img src="'+ret.data+'" class="w10 uc-a02"></span></span>')
+						}
+					})
+				}
+			});
+		}
+	</script>
+</html>

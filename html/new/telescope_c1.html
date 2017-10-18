@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>题材望远镜</title>
+    <link rel="stylesheet" type="text/css" href="../../css/telescope.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css">
+   	<style>
+   	.swiper-slide {border-radius:10px;}
+   	</style>
+</head>
+<body>
+    <div class="telescope">
+      <div class="swiper-container">
+          <div class="swiper-wrapper" id="dapan"></div>
+          <script id="dapan_tpl" type="text/html">
+		   	<%
+		   	for(var i=0;i< data.length;i++){
+		   		if(data[i].percentage<0){
+		   	%>
+		   	<div class="swiper-slide trend_down" > 
+			<%}else{%>
+			<div class="swiper-slide trend_up" > 
+			<%}%>
+            	<div class="head"><%=data[i][0]%></div>
+             	<div class="data">
+                	<div class="left"><%=data[i][3]%></div>
+                	<div class="right">
+                    	<div><%=data[i].difference%></div>
+                    	<div><%=data[i].percentage%>%</div>
+                	</div>
+              	</div>
+              	<div class="bottom">成交额<span class="aui-margin-l-5"><%=data[i][9] %>亿</span></div>
+              	<div class="bottom">高：<%=data[i][4]%> <span  class="aui-margin-l-10">低：<%=data[i][5]%></span></div>
+           </div>   
+			<%
+			}
+			%>
+		</script>
+		</div>
+            
+        <div class="record aui-bg-white">
+            <div class="title">异动记录<img src="../../img/tan.png" alt="" style="height:18px;margin:-3px 0 0 5px;vertical-align:middle;"></div>
+            <div class="timeline aa" id="dapan_list"></div> 
+            <script type="text/html" id="dapan_list_tpl">
+				<%
+			   	for(var i=0;i< data.length;i++){
+			   		if(i==0){
+				%>
+				<div class="timeline-item">
+	                 <div class="timeline-item-lable">
+	                     <img src="../../img/circle.png" alt="">
+	                 </div>
+	                 <div class="timeline-item-inner">
+	                     <div><%=data[i].cTime%></div>
+	                     <div class="event"><%=data[i].abnormal_describe%></div>
+	                 </div>
+	              </div>
+	            <%
+				}else{
+				%>
+				 <div class="timeline-item">
+	                 <div class="timeline-item-lable">
+	                     <img src="../../img/circle2.png" alt="">
+	                 </div>
+	                 <div class="timeline-item-inner">
+	                     <div class="gray_w1"><%=data[i].cTime%></div>
+	                     <div class="event bb"><%=data[i].abnormal_describe%></div>
+	                 </div>
+	              </div>      
+				<%
+					}
+				}
+				%>
+			</script>
+         </div>   
+    </div>   
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/zepto.min.js"></script>
+<script type="text/javascript" src="../../script/init.js"></script>
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/self.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/swiper.min.js"></script>
+<script>
+ 	apiready = function() {
+		dapan();
+		
+	};   
+  function dapan(){
+	var URL = serverURL + 'app_interface/newMobile/new_share_foreNotice/';
+		URL+='?secret='+appSecret;
+        g_ajax(URL,function(ret){
+		if(ret.errCode ==200){
+			//alert(JSON.stringify(ret))
+		  $('#dapan').html(bt('dapan_tpl',ret));
+		  dapan_list();
+		  var mySwiper=new Swiper(".swiper-container",{
+		   	effect: 'coverflow',
+	        grabCursor: true,
+	        centeredSlides: true,
+	        slidesPerView: 'auto',
+            initialSlide:1,
+			   coverflow: {
+	            rotate: 50,
+	            stretch: 0,
+	            depth: 150,
+	            modifier: 1,
+	            slideShadows : false,
+	        }      
+		  });    
+		  		
+		}else{
+			$toast(ret.errMsg,1500);
+		}
+	})
+}
+// 获取大盘异动列表
+	 function  dapan_list(){
+			var URL = serverURL + 'app_interface/newMobile/grailAbnormal_list/';
+			URL+='?secret='+appSecret;
+			g_ajax(URL,function(ret)
+			{	
+				if(ret.errCode==200){
+					$('#dapan_list').html(bt('dapan_list_tpl',ret));
+				}else{
+					$toast(ret.errMsg,1500);		
+				}
+			
+				api.parseTapmode();
+			})
+		}
+</script>
+</html>

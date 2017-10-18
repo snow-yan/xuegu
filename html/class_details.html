@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>课程详情</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<style type="text/css">
+			.ftzp14{
+				font-size: 14px;
+			}
+			#img_h{
+				position: absolute;
+				top:50%;
+				left:50%;
+				width:3em;
+				margin-left:-1.5em;
+				margin-top:-1.5em;
+			}
+			.maska{
+				position: absolute;
+				width:100%;
+				height:100%;
+				background: #000000;
+				opacity: 0.5;
+				top:0;
+				left:0;
+				z-index:10; 
+			}
+		</style>
+	</head>
+	<body class="c-wh">
+		<input type="hidden" id="video_unique" value="" />
+	    <div id="header" class="c-bla">
+			<div class="w10 area_auto ovd" id="video_info">
+				<div id="player" class="pstnr" style="position:relative;">
+					<img id="ls_pic" src="../image/icon/echo_bg.jpg" class="w10" alt="" style="height:100%;"/>
+					<div class="maska"></div>
+					<div class="w20e h20e pstna" style="z-index: 999;left:0px;top:5px;">
+						<img src="../image/icon/left.png" class="w25e h25e" tapmode='' onclick="api.closeWin();">
+					</div>
+					<div id="img_h" class="pstna" style="z-index: 121;"><img src="../image/icon/bofang.png" style="width:100%;" /></div>
+				</div>
+				<div class="umh3 pdl05 pdr05 ovd ftz08 t-999 c-bla">
+					<span  class="fll pdl05 pdr05" >
+						<img src="../image/icon/pinglun.png" class="w15e h15e pdt075 pdb075 pdl02"/>
+					</span>
+					<span onclick="openComment()">
+						<span class="fll pdr05 umh3" id="comment_num">0</span>
+						<span class="fll">热评</span>
+					</span>
+					<span class="flr" tapmode='' onclick="share_Links();">
+						<img src="../image/icon/icon_shear.png" class="w15e h15e pdt075 pdb075"/>
+						<span class="pdr05">分享</span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="http://yuntv.letv.com/bcloud.js"></script>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript" src="../script/sdk_qq.js"></script>
+	<script type="text/javascript" src="../script/sdk_wx.js"></script>
+	<script type="text/javascript" src="../script/sdk_wb.js"></script>
+	<script type="text/javascript">
+		var sysType,H,y,UID,leHeight,video_url,video_info,charge_money,is_buy,corName,cor_pic;
+		apiready = function() {
+			playModule = api.require('playModule');
+			var cor_id =api.pageParam.cor_id;
+			//设置占位图片的高
+			leHeight = Math.round(api.winWidth*19/34);
+			$('#ls_pic').css('height',leHeight);
+		
+			//判断手机类型	
+			sysType = api.systemType;
+			if(sysType == 'ios'){
+			 	H = 20;
+	            $('#video_info').css('padding-top',H+"px");
+	            landscape = 'landscape_right';
+	        }else if(sysType == 'android'){
+	        	H = 25;
+   				$('#video_info').css('margin-top',H+"px");
+	            landscape = 'landscape_left';
+	        }
+			get_course_details(cor_id);
+			api.addEventListener({
+			    name:'pause'
+			}, function(ret, err){        
+			    api.closeFrame({
+				   		name: 'video_pause1'
+					});
+			});
+			
+		};
+		function openF(y,pageParam){
+			api.openFrame(
+			{
+				name : 'class_details_c',
+				url : 'class_details_c.html',
+				rect : 
+				{
+					x : 0,
+					y : y,
+					w : 'auto',
+					h : api.winHeight-y
+				},
+				pageParam:pageParam,
+				bounces : false,
+				allowEdit : false,	
+				bgColor : 'rgba(0,0,0,0)',
+				vScrollBarEnabled : true,
+				hScrollBarEnabled : true,
+				reload : true
+			});
+		}
+		
+		function comment_num(num){
+			if(is_define(num)){
+				$('#comment_num').text(num);
+			}
+		}
+	
+		function switch_course(cor_id,cor_msg){	
+
+			close_f('video_pause');
+			close_f('class_details_c');
+			
+			var data = {cor_id:cor_id};
+			openF(y,data);
+			
+		}
+		function refreshData(cor_id){
+			if(get_local('uid')){
+				uid = get_local('uid')
+			}else if(UID){
+				uid = UID;
+			}else{
+				uid = '';
+			}
+			var data = {cor_id:cor_id,UID:uid};
+			get_course_details(cor_id);
+			//openF(y,data);
+		}
+		function openComment(){
+			ue_script_f('class_details','class_details_c','switch_class(2)');
+		}
+		function setUID(uid,cor_id){
+			//console.log(cor_id);
+			UID = uid;
+			refreshData(cor_id);
+		}
+		//分享
+		function share_Links(){
+			var id = api.pageParam.cor_id;
+			var URL = serverURL + 'app_interface/course/get_course_share_url/';
+			URL+='?secret='+appSecret+'&cor_id='+id;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					
+				    share_apps(ret.data);
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+				api.parseTapmode();
+			})
+		}
+		function share_apps(url)
+		{
+			api.actionSheet({
+				cancelTitle : '取消',
+				buttons : ['QQ好友', 'QQ空间', '微信好友', '微信朋友圈', '新浪微博']
+			}, function(ret, err){
+				var num=ret.buttonIndex;
+				api.download({
+				    url: down_app_logo,
+				    savePath: 'fs://test.png',
+				    report: true,
+				    cache: false,
+				    allowResume: true
+				}, function(ret, err) {
+					//log(JSON.stringify(ret));
+				    if (ret.state==1) {
+						if(num==1){//QQ好友
+							sdk_qq_share_url(url,ret.savePath,corName,share_content,"QFriend");
+						}
+						if(num==2){//QQ空间
+							sdk_qq_share_url(url,ret.savePath,corName,share_content,"");
+						}
+						if(num==3){//微信好友
+							share_wx("session",url,corName,share_content,ret.savePath);
+						}
+						if(num==4){//微信朋友圈
+							share_wx("timeline",url,corName,share_content,ret.savePath);
+						}
+						if(num==5){//新浪微博
+							sdk_wb_share_url(corName,ret.savePath,url,"炒股就上学股网，一站式解决炒股烦恼，问股·学股·谈股。",share_content);
+						}
+				    }
+				});
+			});
+		}
+		function get_course_details(cor_id){
+		
+			var notificationId = api.pageParam.notification_id;
+			UID = get_local('uid');
+		    if(!is_define(cor_id)){
+		   		var cor_id = api.pageParam.cor_id;
+		    }
+			var URL = serverURL + 'app_interface/course/course_detail/';
+			if(is_define(notificationId)){
+				if(is_define(UID)){
+					URL+='?secret='+appSecret+'&uid='+UID+'&cor_id='+cor_id+'&notification_id='+notificationId;
+				}else{
+					URL+='?secret='+appSecret+'&cor_id='+cor_id+'&notification_id='+notificationId;
+				}
+			}else{
+				if(is_define(UID)){
+					URL+='?secret='+appSecret+'&uid='+UID+'&cor_id='+cor_id;
+				}else{
+					URL+='?secret='+appSecret+'&cor_id='+cor_id;
+				}
+			}
+		    g_ajax(URL,function(ret){
+		    	//alert(JSON.stringify(ret))
+		    	if(ret){
+		    		var video_info=ret.data.video_info;
+		    		corName = ret.data.cor_name;
+		    		cor_pic=ret.data.cor_pic;
+		    		charge_money=ret.data.cor_charge_money
+		    		is_buy=ret.data.is_buy
+		    		var le_data = str2json(ret.data.cor_letv_msg);
+			    	var video_unique = le_data.data.video_unique;
+			    	$('#video_unique').val(video_unique);
+		    		setTimeout(function(){
+		    			if(sysType == 'ios'){
+				            y = $api.offset($api.byId('header')).h;
+				        }else if(sysType == 'android'){
+			   				y = $api.offset($api.byId('header')).h;
+				        }
+				      
+				        var pageParam = {
+							cor_id:ret.data.cor_id,
+							UID:get_local('uid'),
+							pic:ret.data.cor_pic,
+							video_unique:video_unique
+						};
+						openF(y,pageParam);
+						
+						var connectionType = api.connectionType;
+						video_url=ret.data.video_info.origUrl;
+						$('#player').show();
+						$('#ls_pic').attr('src',cor_pic);
+						$('#img_h img').click(function(){
+							api.closeFrame({
+							    name: 'video_pause1'
+							});
+							if(charge_money>0){
+								if(is_define(UID)){
+									if(is_buy>0){
+										openplay(video_url,corName);
+									}else{										
+										open_w('sure_order','sure_order.html',{uid:UID,cor_id:cor_id,cor_name:corName,cor_charge_money:charge_money});
+									}
+								}else{
+									$toast('您还没有登录，请先登录',1000);
+									if(api.systemType=='ios'){
+										open_w('ios_login','../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:cor_id});
+									}else{
+										open_w('login','../user/login.html',{'winName':api.winName,'frameName':api.frameName,cor_id:cor_id});
+									}
+								}
+							}else{
+								openplay(video_url,corName);
+								
+								//$('#player').hide();
+							}	
+						})
+							
+						if(is_define(notificationId)){
+				    		refreshNews();
+			    		}
+					},50);
+		    	}
+		    });
+		}
+		
+		function back(){
+			close_name_w('class_details');
+		}
+		
+		function openplay(video_url,corName){
+			var pageParam = {
+				video_url :video_url,
+				corName : corName,
+				leHeight :leHeight,
+				H:H
+			};
+			api.openFrame({
+			    name: 'video_pause1',
+			    url: 'video_pause1.html',
+			    pageParam : pageParam,
+			    rect: {
+			        x: 0,
+			        y: H,
+			        w: api.frameWidth,
+					h:leHeight
+			    },
+			    bounces: false,
+			   
+			});
+			api.addEventListener({
+			    name: 'keyback'
+			}, function(ret, err) {
+					api.execScript({
+					    frameName: 'video_pause1',
+					    script: 'unfull()'
+					});
+			     $('#player').show();
+			});
+			api.addEventListener({
+			    name:'viewdisappear'
+			}, function(ret, err){  
+		   
+			 	api.execScript({
+			    frameName: 'video_pause1',
+			    script: 'pause()'
+				});
+			});
+			
+	}
+	function moiveclose(cor_id){
+		//$('#player').hide();
+		api.closeFrame({
+		    name: 'video_pause1'
+		});
+		get_course_details(cor_id);
+	}
+	</script>
+</html>

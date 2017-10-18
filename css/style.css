@@ -1,0 +1,202 @@
+ /*头部tab切换*/
+ .tab{
+    background: #fff;
+    overflow: hidden;
+    border-bottom:1px solid #dfe1e3;
+}
+.tab>div{
+    height:1.8rem;
+    line-height:1.8rem;
+    width:80%;
+    margin:10px auto;
+    border:1px solid #0055aa;
+    text-align: center;
+    color:#0055aa;
+    background: #fff;           
+    font-size: 16px;
+    border-radius: 20px;
+}
+.tab div div{
+    border-radius: 20px;
+    width:50%;
+    float:left;
+}
+.tab-active{
+    color:#ffffff;
+    background:#0055aa;            
+    
+}
+ #tips .aui-text-danger {
+    width: 4.5rem;
+    position: absolute;
+    top: 0rem;
+}
+#tips .aui-icon-close {
+    width: 1.1rem;
+    height: 1.1rem;
+    text-align: center;
+    border-radius: 50%;
+    background: #cccccc;
+    color: #fff;
+}
+.login{
+    position: relative;
+}
+.login>img{
+    width:100%; 
+}
+.form-list{
+    position: absolute;
+    top:35%;
+    left:15%;
+    width:70%;
+}
+ .control{
+    border:1px solid #033b70;
+    border-radius: 20px;
+    line-height: 1.9rem;
+    height:1.9rem;
+    overflow: hidden;
+    padding:0 0.75rem;
+    margin-bottom: 0.75rem;
+}
+ .control .control-lable{
+    width:10%;
+    float:left;
+    height: 1.9rem;
+ }
+ .control-lable img{
+    width:1.0rem;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top:-0.2rem;
+ }
+ .control input{
+    width:90%;
+    float:left;
+    font-size: 0.7rem;
+    height:1.9rem;
+    line-height:1.9rem;
+    color:#055aaa;
+    padding:0 0.25rem; 
+ }
+ .control_btn{
+    border:1px solid #033b70;
+    background: #3074b5;
+    color:#05509e;
+    border-radius: 20px;
+    line-height: 1.9rem;
+    height:1.9rem;
+    text-align: center;
+    width:100%;
+    margin:1rem 0 0.25rem 0;
+    font-size: 0.8rem;
+}
+.control_btn_active{
+     background: #0055aa !important; 
+     color:#fff !important;
+}
+.login .footer{
+    position: absolute;
+    bottom:1rem;
+    width:100%;
+}
+ .login .footer div{
+    text-align: center;
+    color:#888;
+    font-size: 0.6rem;
+
+ } 
+
+.login .footer  .third img{
+    margin:0 8%;
+    width:10%;
+    display: inline-block;
+}
+.login .right{
+    display: inline-block;
+    width:0.6rem;
+    vertical-align: middle;
+    margin-right:0.1rem;
+    margin-top:-0.1rem;
+}
+.login .top{
+    position: absolute;
+    top:1rem;
+    left:0.75rem;
+    width:1.4rem;
+}
+ .register .tip{
+    height:2.25rem;
+    color:#666;
+    font-size: 0.6rem;
+    padding:0.5rem 0.7rem 0 0.7rem;
+    border-bottom:1px solid #dcdcdc;
+}
+.register form{
+    padding:0.25rem 0;
+}
+.aui-text-red{
+    color:#ff3333;
+}
+.aui-text-gray8{
+    color:#888888 !important;
+}
+.border_10{
+    border-top:10px solid #dcdcdc;
+} 
+ .forget{
+     padding-bottom:0.75rem;
+} 
+ .forget .control{
+    border:none;
+    border-radius:0;
+    margin-bottom: 0;
+    padding:0.25rem 0.75rem;
+    height:2.4rem;
+    border-bottom:1px solid #dcdcdc;
+ } 
+
+.bound .tel{
+    line-height: 2.5rem;
+    padding:0 0.75rem;
+    color:#888;
+    font-size: 0.7rem;
+}
+.bound .tel img{
+    display: inline-block;
+    width:1.2rem;
+    vertical-align: middle;
+    margin-top:-0.1rem;
+    margin-right: 0.25rem;
+}
+.bound  li{
+    padding:0 0.75rem;
+    height:2.5rem;
+    line-height:2.5rem;
+    font-size: 0.7rem;
+    color:#888;
+    border-bottom: 1px solid #dcdcdc;
+    overflow: hidden;
+}
+.bound li img{
+    display: inline-block;
+    width:1.4rem;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+
+}
+.bound li div{
+    width:60px;
+    border:1px solid #0055aa;
+    color:#0055aa;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 1.1rem;
+    margin:0.6rem 0;
+    float:right;
+}
+.bound_active{
+    background:#0055aa;
+    color:#fff!important;            
+}

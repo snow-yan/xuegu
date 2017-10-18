@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>讲师详情</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-wh">	
+		<div class="w10 h30e c-4371bc" id="header">
+			<div class="box w95 area_auto pstnr h30e t-wh">
+				<p class="pstna absl0 abst0 pdt05 pdb05 h20e" ontouchstart="close_w();">
+					<img src="../image/icon/left.png" class="w20e h20e">
+				</p>
+				<!--<p class="ovd tx-c umh3 ftz12">讲师详情</p>-->
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript">   
+		apiready = function() {
+			var pras = api.pageParam;
+			open_f('teacher_info_c','teacher_info_c.html','false',pras);
+		};
+		function refreshData(targetuid){
+			var data ={
+				targetuid : targetuid,
+				uid : api.pageParam.uid
+			};
+			
+			open_f1('teacher_info_c','teacher_info_c.html','false',data);
+		}
+		function open_f1(name,url,bounces,pageParam){
+			var bounces,pageParam;
+			if(is_define(pageParam)){
+				pageParam = pageParam;
+			}else{
+				pageParam = new Object();
+			}
+			if(!is_define(bounces)){
+				bounces = true;
+			}else{
+				bounces = false;
+			}
+			var $header = $api.dom('#header');
+			$api.fixIos7Bar($header);
+			$api.fixStatusBar($header);
+			var $body = $api.dom('body');
+			var header_h = $api.offset($header).h;
+			api.openFrame(
+			{
+				name:name,
+				url:url,
+				rect:
+				{
+					x : 0,
+					y : header_h,
+					w : 'auto',
+					h : 'auto'
+				},
+				bounces : bounces,
+				allowEdit : false,
+				pageParam:pageParam,
+				useWKWebView:true,
+				bgColor : 'rgba(0,0,0,0)',
+				vScrollBarEnabled : true,
+				hScrollBarEnabled : true,
+				reload : true
+			});
+		}
+	</script>
+</html>

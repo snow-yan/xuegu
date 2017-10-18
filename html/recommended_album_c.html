@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>热门专辑</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+	</head>
+	<body class="c-ebf2fc pd07" style="padding-bottom: 0;">
+		<ul id="album_content"></ul>
+		<script type="text/html" id='album_list'>
+			<%
+			for(var i=0;i<data.length;i++){
+			%>
+			<li>
+				<div class="c-wh uc-a02">
+					<div class="uc-a02" tapmode="op8" onclick="open_w('album_details','album_details.html',{'aid':'<%=data[i].aid%>'})">
+						<img src="../image/icon/echo_bg.jpg" style=" height:<%=api.frameWidth/2.2-15%>px;" data-echo="<%=data[i].apic%>"  class="w10" alt="" />
+					</div>
+					<div class="c-wh clo_two pdt025 pdb025 ubb ub-e4e4e4">
+						<div class="col_list umh15 ubr ub-e4e4e4 tx-c mart025 marb025 ftz09">
+							<img src="../image/icon/class.png" class="w15e h15e"/>
+							<span class="t-c1c1c1"><%=data[i].course_count%><font class="ftz08">课程</font></span>
+						</div>
+						<div class="col_list umh15 ubl ub-e4e4e4 tx-c mart025 marb025 ftz09">
+							<img src="../image/icon/eye.png" class="w15e h15e"/>
+							<span class="t-c1c1c1"><%=data[i].areadnum%><font class="ftz08">人观看</font></span>
+						</div>
+					</div>
+					<div class="ubb ub-e4e4e4">
+						<div class="clo_two pdb03">
+						    <div class="pdl03 pdr03 area_auto pdt03">
+						    	<%
+						    	var list = data[i].cac_list;
+						    	for(var j=0;j<list.length;j++){
+						    	var le_msg = str2json(list[j].cor_letv_msg);
+		                        var let_v=le_msg.data.video_unique;
+					    		%>
+								<div class="col_list" tapmode="op8" onclick="open_w('class_details','../html/class_details.html',{'cor_id':'<%=list[j].cor_id%>','UID':get_local('uid'),pic:'<%=list[j].cor_pic%>',video_unique:'<%=let_v%>'})">
+									<div class="box pd03">
+										<p class="w10 tx-c"><img src="../image/icon/echo_bg.jpg" style=" height:<%=api.frameWidth/3.4-15%>px;" data-echo="<%=list[j].cor_pic%>" class="w10 uc-a02" tapmode="op8"></p>
+										<p class="w10 t-333 ftz08 umh15 txo pdt05"><%=list[j].cor_name%></p>
+										<p class="w10 umh1 t-c0c0c0"><img src="../image/icon/play.png" class=" h09e pdt01"><font class="ftz075"><%=list[j].cor_view%>人/<%=list[j].cor_label%></font></p>
+										<%
+										if(is_define(list[j].cor_charge_money) && list[j].cor_charge_money !=0){
+										%>
+										<p class="w10 ovd t-ff7b00 umh15 ftz08"><img src="../image/icon/guzi.png" class="w10e pdt02 pdr01" alt="" /><%=list[j].cor_charge_money%></p>
+										<%
+										}else{
+										%>
+										<p class="w10 ovd t-ff7b00 umh15 ftz08">限时免费</p>
+										<%	
+										}
+										%>
+									</div>
+								</div>
+								<%
+						    	}
+						    	%>
+						   </div>
+					    </div>
+					</div>
+					<div class="umh25 tx-c t-4371bc" tapmode="c-e0e0e0" onclick="open_w('album_details','album_details.html',{'aid':'<%=data[i].aid%>'})">
+						<span class=" ftz09">更多课程...</span>
+					</div>
+				</div>
+			</li>
+			<%
+			if(i!=data.length-1){
+			%>
+			<div class="h05e c-ebf2fc"></div>
+			<%		
+			}
+			}
+			%>
+		</script>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+    <script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			getMoreClass();
+			push_down(getMoreClass);
+		};
+		function getMoreClass(){
+			var URL = serverURL + 'app_interface/course/album_course2/';
+			URL+='?secret='+appSecret;
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode == 0){
+					$('#album_content').html(bt('album_list',ret));
+					api.parseTapmode();
+				}else{
+					$toast(ret.errMsg,1500);
+				}
+				push_down_over();
+				Echo.init({offset: 0,throttle:0});
+			})
+		}
+	</script>
+</html>

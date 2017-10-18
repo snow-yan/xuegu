@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>学股</title>
+		<link rel="stylesheet" href="../cool_css/cool.css">
+		<link rel="stylesheet" href="../cool_css/swiper.min.css">
+		<style>
+			.absb-125{
+				bottom: -1.25em;
+			}
+			.h48e{
+				height: 4.8em;
+			}
+		</style>
+	</head>
+	<body class="c-wh">
+		<input type="hidden" id="page" value="1"/>
+		<div class="c-4371bc umh3 t-wh w10 zindex5" id="header">
+			<div class="box h30e w95 area_auto">
+				<p class="ovd umh3 absl0 w10 tx-c pstnr">
+					<span class="umh2 absl0 abst0 pstna w1 tx-r pdt05 pdb05" tapmode="op8" onclick="open_dynamics()">
+						<span class="pstnr">
+							<img src="../image/icon/msg.png" class="w20e h20e">
+							<span  class="w10e h10e pstna absr01 abst03 umh1 t-wh c-ff7b00 tx-c uc-a ftz065" id="origin" style="display: none;"><span class="ftz07 umh1 h10e pdt02" id="dynamic"></span></span>
+						</span>
+					</span>
+					<font class="ftz12">问股</font>
+					<span class="pstna absr0 abst0 pdt05 pdb05 umh0" tapmode onclick="open_w('search','../html/search.html')" >
+						<img src="../image/icon/search.png" class="w20e h20e">
+					</span>
+				</p>
+			</div>
+		</div>
+		<ul class="clo_two pstnf zindex3" id="ask_top">
+			<li class="col_list c-wh ubb ub-e0e0e0" tapmode="c-e0e0e0" onclick="ask_questions();">
+				<div class="pdl05 mart075 marb075 ubr ub-e0e0e0 pstnr tx-c ovd">
+					<div class="w8 dsplb ovd tx-c">
+						<div class="dsplb pstnr fll">
+							<img src="../image/icon/ask.png" class="uc-a w30e h30e marr05">
+						</div>
+						<p class="ftz095 umh15 txo tx-l t-ff2a2a pdt02">广场提问</p>
+						<p class="ftz07 umh15 txo tx-l t-999">大V在线诊股解答</p>
+					</div>
+				</div>
+			</li>
+			<li class="col_list c-wh ubb ub-e0e0e0" tapmode="c-e0e0e0" onclick="my_answer();">
+				<div class="pdr05 mart075 marb075 pstnr tx-c ovd">
+					<div class="w8 dsplb ovd tx-c">
+						<div class="dsplb pstnr fll">
+							<img src="../image/icon/answer.png" class="uc-a w30e h30e marr05">
+						</div>
+						<p class="ftz095 umh15 txo tx-l t-4371bc pdt02">问我的答主</p>
+						<p class="ftz07 umh15 txo tx-l t-999">热门答主为你解答</p>
+					</div>
+				</div>
+			</li>
+		</ul>
+		<div class="h45e c-wh"></div>
+		<div class="w10 h05e c-edf0f5"></div>
+		<div class="box ubtb w10 ub-e4e4e4" tapmode="c-e0e0e0" onclick="open_w('hot_answer','../html/hot_answer.html')">
+			<p class="pdl05 pdr05 ubb ub-e4e4e4 umh25 tx-l t-939393">
+				<span class="sl umh1" style="width: 1px; border-right: 2px solid #4371bc ; margin: .75em 4px 4px 4px;"></span>
+				<span class="sl"><font class="t-666 ftz09">答主<font class="t-ff7b00 ftz09"> TOP </font>榜</font></span>
+				<span class="sr tx-r umh1 pdt08 pdb075"><img src="../image/icon/right_gra.png" class="w10e h10e"></span>
+				<span class="flr tx-r h25e"><font class="ftz075 t-999 pdr03">更多答主</font></span>
+			</p>
+		</div>
+		<!--swiper开始-->
+		<div id="top_swiper"></div>
+		<script type="text/html" id="top_swiper_list">
+		<div class="swiper-container w95 area_auto">
+			<ul class="swiper-wrapper pdt05 pdb05 w95 marr10">
+				<%
+				for(var i=0;i<data.length;i++){
+				%>
+				<li class="swiper-slide ovd">
+					<div class="uba w10 ui-border-radius pstnr">
+						<div class="w10 h48e pstnr ui-border-radius" style="background-image: url(<%=data[i].face%>);background-size:100% 165%; background-repeat:no-repeat ;"> 
+							<div class="t-wh w10 pstna absb-125 tx-c zindex2 ftz09">
+								<div class="umh15 ftz085"><font class=" t-wh"><%=data[i].nakename%></font></div>
+								<img src="../image/icon/@.png" class="w25e pdt02" alt="" tapmode="op8" onclick="askQuestions(<%=data[i].uid%>,'<%=data[i].nakename%>');api.parseTapmode();event.preventDefault();event.stopPropagation();"/>
+							</div>
+						</div>
+						<div class=" w10 h48e pstna absl0 abst0 " style="background-image: url(../image/icon/tupianzhegai1.png);background-size:100% 100% ; background-repeat:no-repeat ; -webkit-border-radius: 0.2em; border-radius: .2em;" tapmode="op8" onclick="open_w('teacher_info','../html/teacher_info.html',{targetuid:<%=data[i].uid%>,uid:get_local('uid')});api.parseTapmode();event.preventDefault();event.stopPropagation();"></div>
+						<div class="dsplb">	
+							<%
+							if(i==0){
+							%>
+							<img src="../image/icon/top-01.png" class="w20e h20e pstna abst0 absr0 uc-a02 zindex2" alt="" />
+							<%
+							}
+							if(i==1){
+							%>
+							<img src="../image/icon/top-02.png" class="w20e h20e pstna abst0 absr0 uc-a02 zindex2" alt="" />
+							<%
+							}
+							if(i==2){
+							%>
+							<img src="../image/icon/top-03.png" class="w20e h20e pstna abst0 absr0 uc-a02 zindex2" alt="" />
+							<%
+							}
+							%>
+						</div>
+						<div class="zindex5 pdb05 pdl05 dsplb mart10">
+							<p class="ftz075 umh15 pdt05 t-646464">
+								<img src="../image/icon/add_fans_act.png" class="w15e h15e pdr05" alt="" />
+								粉丝<%=data[i].fans_count%>
+							</p>
+							<p class="ftz075 umh15 pdt04 pdb03 t-646464">
+								<img src="../image/icon/pinglun.png" class="w15e h15e pdr05" alt="" />
+								回答<%=data[i].answer_count%>
+							</p>
+						</div>
+					</div>
+				</li>
+				<%
+				}
+				%>
+		   	</ul>
+		</div>
+		</script>
+		<!--swiper结束-->
+		<div class="h05e c-edf0f5"></div>
+		<div class="pdl05 pdr05 pdt07 pdb07 ubtb ub-e0e0e0 pstnr">
+			<ul class="clo_three tx-c tap ftz09">
+				<li class="col_list umh15 ubr ub-e0e0e0" tapmode="" onclick="swich_tap(this,1);">
+					<span>
+						<font class="t-4371bc">全部推荐</font>
+						<img src="../image/icon/down-blue.png" class="w08e pd025 ftz075 mart03"/>
+					</span>
+				</li>
+				<li class="col_list umh15 ubr ub-e0e0e0 pstnr" tapmode="" onclick="swich_tap(this,2);">
+					<span>
+						<font>付费问题</font>
+						<img src="../image/icon/right-gray.png" class="w08e pd025 ftz075 mart03"/>
+					</span>
+				</li>
+				<li class="col_list umh15 pstnr" tapmode="" onclick="swich_tap(this,3);">
+					<span>
+						<font>免费问题</font>
+						<img src="../image/icon/right-gray.png" class="w08e pd025 ftz075 mart03"/>
+					</span>
+				</li>
+			</ul>
+			<div id="hotOrNew1" class="pstna dspn absl0 abst25 c-wh ftz09 tx-c t-999 zindex2 border-radius-e0e0e0">
+            	<div onclick="selectHotOrNew(this,'all',1)" class="umh25 w9 area_auto ubb ub-e0e0e0 t-4371bc">最新问题</div>
+		        <div onclick="selectHotOrNew(this,'all',2)" class="umh25 w9 area_auto">最热问题</div>
+            </div>
+            <div id="hotOrNew2" class="pstna dspn absl33p abst25 c-wh ftz09 tx-c t-999 zindex2 border-radius-e0e0e0">
+            	<div onclick="selectHotOrNew(this,'pay',1)" class="umh25 w9 area_auto ubb ub-e0e0e0 t-4371bc">最新问题</div>
+		        <div onclick="selectHotOrNew(this,'pay',2)" class="umh25 w9 area_auto">最热问题</div>
+            </div>
+            <div id="hotOrNew3" class="pstna dspn absl66p abst25 c-wh ftz09 tx-c t-999 zindex2 border-radius-e0e0e0">
+            	<div onclick="selectHotOrNew(this,'free',1)" class="umh25 w9 area_auto ubb ub-e0e0e0 t-4371bc">最新问题</div>
+		        <div onclick="selectHotOrNew(this,'free',2)" class="umh25 w9 area_auto">最热问题</div>
+            </div>
+		</div>
+		<div class="h03e c-edf0f5"></div>
+		<!--全部推荐-->
+		<div id="ask_tap"></div>
+		<script type="text/html" id="ask_tap_details">
+			<div class="aff" id="all">
+			<%
+			for(var i=0;i<data.length;i++){
+			%>
+			<div class="box w10 ovd ubb ub-e0e0e0" tapmode="c-e0e0e0" onclick="open_w('choice_details','../html/choice_details.html',{'question_id':<%=data[i].question_id%>,uid:get_local('uid'),tangu_id:'<%=data[i].published_uid%>'})">
+				<p class="area_auto w95">
+					<span class="sl pdb05 pdt05 pdl02">
+						<span class="pdl05 pdr05 h10e umh1 c-wh ftz075 pdb03 pdt03 border-radius-ff7b00 tx-c t-ff7b00">
+						    <img src="../image/icon/guzi.png" class="w10e pdr01 " alt="" /><%=data[i].question_reward%>
+						</span>
+					</span>
+					<span class="sr umh2 t-c0c0c0 pdt08 pdb05 pdr02 ftz07" id="createTime<%=data[i].question_id%>"></span>
+				</p>
+				<p class="ovd w95 area_auto ftz085 t-545454 tx-lr">
+					<span class="pdl02 pdr02"><%=data[i].question_content%></span>
+				</p>
+				<div class="ovd w95 area_auto pdt05 pdb05">
+					<p class="w5 fll txo ftz075 umh2">
+						<span class="sl umh2 t-c0c0c0 w10 txo pdl02">
+							<%
+							if(data[i].last_answer != 0){
+							%>
+							<img src="<%=data[i].face%>" class="w20e h20e uc-a10">
+							<font class="pdl05 pdt01 t-999"><%=data[i].nakename%></font>
+							<font class="pdl05 pdt01 t-999">已抢答</font>
+							<%
+							}else{
+							%>
+							<img src="../image/icon/no-answer.png" class="w20e h20e uc-a10">
+							<%
+							}
+							%>
+						</span>
+					</p>
+					<p class="w5 flr ftz075">
+						<span class="sl t-c0c0c0 umh2 pdr07 tx-r w10 txo">
+							<img src="../image/icon/dot-gray.png" class="w20e h20e">
+							<%=data[i].view_count%>人
+							<img src="../image/icon/biaoqian.png" class="w10e h10e mart04 pdl05 pdr02">
+							<font class=" pdr02"><%=data[i].question_label%></font>
+						</span>
+					</p>
+				</div>
+			</div>
+			<%
+			}
+			%>
+		</div>
+		<!--付费问题-->
+		<div class="dspn aff" id="pay">
+		    <%
+			for(var i=0;i<data.length;i++){
+			%>
+			<div class="box w10 ovd ubb ub-e0e0e0" tapmode="c-e0e0e0" onclick="open_w('choice_details','../html/choice_details.html',{'question_id':<%=data[i].question_id%>,uid:get_local('uid'),tangu_id:'<%=data[i].published_uid%>'})">
+				<p class="area_auto w95">
+					<span class="sl pdb05 pdt05 pdl02">
+						<span class="pdl05 pdr05 h10e umh1 c-wh ftz075 pdb03 pdt03 border-radius-ff7b00 tx-c t-ff7b00">
+						    <img src="../image/icon/guzi.png" class="w10e pdr01 " alt="" /><%=data[i].question_reward%>
+						</span>
+					</span>
+					<span class="sr umh2 t-c0c0c0 pdt08 pdb05 pdr02 ftz07" id="createTime<%=data[i].question_id%>"></span>
+				</p>
+				<p class="ovd w95 area_auto ftz085 t-545454 tx-lr">
+					<span class="pdl02 pdr02"><%=data[i].question_content%></span>
+				</p>
+				<div class="ovd w95 area_auto pdt05 pdb05">
+					<p class="w5 fll txo ftz075 umh2">
+						<span class="sl umh2 t-c0c0c0 w10 txo pdl02">
+							<%
+							if(data[i].last_answer != 0){
+							%>
+							<img src="<%=data[i].face%>" class="w20e h20e uc-a10">
+							<font class="pdl05 pdt01 t-999"><%=data[i].nakename%></font>
+							<font class="pdl05 pdt01 t-999">已抢答</font>
+							<%
+							}else{
+							%>
+							<img src="../image/icon/no-answer.png" class="w20e h20e uc-a10">
+							<%
+							}
+							%>
+						</span>
+					</p>
+					<p class="w5 flr ftz075">
+						<span class="sl t-c0c0c0 umh2 pdr07 tx-r w10 txo">
+							<img src="../image/icon/dot-gray.png" class="w20e h20e">
+							<%=data[i].view_count%>人
+							<img src="../image/icon/biaoqian.png" class="w10e h10e mart04 pdl05 pdr02">
+							<font class=" pdr02"><%=data[i].question_label%></font>
+						</span>
+					</p>
+				</div>
+			</div>
+			<%
+			}
+			%>
+		</div>
+		
+		<!--免费问题-->
+		<div class="dspn aff" id="free">
+		   	<%
+			for(var i=0;i<data.length;i++){
+			%>
+			<div class="box w10 ovd ubb ub-e0e0e0" tapmode="c-e0e0e0" onclick="open_w('choice_details','../html/choice_details.html',{'question_id':<%=data[i].question_id%>,uid:get_local('uid'),tangu_id:'<%=data[i].published_uid%>'})">
+				<p class="area_auto w95">
+					<span class="sl pdb05 pdt05 pdl02">
+						<span class="pdl05 pdr05 h10e umh1 c-wh ftz075 pdb03 pdt03 border-radius-ff7b00 tx-c t-ff7b00">
+						    <img src="../image/icon/guzi.png" class="w10e pdr01 " alt="" /><%=data[i].question_reward%>
+						</span>
+					</span>
+					<span class="sr umh2 t-c0c0c0 pdt08 pdb05 pdr02 ftz07" id="createTime<%=data[i].question_id%>"></span>
+				</p>
+				<p class="ovd w95 area_auto ftz085 t-545454 tx-lr">
+					<span class="pdl02 pdr02"><%=data[i].question_content%></span>
+				</p>
+				<div class="ovd w95 area_auto pdt05 pdb05">
+					<p class="w5 fll txo ftz075 umh2">
+						<span class="sl umh2 t-c0c0c0 w10 txo pdl02">
+							<%
+							if(data[i].last_answer != 0){
+							%>
+							<img src="<%=data[i].face%>" class="w20e h20e uc-a10">
+							<font class="pdl05 pdt01 t-999"><%=data[i].nakename%></font>
+							<font class="pdl05 pdt01 t-999">已抢答</font>
+							<%
+							}else{
+							%>
+							<img src="../image/icon/no-answer.png" class="w20e h20e uc-a10">
+							<%
+							}
+							%>
+						</span>
+					</p>
+					<p class="w5 flr ftz075">
+						<span class="sl t-c0c0c0 umh2 pdr07 tx-r w10 txo">
+							<img src="../image/icon/dot-gray.png" class="w20e h20e">
+							<%=data[i].view_count%>人
+							<img src="../image/icon/biaoqian.png" class="w10e h10e mart04 pdl05 pdr02">
+							<font class=" pdr02"><%=data[i].question_label%></font>
+						</span>
+					</p>
+				</div>
+			</div>
+			<%
+			}
+			%>
+		</div>
+		</script>
+		<div class="w10 h05e c-edf0f5"></div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../script/init.js"></script>
+	<script type="text/javascript" src="../script/app.js"></script>
+	<script type="text/javascript" src="../script/self.js"></script>
+	<script type="text/javascript" src="../script/echo.min.js"></script>
+	<script type="text/javascript" src="../script/swiper.min.js"></script>
+	<script type="text/javascript" src="../script/template.js"></script>
+	<script type="text/javascript">
+		var lastPage = 1;
+		apiready = function() 
+		{
+			var $header = $api.dom('#header');
+			$api.fixIos7Bar($header);
+			$api.fixStatusBar($header);
+			header_h = $api.offset($header).h;
+			$("body").css("padding-top",header_h+"px");
+		    getStudyData();
+			getAnswerList();
+			scrollBottom(function(){
+				nextPage(lastPage);
+			});
+			Dynamic();
+			$('#hotOrNew1').css('width',api.winWidth/3+'px');
+			$('#hotOrNew2').css('width',api.winWidth/3+'px');
+			$('#hotOrNew3').css('width',api.winWidth/3+'px');
+		};
+		var type = 1,first=true;//1 全部推荐 ，2 付费问题，3 免费问题，默认全部推荐
+		var order1 = 1,order2 = 1,order3 = 1;//1 最新问题 ，2 最热问题，默认最新
+		function swich_tap(el,index){
+			if(type != index){
+				switch(index)
+				{
+				case 1 :
+					ord = order1;
+				break;
+				case 2 :
+					ord = order2;
+				break;
+				case 3 :
+					ord = order3;
+				break;
+				}
+				type = index;
+				getStudyData(ord);
+			}
+				
+			lastPage = 1;
+			$api.val($api.byId("page"),1);
+			$(".tap font").removeAttr('class');
+			$(".tap img").attr('src',"../image/icon/right-gray.png");
+			$(".tap font").eq(index-1).attr('class',"t-4371bc");
+			$(".tap img").eq(index-1).attr('src',"../image/icon/down-blue.png");
+			for (var i=1;i<4;i++) {
+				var ID = "#hotOrNew"+i;
+				if(i!=index){
+					$(ID).css("display",'none');
+				}
+			}
+			$("#hotOrNew"+index).toggle();
+			$("#tap"+index).removeClass("dspn");
+		}
+		function selectHotOrNew(el,ID,ord){
+			if(type){
+				switch(type)
+				{
+				case 1 :
+					order1 = ord;
+				break;
+				case 2 :
+					order2 = ord;
+				break;
+				case 3 :
+					order3 = ord;
+				break;
+				}
+			}
+			$('#all').addClass("dspn");
+			$('#free').addClass("dspn");
+			$('#pay').addClass("dspn");
+			$("#"+ID).removeClass("dspn");
+			if(ord == 1){
+				$(el).next().removeClass('t-4371bc');
+			}else{
+				$(el).prev().removeClass('t-4371bc');
+			}
+			$(el).addClass('t-4371bc');
+			setTimeout(function(){
+				$(el).parent().toggle();
+				getStudyData(ord);
+			},200);
+		}
+		function Dynamic(){
+	        var UID = get_local('uid');
+			var URL = serverURL + 'app_interface/user/get_my_dongtai_num/';
+	        if(is_define(UID)){
+				URL+='?secret='+appSecret+'&uid='+UID;
+			    g_ajax(URL,function(ret){
+//			    	console.log(json2str(ret));
+					if(ret.errCode ==0){
+					    if(ret.data.num){
+					    	$('#origin').css('display', '');
+						    var dt=ret.data.num;
+					        $('#dynamic').text(dt);
+				        }else{
+				        	$('#origin').css('display', 'none');
+				        }
+					}
+				})
+		    }else{
+				$('#dynamic').text('0');
+				$('#origin').css('display', 'none');
+		    }
+		}
+		function getStudyData(odr){
+			if(odr){
+				order = odr;
+			}else{
+				order = 1 ;
+			}
+			var page = 1;
+			var pagesize = 10;
+			var URL = serverURL + 'app_interface/question/get_question_list/';
+			URL+='?secret='+appSecret+'&type='+type+'&order='+order+'&page='+page+'&pagesize='+pagesize;
+//		   console.log(URL);
+		    g_ajax(URL,function(ret)
+			{
+//				console.log(json2str(ret))
+				if(ret.errCode ==0){
+					$('#ask_tap').html(bt('ask_tap_details',ret));
+					for(var i =0 ; i < ret.data.length;i++){
+						var idx = '#createTime'+ret.data[i].question_id;
+						var t = getTimeDifference(ret.data[i].add_time);
+						$(idx).text(t);
+					}
+					api.parseTapmode();
+				}else{
+					$toast(errMsg,1500);
+				}
+			})
+		}
+		function getAnswerList(){
+			var URL = serverURL + 'app_interface/main/get_jiangshi_list/';
+			URL+='?secret='+appSecret+'&type=1&page=1&pagesize=5';
+			g_ajax(URL,function(ret)
+			{
+				if(ret.errCode ==0){
+					$('#top_swiper').html(bt('top_swiper_list',ret.data));
+					var swiper = new Swiper('.swiper-container', {
+						pagination: '.swiper-pagination',
+				        slidesPerView: 2.8,
+				        paginationClickable: true,
+				        spaceBetween: 8
+				    });
+					api.parseTapmode();
+				}else{
+					$toast(errMsg,1500);
+				}
+			})
+		}
+		function nextPage(lastPage){
+			if(lastPage){
+				var page = $("#page").val();
+				page = parseInt(page) + 1;
+				$api.val($api.byId("page"), page);
+				var pagesize = 10;
+				var URL = serverURL + 'app_interface/question/get_question_list/';
+				URL+='?secret='+appSecret+'&type='+type+'&order='+order+'&page='+page+'&pagesize='+pagesize;
+//			    console.log(URL);
+			    g_ajax(URL,function(ret)
+				{
+					if(ret.errCode ==0){
+						$("#ask_tap").append(bt('ask_tap_details', ret));
+						for(var i =0 ; i < ret.data.length;i++){
+						var idx = '#createTime'+ret.data[i].question_id;
+						var t = getTimeDifference(ret.data[i].add_time);
+						$(idx).text(t);
+						if(ret.data.length<1){
+							lastPage =0;
+							if(type==1){
+								no_data_more('all');
+							}
+							if(type == 2){
+								no_data_more('pay');
+							}
+							if(type == 3){
+								no_data_more('free');
+							}
+						}
+					}
+						api.parseTapmode();
+					}else{
+						$toast(errMsg,1500);
+					}
+				})
+			}
+		}
+		function ask_questions(){
+			var uid = get_local('uid');
+			if(is_define(uid)){
+				open_w('ask_questions','../html/ask_questions.html',{'winName':api.winName,'frameName':api.frameName,'uid':get_local('uid')})
+			}else{
+				open_w('login','../user/login.html');
+			}
+		}
+		function my_answer(){
+			var uid = get_local('uid');
+			if(is_define(uid)){
+				open_w('my_answer','../html/my_answer.html')
+			}else{
+				open_w('login','../user/login.html');
+			}
+		}
+		function open_dynamics(){
+			var uid = get_local('uid');
+			if(is_define(uid)){
+				open_w('my_dynamics','../user/my_dynamics.html');
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					open_w('login','../user/login.html');
+				},1000);
+			}
+		}
+		function askQuestions(targetuid,tagetNakename){
+			var uid = get_local('uid');
+			if(is_define(uid)){
+				open_w('put_questions_to','../html/put_questions_to.html',{targetuid:targetuid,uid:uid,tagetNakename:tagetNakename});
+			}else{
+				$toast('您还没有登录，请先登录',1000);
+				setTimeout(function(){
+					open_w('login','../user/login.html');
+				},1000);
+			}
+		}
+ 	</script>
+</html>

@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>学股网新手大礼包</title>
+		<link type="text/css" href="../../css/xslb.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="xslbtop">
+			<img src="../../img/xslbtop.jpg">
+		</div>
+		<div class="lqinfo">
+			<div class="lblogined">
+				<img src="../../img/xslbbg01.png" >
+			</div>
+			<div class="lqlist">
+				<img src="../../img/xslbbg04.png" >
+				<ul class="xslblist" id="gift"></ul>
+				<script type="text/html" id="gift_tpl">
+				<%
+				for(var i=0;i<data.length;i++){
+				%>
+			   <li class="clo_two pstnr ubb ub-e4e4e4" onclick="login();">
+					 <img src="../../image/icon/echo_bg.jpg" data-echo="<%=data[i].cor_pic%>" style="border-radius:5px;"><span class="lqtitle"><%=data[i].cor_name%></span>
+					<p>
+						<span class="lqguzi"><img src="../../img/lbguzuico.png"><%=data[i].cor_charge_money%></span>
+						<span class="lqplay"><img src="../../img/lbplay.png"><%=data[i].cor_view%></span>
+					</p>
+				</li>	
+				<%
+				}
+				%>
+				</script>
+			</div>
+			<img src="../../img/xslbbg02.png" >
+			<div class="lqlist" onclick="login();">
+				<img src="../../img/qkk.png">
+			</div>
+			<img src="../../img/xslbbg02.png" >
+			<div class="lqlist jsinfo">
+				<img src="../../img/xslbgz.png">
+				<p>
+					1>如何获得奖励：2017年8月1日起，学股网注册新用户可获得学股网新手课程大礼包一份；
+				</p>
+				<p>
+					2>获得奖励条件：新手礼包仅限新用户领取，新用户是指未在学股网有过注册行为的用户，每个新用户只能领取1次，同一登录账号、同一手机号、同一终端设备号或其他合理显示为同一用户的情形，均视为同一用户；
+				</p>
+				<p>
+					3>礼包使用方式：用户领取成功后可在"我的页面-学股礼包-新手礼包"中进行查看；
+				</p>
+				<p>
+					4>凡以不正当手段（作弊、恶意套现、虚假交易、扰乱系统、实施网络攻击等）参与本次活动的用户，学股网有权终止其参与活动，并取消其获券资格；
+				</p>
+			</div>
+			<img src="../../img/xslbbg03.png">
+		</div>
+		<div class="xslbbottom">
+			<img src="../../img/xslbbottom.jpg">
+		</div>
+	</body>
+	<script type="text/javascript" src="../../script/api.js"></script>
+	<script type="text/javascript" src="../../script/zepto.min.js"></script>
+	<script type="text/javascript" src="../../script/init.js"></script>
+	<script type="text/javascript" src="../../script/app.js"></script>
+	<script type="text/javascript" src="../../script/self.js"></script>
+	<script type="text/javascript" src="../../script/template.js"></script>
+	<script type="text/javascript" src="../../script/echo.min.js"></script>
+	<script type="text/javascript">
+	apiready = function() {
+		gift_datail();
+	};
+	// 获取课程列表
+	function gift_datail(){
+		var URL = serverURL + 'app_interface/activityManage/get_course_by_id/';
+		URL+='?secret='+appSecret+'&id='+api.pageParam.gift_id;
+		g_ajax(URL,function(ret)
+		{	
+			//alert(JSON.stringify(ret))
+			if(ret.errCode==200){
+				$('#gift').html(bt('gift_tpl',ret));
+				Echo.init();
+			}else{
+				$toast(ret.errMsg,1500);		
+			}
+			api.parseTapmode();
+		})
+	} 
+	// 登录
+	function login(){
+		var uid = get_local("uid");
+		if(is_define(uid)){
+	        $toast('您的账号不符合新手礼包领取条件，不可领取礼包',1500);	
+        }else{
+        	if(api.systemType=='ios'){
+				open_w('ios_login','../../user/ios_login.html',{'winName':api.winName,'frameName':api.frameName});
+			}else{
+				open_w('login','../../user/login.html',{'winName':api.winName,'frameName':api.frameName});
+			}
+        }
+		
+	}
+	
+	// 判断是否符合领取条件
+	function is_getlibao(){
+		var URL1 = serverURL + 'app_interface/activityManage/get_people_activity/';
+			URL1+='?secret='+appSecret;
+			g_ajax(URL1,function(ret)
+			{	
+				if(ret.errCode==200){
+					//alert(ret.data.start_time)
+					var start_time=ret.data.start_time;
+					var end_time=ret.data.end_time;
+					var uid = get_local("uid");
+					var URL = serverURL + 'app_interface/user/get_other_user_info/';
+					var data = {
+						values : {
+							targetuid  : uid,
+							loginuid : 0,
+							secret : appSecret
+						}
+					}
+					r_ajax(URL, data, function(rett) {
+						var reg_time = rett.data.reg_time;
+						if(start_time < reg_time && end_time > reg_time){
+							//活动开启
+							open_w('gift_list','gift_list.html',{'gift_id':api.pageParam.gift_id});
+						}else{
+							setTimeout(function(){
+								alert('感谢您对学股网的支持，本活动仅对新注册用户开放，更多优惠活动敬请期待！')	
+								open_w('index','../../index.html');						
+							},1000)
+							
+							
+						}
+					})
+	
+				}else{
+					$toast(ret.errMsg,1000);
+				}
+			})
+	}
+	
+	</script>
+</html>
